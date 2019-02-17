@@ -9,14 +9,25 @@
 
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, Image} from 'react-native';
-
-const img = 'https://beta.ozelden.com/img/logo/logo-min.png';
+import TournamentsList from './js/components/TournamentsList.js';
 
 type Props = {};
+
 export default class App extends Component<Props> {
-  render() {
-    return (
-        <HelloWorldApp />
-    );
-  }
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            tournaments: [
+                {key: '1', image: {uri: 'https://beta.ozelden.com/img/logo/logo-min.png'}, holder: 'Play 24'},
+                {key: '2', image: {uri: 'https://beta.ozelden.com/img/logo/logo-min.png'}, holder: 'Küçükpark PlayStation'}
+            ]
+        };
+    }
+
+    render() {
+        return (
+            <TournamentsList tournaments={this.state.tournaments}/>
+        );
+    }
 }
