@@ -16,3 +16,12 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+header('Access-Control-Allow-Origins:*');
+header('Access-Control-Allow-Methods:*');
+
+Route::group(['middleware' => 'cors', 'prefix' => '/v1'], function () {
+
+    Route::post('/register', 'UserController@register');
+
+});
