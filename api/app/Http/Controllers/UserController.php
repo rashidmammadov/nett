@@ -123,10 +123,8 @@ class UserController extends ApiController {
     public function logout() {
         try {
             $user = JWTAuth::parseToken()->authenticate();
-            $token = JWTAuth::getToken();
             $user->remember_token = NULL;
             $user->save();
-            JWTAuth::setToken($token)->invalidate();
             $this->setStatusCode(Res::HTTP_OK);
             return $this->respondCreated(LOGGED_OUT_SUCCESSFULLY);
         } catch(JWTException $e) {
