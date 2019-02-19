@@ -33,6 +33,19 @@ class ApiQuery {
     }
 
     /**
+     * @description query to get user by email.
+     * @param string $email
+     * @return mixed
+     */
+    public static function getUserByEmail($email) {
+        $queryResult = User::where([
+            [EMAIL, EQUAL_SIGN, $email]
+        ])->first();
+
+        return $queryResult;
+    }
+
+    /**
      * @description query to create new user.
      * @param mixed $user
      * @return mixed

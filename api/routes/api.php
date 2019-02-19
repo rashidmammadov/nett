@@ -22,6 +22,9 @@ header('Access-Control-Allow-Methods:*');
 
 Route::group(['middleware' => 'cors', 'prefix' => '/v1'], function () {
 
+    Route::get('/refreshUser', 'UserController@refreshUser');
+    Route::post('/login', 'UserController@auth');
+    Route::post('/logout', 'UserController@logout');
     Route::post('/register', 'UserController@register');
 
 });
