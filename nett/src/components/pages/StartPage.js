@@ -1,28 +1,36 @@
 import React, {Component} from 'react';
-import {Text, Button, View} from 'react-native';
+import {AsyncStorage, Text, Button, View} from 'react-native';
 import {Actions} from 'react-native-router-flux';
-import Cookie from 'react-native-cookie';
 
 export default class StartPage extends Component {
 
 	constructor(props) {
 		super(props);
-		Cookie.set('http://bing.com/', 'foo', 'bar').then(() => console.log(success));
-		Cookie.get('http://bing.com/', 'foo')
-		    .then((cookie) => console.log(cookie) );
+		//AsyncStorage.setItem('user', 'rashid');
+		//AsyncStorage.removeItem('user');
+	}
+
+	async componentDidMount() {
+	    AsyncStorage.getItem('user').then((value) => {
+	        if (value) {
+	            Actions.DashboardPage({type: 'reset'});
+	        } else {
+	            Actions.SignPage({type: 'reset'});
+	        }
+	    });
 	}
 
 	render() {
-		return (
-			<View
-				style={{
-					flex: 1,
-					flexDirection: 'column',
-					alignItems: 'center',
-					justifyContent: 'center'
-				}}>
-				<Text onPress={Actions.DashboardPage}>{this.state.cookie}Yükleniyor..</Text>
-			</View>
-		);
+        return (
+            <View
+                style={{
+                    flex: 1,
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}>
+                <Text>Loading..</Text>
+            </View>
+        );
 	}
 }
