@@ -6,12 +6,12 @@ export default class StartPage extends Component {
 
 	constructor(props) {
 		super(props);
-		//AsyncStorage.setItem('user', 'rashid');
+		//AsyncStorage.setItem('token', 'rashid');
 		//AsyncStorage.removeItem('user');
 	}
 
 	async componentDidMount() {
-	    AsyncStorage.getItem('user').then((value) => {
+	    AsyncStorage.getItem('token').then((value) => {
 	        if (value) {
 	            Actions.DashboardPage({type: 'reset'});
 	        } else {
