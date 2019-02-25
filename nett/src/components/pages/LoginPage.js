@@ -44,7 +44,7 @@ export default class LoginPage extends Component {
                                 value={this.state.email}/>
                         </Item>
                         <Item regular style={{marginBottom: 8}}>
-                            <Input placeholder="Şifre"
+                            <Input placeholder="Şifre" secureTextEntry={true}
                                 onChangeText={(value) => this.setState({password: value})}
                                 value={this.state.password}/>
                         </Item>
