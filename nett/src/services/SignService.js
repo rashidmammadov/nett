@@ -1,5 +1,7 @@
+import {apiUrl} from './ConfigService';
+
 export const signIn = (user) => {
-    const URL = 'http://api.ozelden.com/api/v1/login';
+    const URL = apiUrl + 'login';
     return fetch(URL, {
         method: 'POST',
         headers: {
@@ -11,7 +13,7 @@ export const signIn = (user) => {
 }
 
 export const signUp = (user) => {
-    const URL = 'http://api.ozelden.com/api/v1/register';
+    const URL = apiUrl + 'register';
     return fetch(URL, {
         method: 'POST',
         headers: {

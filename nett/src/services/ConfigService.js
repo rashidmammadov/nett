@@ -1,0 +1,1 @@
+export const apiUrl = 'http://nett.ozelden.com/api/v1/';

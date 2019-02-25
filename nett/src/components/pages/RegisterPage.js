@@ -32,7 +32,11 @@ export default class RegisterPage extends Component {
 	            });
 	            this.setState({
 	                districts: res.data.regions[this.state.cities[0]]
-	            })
+	            });
+	            this.setState({
+	                selectedCity: this.state.cities[34],
+	                selectedDistrict: this.state.districts[0]
+	            });
 	        }
 	    })
 	}
@@ -44,13 +48,18 @@ export default class RegisterPage extends Component {
             email: this.state.email,
             password: this.state.password,
             passwordConfirmation: this.state.passwordConfirmation,
-            city: this.state.city,
-            district: this.state.district
+            city: this.state.selectedCity,
+            district: this.state.selectedDistrict
         }
         signUp(user).then((res) => {
             if (res.status === 'success') {
                 AsyncStorage.setItem('token', res.data.remember_token);
                 Actions.DashboardPage({type: 'reset'});
+                Toast.show({
+                    text: 'Hesap başarıyla oluşturuldu',
+                    buttonText: 'tamam',
+                    type: 'success'
+                });
             } else {
                 Toast.show({
                     text: res.message,
