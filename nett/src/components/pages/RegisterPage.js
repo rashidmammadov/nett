@@ -31,7 +31,7 @@ export default class RegisterPage extends Component {
 	                cities: Object.keys(res.data.regions)
 	            });
 	            this.setState({
-	                districts: res.data.regions[this.state.cities[0]]
+	                districts: res.data.regions[this.state.cities[34]]
 	            });
 	            this.setState({
 	                selectedCity: this.state.cities[34],
