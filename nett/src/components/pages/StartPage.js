@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {AsyncStorage, Text, Button, View} from 'react-native';
 import {Actions} from 'react-native-router-flux';
+import {style} from '../../assets/style/Custom.js';
 
 export default class StartPage extends Component {
 
@@ -13,7 +14,7 @@ export default class StartPage extends Component {
 	async componentDidMount() {
 	    AsyncStorage.getItem('token').then((value) => {
 	        if (value) {
-	            Actions.DashboardPage({type: 'reset'});
+	            Actions.AppPage({type: 'reset'});
 	        } else {
 	            Actions.LoginPage({type: 'reset'});
 	        }
@@ -22,13 +23,7 @@ export default class StartPage extends Component {
 
 	render() {
         return (
-            <View
-                style={{
-                    flex: 1,
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                }}>
+            <View style={style.columnCenter}>
                 <Text>Loading..</Text>
             </View>
         );

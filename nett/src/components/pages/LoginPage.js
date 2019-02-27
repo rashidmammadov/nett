@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import {AsyncStorage, View} from 'react-native';
+import {AsyncStorage, ScrollView} from 'react-native';
 import {Root, Container, Header, Form, Footer, FooterTab, Item, Input, Button, Text, Toast} from 'native-base';
 import {Actions} from 'react-native-router-flux';
 import {signIn} from '../../services/SignService.js';
+import {style} from '../../assets/style/Custom.js';
 
 export default class LoginPage extends Component {
 
@@ -22,7 +23,7 @@ export default class LoginPage extends Component {
             this.setState({loading: false});
             if (res.status === 'success') {
                 AsyncStorage.setItem('token', res.data.remember_token);
-                Actions.DashboardPage({type: 'reset'});
+                Actions.AppPage({type: 'reset'});
             } else {
                 Toast.show({
                     text: res.message,
@@ -36,8 +37,8 @@ export default class LoginPage extends Component {
 	render() {
 		return (
             <Root>
-                <Container>
-                    <View style={{ flex: 1, justifyContent: "center", alignItems: "center", padding: 16 }}>
+                <ScrollView>
+                    <Container style={{ flex: 1, justifyContent: "center", alignItems: "center", padding: 16 }}>
                         <Item regular style={{marginBottom: 8}}>
                             <Input placeholder="Email"
                                 onChangeText={(value) => this.setState({email: value})}
@@ -51,13 +52,13 @@ export default class LoginPage extends Component {
                         <Button disabled={this.state.loading ? true : false} block onPress={this.login.bind(this)}>
                             <Text>GİRİŞ</Text>
                         </Button>
-                    </View>
-                    <Footer style={{backgroundColor: '#fff'}}>
-                        <Text>Bir hesabın yok mu?
-                            <Text onPress={Actions.RegisterPage} style={{fontWeight: 'bold'}}> Kayıt ol</Text>.
-                        </Text>
-                    </Footer>
-                </Container>
+                        <Footer style={{position: 'absolute', bottom:0, backgroundColor: '#fff'}}>
+                            <Text style={{marginTop: 16}}>Bir hesabın yok mu?
+                                <Text onPress={Actions.RegisterPage} style={{fontWeight: 'bold'}}> Kayıt ol</Text>.
+                            </Text>
+                        </Footer>
+                    </Container>
+                </ScrollView>
             </Root>
 		);
 	}
