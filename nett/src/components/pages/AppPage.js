@@ -12,7 +12,7 @@ export default class AppPage extends Component {
         super(props);
         this.state = {
             activeTab: 0
-        }
+        };
         this.changeTab.bind(this);
     }
 
@@ -26,12 +26,14 @@ export default class AppPage extends Component {
 		return (
 		    <Root>
                 <Container>
-                    <Header noLeft>
+                    <Header noLeft style={{backgroundColor: '#303030'}}>
                         <Body>
-                            <Title>{this.props.title}</Title>
+                            <Title style={{color: '#f8f8f8', fontSize: 20, fontFamily: 'GoogleSans-Regular'}}>{this.props.title}</Title>
                         </Body>
                     </Header>
-                    {tabPages[this.state.activeTab]}
+                    <Container style={{backgroundColor: '#000'}}>
+                        {tabPages[this.state.activeTab]}
+                    </Container>
                     <Footer>
                         <FooterTab style={style.footer}>
                             <Button onPress={() => this.changeTab(0)}

@@ -8,20 +8,20 @@ export const style = StyleSheet.create({
         justifyContent: 'center'
     },
     footer: {
-        backgroundColor: '#ffffff'
+        backgroundColor: '#000'
     },
     footerTab: {
-        backgroundColor: '#f8f8f8',
-        color: '#707070'
+        backgroundColor: '#303030',
+        color: '#f8f8f8'
     },
     footerIcon: {
-        color: '#707070'
+        color: '#f8f8f8'
     },
     footerActiveTab: {
-        backgroundColor: '#707070',
-        color: '#f8f8f8'
+        backgroundColor: '#f8f8f8',
+        color: '#303030'
     },
     footerActiveIcon: {
-        color: '#f8f8f8'
+        color: '#303003'
     }
 });
