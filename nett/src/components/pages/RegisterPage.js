@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import {AsyncStorage, ScrollView} from 'react-native';
-import {Root, Container, Content, Header, Form, Footer, FooterTab, Item, Input, Picker,
-    Button, Text, Toast} from 'native-base';
+import {Root, Container, Footer, Item, Input, Picker, Button, Text, Toast} from 'native-base';
 import {Actions} from 'react-native-router-flux';
 import {regions} from '../../services/DataService.js';
 import {signUp} from '../../services/SignService.js';
-import {style} from '../../assets/style/Custom.js';
 
 export default class RegisterPage extends Component {
 
@@ -51,7 +49,7 @@ export default class RegisterPage extends Component {
             passwordConfirmation: this.state.passwordConfirmation,
             city: this.state.selectedCity,
             district: this.state.selectedDistrict
-        }
+        };
         signUp(user).then((res) => {
             if (res.status === 'success') {
                 AsyncStorage.setItem('token', res.data.remember_token);
@@ -71,7 +69,7 @@ export default class RegisterPage extends Component {
         });
 	}
 
-	onCityChange(value: string) {
+	onCityChange(value) {
         this.setState({
             selectedCity: value,
             districts: this.state.regions[value]
@@ -81,7 +79,7 @@ export default class RegisterPage extends Component {
         });
 	}
 
-	onDistrictChange(value: string) {
+	onDistrictChange(value) {
         this.setState({
             selectedDistrict: value
         });

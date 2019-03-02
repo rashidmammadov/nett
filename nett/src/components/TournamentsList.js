@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, FlatList } from 'react-native';
+import {View, FlatList} from 'react-native';
 import TournamentCard from './TournamentCard.js';
 
 export default class TournamentsList extends Component {
@@ -9,7 +9,8 @@ export default class TournamentsList extends Component {
             <View>
                 <FlatList
                     data={this.props.tournaments}
-                    renderItem = {({item}) => <TournamentCard tournament={item}/>}
+                    renderItem = {({item}) => <TournamentCard tournament={item} />}
+                    keyExtractor={(item, index) => index.toString()}
                 />
             </View>
         );

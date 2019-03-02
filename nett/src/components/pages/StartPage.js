@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {AsyncStorage, Text, Button, View} from 'react-native';
+import {AsyncStorage, Text, View} from 'react-native';
 import {Actions} from 'react-native-router-flux';
 import {style} from '../../assets/style/Custom.js';
 

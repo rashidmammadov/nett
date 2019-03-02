@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import {Root, Container, Header, Content, Footer, FooterTab, Button, Text, Body, Title} from 'native-base';
+import {Root, Container, Header, Footer, FooterTab, Button, Text, Body, Title} from 'native-base';
 import DashboardPage from './DashboardPage.js';
+import SearchPage from './SearchPage.js';
 import Icon from 'react-native-vector-icons/Feather';
 import {style} from '../../assets/style/Custom.js';
 
-const tabPages = [<DashboardPage />, <DashboardPage />, <DashboardPage />, <DashboardPage />, <DashboardPage />];
+const tabPages = [<DashboardPage />, <SearchPage />, <DashboardPage />, <DashboardPage />, <DashboardPage />];
 
 export default class AppPage extends Component {
 
