@@ -14,6 +14,7 @@ import DashboardPage from './src/components/pages/DashboardPage.js';
 import LoginPage from './src/components/pages/LoginPage.js';
 import RegisterPage from './src/components/pages/RegisterPage.js';
 import SearchPage from './src/components/pages/SearchPage.js';
+import SetTournamentPage from './src/components/pages/SetTournamentPage.js';
 import StartPage from './src/components/pages/StartPage.js';
 
 type Props = {};
@@ -26,6 +27,7 @@ export default class App extends Component<Props> {
                 <Scene key="LoginPage" component={LoginPage} hideNavBar={true}/>
                 <Scene key="RegisterPage" component={RegisterPage} hideNavBar={true}/>
                 <Scene key="SearchPage" component={SearchPage} hideNavBar={true}/>
+                <Scene key="SetTournamentPage" component={SetTournamentPage} hideNavBar={true}/>
                 <Scene key="StartPage" component={StartPage} initial={true} hideNavBar={true}/>
             </Scene>
         );
