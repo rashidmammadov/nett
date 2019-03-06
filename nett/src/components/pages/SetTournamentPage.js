@@ -26,7 +26,7 @@ export default class SetTournamentPage extends Component {
             participantList: participantList,
             selectedDate: new Date(),
             selectedTime: new Date(),
-            income: (Number(participantList[0]) * (5 + Number(participantList[0]) / 10)).toFixed(2)
+            income: (Number(participantList[0]) * (5 + Number(participantList[0]) / 11)).toFixed(2)
         };
 
         this.setDate = this.setDate.bind(this);
@@ -54,7 +54,7 @@ export default class SetTournamentPage extends Component {
     onParticipantChange(value) {
         this.setState({
             selectedParticipant: value,
-            income: (Number(value) * (5 + Number(value) / 10)).toFixed(2)
+            income: (Number(value) * (5 + Number(value) / 11)).toFixed(2)
         });
     }
 
@@ -196,7 +196,7 @@ export default class SetTournamentPage extends Component {
                         </ListItem>
                     </View>
 
-                    <Button block style={{backgroundColor: '#7F00FF'}}>
+                    <Button rounded  block style={{backgroundColor: '#7F00FF'}}>
                         <Text style={{fontFamily: 'GoogleSans-Regular'}}>OLUŞTUR</Text>
                     </Button>
                 </View>
