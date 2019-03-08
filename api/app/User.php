@@ -27,4 +27,8 @@ class User extends Authenticatable {
     protected $hidden = [
         PASSWORD, REMEMBER_TOKEN,
     ];
+
+    public function tournament() {
+        return $this->hasMany('App\Tournament');
+    }
 }
