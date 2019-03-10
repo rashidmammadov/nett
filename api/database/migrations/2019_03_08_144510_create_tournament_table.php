@@ -20,8 +20,9 @@ class CreateTournamentTable extends Migration
             $table->string(FIXTURE_ID)->nullable();
             $table->char(TOURNAMENT_TYPE, 20);
             $table->integer(PARTICIPANT_COUNT);
-            $table->timestamp(START_DATE);
-            $table->char(STATUS)->default(2);
+            $table->string(START_DATE,20);
+            $table->integer(STATUS)->default(2);
+            $table->integer(DAYS)->nullable();
             $table->timestamps();
         });
     }

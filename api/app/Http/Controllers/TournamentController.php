@@ -8,6 +8,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Queries\MySQL\ApiQuery;
+use App\Http\Utility\CustomDate;
 use App\Http\Utility\Fixture;
 use Illuminate\Http\Request;
 use JWTAuth;
@@ -33,8 +35,14 @@ class TournamentController extends ApiController {
                 return $this->respondValidationError(FIELDS_VALIDATION_FAILED, $validator->errors());
             } else {
                 if ($user->type == HOLDER) {
-                    $fixture = Fixture::set($request);
-                    return $this->respondCreated(SUCCESS, $fixture);
+                    if ($request[START_DATE] > CustomDate::getCurrentMilliseconds()) {
+                        $request[STATUS] = 2;
+                        $tournament = $this->setTournament($user->id, $request);
+                        $fixture = $this->setDefaultFixture($tournament);
+                        return $this->respondCreated(TOURNAMENT_CREATED_SUCCESSFULLY, $fixture);
+                    } else {
+                        return $this->respondWithError(INVALID_DATE);
+                    }
                 } else {
                     return $this->respondWithError(PERMISSION_DENIED);
                 }
@@ -43,5 +51,21 @@ class TournamentController extends ApiController {
             $this->setStatusCode($e->getStatusCode());
             return $this->respondWithError($e->getMessage());
         }
+    }
+
+    private function setTournament($userId, $request) {
+        $request[HOLDER_ID] = $userId;
+        return ApiQuery::setTournament($request);
+    }
+
+    private function setDefaultFixture($parameters) {
+        $fixture = new Fixture($parameters);
+        $fixture::setCreatedAt(CustomDate::getDateFromMilliseconds());
+        $draws = array();
+        if ($parameters[TOURNAMENT_TYPE] == KNOCK_OUT) {
+            $draws = $fixture::setKnockOutDraws($parameters[START_DATE], $parameters[DAYS]);
+        }
+        $fixture::setDraws($draws);
+        return $fixture::getFixture();
     }
 }

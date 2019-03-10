@@ -2,9 +2,33 @@
 
 namespace App\Http\Queries\MySQL;
 
+use App\Tournament;
 use App\User;
 
 class ApiQuery {
+
+    /** -------------------- TOURNAMENT QUERIES -------------------- **/
+
+    /**
+     * @description query to create new tournament
+     * @param $tournament
+     * @return mixed
+     */
+    public static function setTournament($tournament) {
+        $queryResult =  Tournament::create([
+            HOLDER_ID => $tournament[HOLDER_ID],
+            GAME_ID => $tournament[GAME_ID],
+            TOURNAMENT_TYPE => $tournament[TOURNAMENT_TYPE],
+            PARTICIPANT_COUNT => $tournament[PARTICIPANT_COUNT],
+            START_DATE => $tournament[START_DATE],
+            STATUS => $tournament[STATUS],
+            DAYS => $tournament[DAYS]
+        ]);
+
+        return $queryResult;
+    }
+
+    /** -------------------- USER QUERIES -------------------- **/
 
     /**
      * @description query to check if email exist.
