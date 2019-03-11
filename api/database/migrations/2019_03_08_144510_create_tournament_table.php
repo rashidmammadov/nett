@@ -17,7 +17,6 @@ class CreateTournamentTable extends Migration
             $table->increments(TOURNAMENT_ID);
             $table->integer(HOLDER_ID)->references(IDENTIFIER)->on(DB_USERS_TABLE);
             $table->integer(GAME_ID)->references(GAME_ID)->on(DB_GAME_TABLE);
-            $table->string(FIXTURE_ID)->nullable();
             $table->char(TOURNAMENT_TYPE, 20);
             $table->integer(PARTICIPANT_COUNT);
             $table->string(START_DATE,20);

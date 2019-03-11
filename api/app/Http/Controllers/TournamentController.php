@@ -20,13 +20,18 @@ class TournamentController extends ApiController {
 
     public function __construct() { }
 
+    /**
+     * @description: handle request to create new tournament
+     * @param Request $request
+     * @return mixed: tournament info
+     */
     public function add(Request $request) {
         try {
             $user = JWTAuth::parseToken()->authenticate();
             $rules = array(
                 GAME_ID => 'required',
                 TOURNAMENT_TYPE => 'required',
-                PARTICIPANT_COUNT => 'required',
+                PARTICIPANT_COUNT => 'required|numeric|min:16|max:32',
                 START_DATE => 'required'
             );
 
@@ -38,8 +43,8 @@ class TournamentController extends ApiController {
                     if ($request[START_DATE] > CustomDate::getCurrentMilliseconds()) {
                         $request[STATUS] = 2;
                         $tournament = $this->setTournament($user->id, $request);
-                        $fixture = $this->setDefaultFixture($tournament);
-                        return $this->respondCreated(TOURNAMENT_CREATED_SUCCESSFULLY, $fixture);
+                        $this->setDefaultFixture($tournament);
+                        return $this->respondCreated(TOURNAMENT_CREATED_SUCCESSFULLY, $tournament);
                     } else {
                         return $this->respondWithError(INVALID_DATE);
                     }
@@ -53,11 +58,21 @@ class TournamentController extends ApiController {
         }
     }
 
+    /**
+     * @description: put tournament data to database
+     * @param Integer $userId
+     * @param Request $request
+     * @return mixed: tournament info
+     */
     private function setTournament($userId, $request) {
         $request[HOLDER_ID] = $userId;
         return ApiQuery::setTournament($request);
     }
 
+    /**
+     * @description: prepare tournament`s fixture with given type.
+     * @param array $parameters
+     */
     private function setDefaultFixture($parameters) {
         $fixture = new Fixture($parameters);
         $fixture::setCreatedAt(CustomDate::getDateFromMilliseconds());
@@ -66,6 +81,6 @@ class TournamentController extends ApiController {
             $draws = $fixture::setKnockOutDraws($parameters[START_DATE], $parameters[DAYS]);
         }
         $fixture::setDraws($draws);
-        return $fixture::getFixture();
+        ApiQuery::setFixture($parameters[TOURNAMENT_ID], $fixture::getFixture());
     }
 }

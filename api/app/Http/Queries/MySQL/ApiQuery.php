@@ -2,10 +2,25 @@
 
 namespace App\Http\Queries\MySQL;
 
+use App\Fixture;
 use App\Tournament;
 use App\User;
 
 class ApiQuery {
+
+    /** -------------------- FIXTURE QUERIES -------------------- **/
+
+    /**
+     * @description query to create new tournament`s fixture
+     * @param $tournamentId
+     * @param $fixture
+     */
+    public static function setFixture($tournamentId, $fixture) {
+        Fixture::create([
+            TOURNAMENT_ID => $tournamentId,
+            FIXTURE => json_encode($fixture, JSON_UNESCAPED_UNICODE)
+        ]);
+    }
 
     /** -------------------- TOURNAMENT QUERIES -------------------- **/
 
