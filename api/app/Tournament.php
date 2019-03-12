@@ -10,7 +10,6 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 class Tournament extends Model {
 
     protected $table = DB_TOURNAMENT_TABLE;
@@ -26,5 +25,9 @@ class Tournament extends Model {
 
     public function fixture() {
         return $this->hasOne('App\Fixture');
+    }
+
+    public function participant() {
+        return $this->hasMany('App\Participant');
     }
 }
