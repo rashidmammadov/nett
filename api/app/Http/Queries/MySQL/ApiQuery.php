@@ -3,6 +3,7 @@
 namespace App\Http\Queries\MySQL;
 
 use App\Fixture;
+use App\Participant;
 use App\Tournament;
 use App\User;
 
@@ -22,6 +23,65 @@ class ApiQuery {
         ]);
     }
 
+    /** -------------------- PARTICIPANT QUERIES -------------------- **/
+
+    /**
+     * @description query to append participant to given tournament
+     * @param integer $tournamentId
+     * @param integer $participantId
+     * @param array $parameters
+     */
+    public static function appendTournament($tournamentId, $participantId, $parameters) {
+        Participant::create([
+            TOURNAMENT_ID => $tournamentId,
+            PARTICIPANT_ID => $participantId,
+            PAYMENT_AMOUNT => $parameters[PAYMENT_AMOUNT],
+            PAYMENT_TYPE => $parameters[PAYMENT_TYPE]
+        ]);
+    }
+
+    /**
+     * @description query to check if user already registered for tournament
+     * @param integer $tournamentId
+     * @param integer $participantId
+     * @return mixed $queryResult
+     */
+    public static function checkIfAppended($tournamentId, $participantId) {
+        $queryResult = Participant::where([
+            [TOURNAMENT_ID, EQUAL_SIGN, $tournamentId],
+            [PARTICIPANT_ID, EQUAL_SIGN, $participantId]
+        ])->exists();
+
+        return $queryResult;
+    }
+
+    /**
+     * @description query to get participant detail
+     * @param integer $tournamentId
+     * @param integer $participantId
+     * @return mixed $queryResult
+     */
+    public static function getParticipant($tournamentId, $participantId) {
+        $queryResult = Participant::where([
+            [TOURNAMENT_ID, EQUAL_SIGN, $tournamentId],
+            [PARTICIPANT_ID, EQUAL_SIGN, $participantId]
+        ])->first();
+
+        return $queryResult;
+    }
+
+    /**
+     * @description query to remove participant from tournament
+     * @param integer $tournamentId
+     * @param integer $participantId
+     */
+    public static function removeParticipant($tournamentId, $participantId) {
+        Participant::where([
+            [TOURNAMENT_ID, EQUAL_SIGN, $tournamentId],
+            [PARTICIPANT_ID, EQUAL_SIGN, $participantId]
+        ])->delete();
+    }
+
     /** -------------------- TOURNAMENT QUERIES -------------------- **/
 
     /**
@@ -39,6 +99,19 @@ class ApiQuery {
             STATUS => $tournament[STATUS],
             DAYS => $tournament[DAYS]
         ]);
+
+        return $queryResult;
+    }
+
+    /**
+     * @description query to get tournament general detail
+     * @param integer $tournamentId
+     * @return mixed
+     */
+    public static function getTournament($tournamentId) {
+        $queryResult = Tournament::where([
+            [TOURNAMENT_ID, EQUAL_SIGN, $tournamentId]
+        ])->first();
 
         return $queryResult;
     }
@@ -79,6 +152,19 @@ class ApiQuery {
     public static function getUserByEmail($email) {
         $queryResult = User::where([
             [EMAIL, EQUAL_SIGN, $email]
+        ])->first();
+
+        return $queryResult;
+    }
+
+    /**
+     * @description query to get user by id.
+     * @param $userId
+     * @return mixed
+     */
+    public static function getUserById($userId) {
+        $queryResult = User::where([
+            [IDENTIFIER, EQUAL_SIGN, $userId]
         ])->first();
 
         return $queryResult;

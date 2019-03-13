@@ -14,6 +14,7 @@ class Participant extends Model {
 
     protected $table = DB_PARTICIPANT_TABLE;
     protected $primaryKey = null;
+    public $incrementing = false;
 
     protected $fillable = [
         TOURNAMENT_ID, PARTICIPANT_ID, PAYMENT_AMOUNT, PAYMENT_TYPE, EARNINGS, RANKING, POINT
