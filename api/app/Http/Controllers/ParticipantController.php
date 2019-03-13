@@ -67,6 +67,11 @@ class ParticipantController extends ApiController {
         }
     }
 
+    /**
+     * @description: leave participant from tournament.
+     * @param Request $request
+     * @return mixed
+     */
     public function leave(Request $request) {
         try {
             $user = JWTAuth::parseToken()->authenticate();
