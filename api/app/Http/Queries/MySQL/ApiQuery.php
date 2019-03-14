@@ -56,16 +56,19 @@ class ApiQuery {
     }
 
     /**
-     * @description query to get participant detail
+     * @description query to get all participants if $participantId is null
+     *      or get given $participantId
      * @param integer $tournamentId
      * @param integer $participantId
      * @return mixed $queryResult
      */
-    public static function getParticipant($tournamentId, $participantId) {
-        $queryResult = Participant::where([
-            [TOURNAMENT_ID, EQUAL_SIGN, $tournamentId],
-            [PARTICIPANT_ID, EQUAL_SIGN, $participantId]
-        ])->first();
+    public static function getParticipants($tournamentId, $participantId = null) {
+        $queryResult = Participant::where(TOURNAMENT_ID, EQUAL_SIGN, $tournamentId)
+            ->where(function ($query) use ($participantId) {
+                if ($participantId) {
+                    $query->where(PARTICIPANT_ID, EQUAL_SIGN, $participantId);
+                }
+            })->get();
 
         return $queryResult;
     }

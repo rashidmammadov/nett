@@ -40,19 +40,25 @@ class ParticipantController extends ApiController {
                     $tournament = ApiQuery::getTournament($request[TOURNAMENT_ID]);
                     /** check if tournament registration is active **/
                     if ($tournament[STATUS] == TOURNAMENT_STATUS_OPEN) {
-                        $ifAppended = ApiQuery::checkIfAppended($request[TOURNAMENT_ID], $user[IDENTIFIER]);
-                        /** check if user did not appended before **/
-                        if (!$ifAppended) {
-                            if (strtolower($request[PAYMENT_TYPE]) == strtolower(MONEY) && $user[BUDGET] >= MIN_AMOUNT) {
-                                $data = $this->appendWithMoney($request[TOURNAMENT_ID], $user);
-                            } else if (strtolower($request[PAYMENT_TYPE]) == strtolower(TICKET) && $user[TICKET] > 0) {
-                                $data = $this->appendWithTicket($request[TOURNAMENT_ID], $user);
+                        $participantCount = ApiQuery::getParticipants($request[TOURNAMENT_ID])->count();
+                        /** check if participant count is available **/
+                        if ($participantCount < $tournament[PARTICIPANT_COUNT]) {
+                            $ifAppended = ApiQuery::checkIfAppended($request[TOURNAMENT_ID], $user[IDENTIFIER]);
+                            /** check if user did not appended before **/
+                            if (!$ifAppended) {
+                                if (strtolower($request[PAYMENT_TYPE]) == strtolower(MONEY) && $user[BUDGET] >= MIN_AMOUNT) {
+                                    $data = $this->appendWithMoney($request[TOURNAMENT_ID], $user);
+                                } else if (strtolower($request[PAYMENT_TYPE]) == strtolower(TICKET) && $user[TICKET] > 0) {
+                                    $data = $this->appendWithTicket($request[TOURNAMENT_ID], $user);
+                                } else {
+                                    return $this->respondWithError(INVALID_PAYMENT_TYPE);
+                                }
+                                return $this->respondCreated(APPENDED_SUCCESSFULLY, $data);
                             } else {
-                                return $this->respondWithError(INVALID_PAYMENT_TYPE);
+                                return $this->respondWithError(ALREADY_APPENDED);
                             }
-                            return $this->respondCreated(APPENDED_SUCCESSFULLY, $data);
                         } else {
-                            return $this->respondWithError(ALREADY_APPENDED);
+                            return $this->respondWithError(MAXIMUM_PARTICIPANTS_COUNT_LIMIT);
                         }
                     } else {
                         return $this->respondWithError(EXPIRED_TOURNAMENT);
@@ -153,7 +159,7 @@ class ParticipantController extends ApiController {
      * @return mixed
      */
     private function leaveTournament($tournamentId, $user) {
-        $participant = ApiQuery::getParticipant($tournamentId, $user[IDENTIFIER]);
+        $participant = ApiQuery::getParticipants($tournamentId, $user[IDENTIFIER])->first();
         ApiQuery::removeParticipant($tournamentId, $user->id);
         if (strtolower($participant[PAYMENT_TYPE]) == strtolower(MONEY)) {
             $user[BUDGET] = ($user[BUDGET] + $participant[PAYMENT_AMOUNT]);
