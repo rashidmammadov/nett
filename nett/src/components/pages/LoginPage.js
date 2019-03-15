@@ -21,7 +21,7 @@ export default class LoginPage extends Component {
         signIn(user).then((res) => {
             this.setState({loading: false});
             if (res.status === 'success') {
-                AsyncStorage.setItem('token', res.data.remember_token);
+                AsyncStorage.setItem('user', JSON.stringify(res.data));
                 Actions.AppPage({type: 'reset'});
             } else {
                 Toast.show({

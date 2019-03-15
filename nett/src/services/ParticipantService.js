@@ -1,4 +1,4 @@
-import {apiUrl} from './ConfigService';
+import {apiUrl, token} from './ConfigService';
 
 export const attend = (data) => {
     const URL = apiUrl + 'participant';
@@ -7,6 +7,7 @@ export const attend = (data) => {
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
         },
         body: JSON.stringify(data)
     }).then((res) => res.json());
@@ -17,8 +18,9 @@ export const leave = (data) => {
     return fetch(URL, {
         method: 'DELETE',
         headers: {
-            Accept: 'application/json',
+            'Accept': 'application/json',
             'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
         },
         body: JSON.stringify(data)
     }).then((res) => res.json());

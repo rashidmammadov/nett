@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,17 @@ header('Access-Control-Allow-Origins:*');
 header('Access-Control-Allow-Methods:*');
 
 Route::group(['middleware' => 'cors', 'prefix' => '/v1'], function () {
+
+    Route::get('/init', function() {
+        $route = Artisan::call('route:clear');
+        $config = Artisan::call('config:clear');
+        $cache = Artisan::call('cache:clear');
+        $migrate = Artisan::call('migrate');
+        echo 'route: '.$route.'<br>'.
+            'config: '.$config.'<br>'.
+            'cache: '.$cache.'<br>'.
+            'migrate: '.$migrate;
+    });
 
     Route::get('/refreshUser', 'UserController@refreshUser');
     Route::post('/login', 'UserController@auth');

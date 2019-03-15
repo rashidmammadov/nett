@@ -8,11 +8,11 @@ export default class StartPage extends Component {
 	constructor(props) {
 		super(props);
 		//AsyncStorage.setItem('token', 'rashid');
-		//AsyncStorage.removeItem('token');
+		//AsyncStorage.removeItem('user');
 	}
 
 	async componentDidMount() {
-	    AsyncStorage.getItem('token').then((value) => {
+	    AsyncStorage.getItem('user').then((value) => {
 	        if (value) {
 	            Actions.AppPage({type: 'reset'});
 	        } else {

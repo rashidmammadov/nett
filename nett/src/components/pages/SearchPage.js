@@ -8,7 +8,7 @@ export default class SearchPage extends Component {
         super(props);
         this.state = {
             tournaments: [{
-                tournamentId: 1,
+                tournamentId: 2,
                 attended: true,
                 holderImage: {uri: 'https://beta.ozelden.com/img/logo/logo-min.png'},
                 holder: 'PlayStation 24',
@@ -21,7 +21,7 @@ export default class SearchPage extends Component {
                 currentParticipants: 20
 
             }, {
-                tournamentId: 2,
+                tournamentId: 1,
                 attended: false,
                 holderImage: {uri: 'https://beta.ozelden.com/img/logo/logo-min.png'},
                 holder: 'Keko Bilişim',

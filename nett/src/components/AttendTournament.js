@@ -41,7 +41,7 @@ export default class AttendTournament extends Component {
     $$attend(params) {
         this.setState({loading: true});
         this.setState({visible: false});
-        leave(params).then((res) => {
+        attend(params).then((res) => {
             this.setState({loading: false});
             if (res.status === 'success') {
                 let data = Object.assign({}, this.state.data);
@@ -67,7 +67,7 @@ export default class AttendTournament extends Component {
     $$leave(params) {
         this.setState({loading: true});
         this.setState({visible: false});
-        attend(params).then((res) => {
+        leave(params).then((res) => {
             this.setState({loading: false});
             if (res.status === 'success') {
                 let data = Object.assign({}, this.state.data);

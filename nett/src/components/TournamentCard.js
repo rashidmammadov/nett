@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {ImageBackground, View} from 'react-native';
-import {Card, CardItem, Thumbnail, Text, Button, Left, Body, Right, Toast} from 'native-base';
+import {Card, CardItem, Thumbnail, Text, Left, Body, Right} from 'native-base';
 import AttendTournament from './AttendTournament';
 import Icon from 'react-native-vector-icons/Feather';
 
@@ -11,26 +11,6 @@ export default class TournamentCard extends Component {
         this.state = {
             data: this.props.tournament
         };
-    }
-
-    attendTournament() {
-        let data = Object.assign({}, this.state.data);
-        data.attended = !data.attended;
-        this.$$setParticipantsCount(data);
-        this.setState({data});
-        this.$$toastMessage(data.attended, 'message');
-    }
-
-    $$setParticipantsCount(data) {
-        data.currentParticipants = data.currentParticipants + (data.attended ? 1 : -1);
-    }
-
-    $$toastMessage(status, message) {
-        Toast.show({
-            text: message,
-            buttonText: 'tamam',
-            type: status ? 'success' : 'warning'
-        });
     }
 
     render() {
