@@ -1,8 +1,8 @@
 <?php
 
 define('ADDRESS', 'address');
-define('APPENDED_SUCCESSFULLY', 'Başarıyla katılım sağlandı');
-define('ALREADY_APPENDED', 'Zaten bu tunuvaya katıldın');
+define('ATTENDED_SUCCESSFULLY', 'Başarıyla katılım sağlandı');
+define('ALREADY_ATTENDED', 'Zaten bu tunuvaya katıldın');
 define('AVAILABLE', 'available');
 define('AWAY', 'away');
 define('AWAY_POINT', 'awayPoint');
@@ -19,7 +19,7 @@ define('DB_GAME_TABLE', 'game');
 define('DB_PARTICIPANT_TABLE', 'participant');
 define('DB_TOURNAMENT_TABLE', 'tournament');
 define('DB_USERS_TABLE', 'users');
-define('DID_NOT_APPENDED', 'Bu turnuvaya zaten katılmadın');
+define('DID_NOT_ATTENDED', 'Bu turnuvaya zaten katılmadın');
 define('DISTRICT', 'district');
 define('DRAWS', 'draws');
 define('DRAW_TITLE', 'drawTitle');

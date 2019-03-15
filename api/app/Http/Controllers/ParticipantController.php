@@ -19,11 +19,11 @@ class ParticipantController extends ApiController {
     public function __construct() { }
 
     /**
-     * @description: append player to given tournament.
+     * @description: attend player to given tournament.
      * @param Request $request
      * @return mixed
      */
-    public function append(Request $request) {
+    public function attend(Request $request) {
         try {
             $user = JWTAuth::parseToken()->authenticate();
             $rules = array(
@@ -43,19 +43,19 @@ class ParticipantController extends ApiController {
                         $participantCount = ApiQuery::getParticipants($request[TOURNAMENT_ID])->count();
                         /** check if participant count is available **/
                         if ($participantCount < $tournament[PARTICIPANT_COUNT]) {
-                            $ifAppended = ApiQuery::checkIfAppended($request[TOURNAMENT_ID], $user[IDENTIFIER]);
-                            /** check if user did not appended before **/
-                            if (!$ifAppended) {
+                            $ifAttended = ApiQuery::checkIfAttended($request[TOURNAMENT_ID], $user[IDENTIFIER]);
+                            /** check if user did not attended before **/
+                            if (!$ifAttended) {
                                 if (strtolower($request[PAYMENT_TYPE]) == strtolower(MONEY) && $user[BUDGET] >= MIN_AMOUNT) {
-                                    $data = $this->appendWithMoney($request[TOURNAMENT_ID], $user);
+                                    $data = $this->attendWithMoney($request[TOURNAMENT_ID], $user);
                                 } else if (strtolower($request[PAYMENT_TYPE]) == strtolower(TICKET) && $user[TICKET] > 0) {
-                                    $data = $this->appendWithTicket($request[TOURNAMENT_ID], $user);
+                                    $data = $this->attendWithTicket($request[TOURNAMENT_ID], $user);
                                 } else {
                                     return $this->respondWithError(INVALID_PAYMENT_TYPE);
                                 }
-                                return $this->respondCreated(APPENDED_SUCCESSFULLY, $data);
+                                return $this->respondCreated(ATTENDED_SUCCESSFULLY, $data);
                             } else {
-                                return $this->respondWithError(ALREADY_APPENDED);
+                                return $this->respondWithError(ALREADY_ATTENDED);
                             }
                         } else {
                             return $this->respondWithError(MAXIMUM_PARTICIPANTS_COUNT_LIMIT);
@@ -91,12 +91,12 @@ class ParticipantController extends ApiController {
             } else {
                 $tournament = ApiQuery::getTournament($request[TOURNAMENT_ID]);
                 if ($tournament->status == TOURNAMENT_STATUS_OPEN) {
-                    $ifAppended = ApiQuery::checkIfAppended($request[TOURNAMENT_ID], $user[IDENTIFIER]);
-                    if ($ifAppended) {
+                    $ifAttended = ApiQuery::checkIfAttended($request[TOURNAMENT_ID], $user[IDENTIFIER]);
+                    if ($ifAttended) {
                         $data = $this->leaveTournament($request[TOURNAMENT_ID], $user);
                         return $this->respondCreated(LEFT_TOURNAMENT_SUCCESSFULLY, $data);
                     } else {
-                        return $this->respondWithError(DID_NOT_APPENDED);
+                        return $this->respondWithError(DID_NOT_ATTENDED);
                     }
                 } else {
                     return $this->respondWithError(EXPIRED_TOURNAMENT);
@@ -109,18 +109,18 @@ class ParticipantController extends ApiController {
     }
 
     /**
-     * @description: append tournament with money.
+     * @description: attend tournament with money.
      * @param integer $tournamentId
      * @param object $user
      * @return mixed
      */
-    private function appendWithMoney($tournamentId, $user) {
+    private function attendWithMoney($tournamentId, $user) {
         $participantId = $user[IDENTIFIER];
         $params = array(
             PAYMENT_AMOUNT => MIN_AMOUNT,
             PAYMENT_TYPE => MONEY
         );
-        ApiQuery::appendTournament($tournamentId, $participantId, $params);
+        ApiQuery::attendTournament($tournamentId, $participantId, $params);
         $user[BUDGET] = number_format($user[BUDGET] - MIN_AMOUNT, 2, '.', '');
         $user->save();
 
@@ -131,18 +131,18 @@ class ParticipantController extends ApiController {
     }
 
     /**
-     * @description: append tournament with ticket.
+     * @description: attend tournament with ticket.
      * @param integer $tournamentId
      * @param object $user
      * @return mixed
      */
-    private function appendWithTicket($tournamentId, $user) {
+    private function attendWithTicket($tournamentId, $user) {
         $participantId = $user[IDENTIFIER];
         $params = array(
             PAYMENT_AMOUNT => 0,
             PAYMENT_TYPE => TICKET
         );
-        ApiQuery::appendTournament($tournamentId, $participantId, $params);
+        ApiQuery::attendTournament($tournamentId, $participantId, $params);
         $user[TICKET] = ($user[TICKET] - 1);
         $user->save();
 

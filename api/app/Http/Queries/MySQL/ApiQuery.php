@@ -26,12 +26,12 @@ class ApiQuery {
     /** -------------------- PARTICIPANT QUERIES -------------------- **/
 
     /**
-     * @description query to append participant to given tournament
+     * @description query to attend participant to given tournament
      * @param integer $tournamentId
      * @param integer $participantId
      * @param array $parameters
      */
-    public static function appendTournament($tournamentId, $participantId, $parameters) {
+    public static function attendTournament($tournamentId, $participantId, $parameters) {
         Participant::create([
             TOURNAMENT_ID => $tournamentId,
             PARTICIPANT_ID => $participantId,
@@ -46,7 +46,7 @@ class ApiQuery {
      * @param integer $participantId
      * @return mixed $queryResult
      */
-    public static function checkIfAppended($tournamentId, $participantId) {
+    public static function checkIfAttended($tournamentId, $participantId) {
         $queryResult = Participant::where([
             [TOURNAMENT_ID, EQUAL_SIGN, $tournamentId],
             [PARTICIPANT_ID, EQUAL_SIGN, $participantId]
