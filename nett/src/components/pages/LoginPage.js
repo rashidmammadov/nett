@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import {AsyncStorage, ScrollView} from 'react-native';
-import {Root, Container, Header, Form, Footer, FooterTab, Item, Input, Button, Text, Toast} from 'native-base';
+import {Root, Container, Footer, Item, Input, Button, Text, Toast} from 'native-base';
 import {Actions} from 'react-native-router-flux';
 import {signIn} from '../../services/SignService.js';
-import {style} from '../../assets/style/Custom.js';
 
 export default class LoginPage extends Component {
 
@@ -17,7 +16,7 @@ export default class LoginPage extends Component {
 	    let user = {
             email: this.state.email,
             password: this.state.password
-        }
+        };
         this.setState({loading: true});
         signIn(user).then((res) => {
             this.setState({loading: false});

@@ -1,25 +1,25 @@
 import {apiUrl} from './ConfigService';
 
-export const signIn = (user) => {
-    const URL = apiUrl + 'login';
+export const attend = (data) => {
+    const URL = apiUrl + 'participant';
     return fetch(URL, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(user)
+        body: JSON.stringify(data)
     }).then((res) => res.json());
 };
 
-export const signUp = (user) => {
-    const URL = apiUrl + 'register';
+export const leave = (data) => {
+    const URL = apiUrl + 'participant';
     return fetch(URL, {
-        method: 'POST',
+        method: 'DELETE',
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(user)
+        body: JSON.stringify(data)
     }).then((res) => res.json());
 };

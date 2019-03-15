@@ -8,7 +8,7 @@ export default class SearchPage extends Component {
         super(props);
         this.state = {
             tournaments: [{
-                id: 1,
+                tournamentId: 1,
                 attended: true,
                 holderImage: {uri: 'https://beta.ozelden.com/img/logo/logo-min.png'},
                 holder: 'PlayStation 24',
@@ -17,11 +17,11 @@ export default class SearchPage extends Component {
                 gameImage: {uri: 'https://i.cnnturk.com/ps/cnnturk/75/650x325/5b6f078661361f2a14f6eea9.jpg'},
                 date: '29/03',
                 price: '15 ₺',
-                maxParticipants: 24,
+                participantCount: 24,
                 currentParticipants: 20
 
             }, {
-                id: 2,
+                tournamentId: 2,
                 attended: false,
                 holderImage: {uri: 'https://beta.ozelden.com/img/logo/logo-min.png'},
                 holder: 'Keko Bilişim',
@@ -29,7 +29,7 @@ export default class SearchPage extends Component {
                 gameName: 'PUBG',
                 date: '01/04',
                 price: '15 ₺',
-                maxParticipants: 32,
+                participantCount: 32,
                 currentParticipants: 25,
                 gameImage: {uri: 'https://steamcdn-a.akamaihd.net/steam/apps/578080/header.jpg?t=1545084399'}
             },]

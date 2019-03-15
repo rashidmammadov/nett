@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {ImageBackground, View} from 'react-native';
 import {Card, CardItem, Thumbnail, Text, Button, Left, Body, Right, Toast} from 'native-base';
+import AttendTournament from './AttendTournament';
 import Icon from 'react-native-vector-icons/Feather';
 
 export default class TournamentCard extends Component {
@@ -46,15 +47,7 @@ export default class TournamentCard extends Component {
                         </Body>
                     </Left>
                     <Right>
-                        <Button small light={!this.state.data.attended} success={this.state.data.attended}
-                            onPress={() => this.attendTournament()}>
-                            <Text uppercase={false} style={{fontFamily: 'GoogleSans-Regular'}}>
-                                {this.state.data.attended ? 'Katıldın' : 'Katıl'}
-                            </Text>
-                        </Button>
-                        <Text note style={{fontFamily: 'GoogleSans-Regular'}}>
-                            {this.state.data.maxParticipants - this.state.data.currentParticipants} yer kaldı
-                        </Text>
+                        <AttendTournament data={this.props.tournament}/>
                     </Right>
                 </CardItem>
                 <CardItem cardBody>
@@ -78,7 +71,7 @@ export default class TournamentCard extends Component {
                         </View>
                         <View style={{justifyContent: 'center', alignItems: 'center'}}>
                             <Text note style={{fontFamily: 'GoogleSans-Regular'}}>Katılımcı</Text>
-                            <Text style={{fontSize: 16, fontFamily: 'GoogleSans-Regular', color: '#f8f8f8'}}>{this.state.data.maxParticipants}</Text>
+                            <Text style={{fontSize: 16, fontFamily: 'GoogleSans-Regular', color: '#f8f8f8'}}>{this.state.data.participantCount}</Text>
                         </View>
                     </View>
                 </CardItem>
