@@ -10,6 +10,7 @@ define('BIRTHDAY', 'birthday');
 define('BUDGET', 'budget');
 define('CITY', 'city');
 define('CREATED_AT', 'createdAt');
+define('CURRENT_PARTICIPANTS', 'currentParticipants');
 define('DATA', 'data');
 define('DATE', 'date');
 define('DATE_FORMAT', 'd/m/Y H:i');

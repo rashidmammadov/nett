@@ -53,6 +53,7 @@ class ParticipantController extends ApiController {
                                 } else {
                                     return $this->respondWithError(INVALID_PAYMENT_TYPE);
                                 }
+                                $data[CURRENT_PARTICIPANTS] = $participantCount + 1;
                                 return $this->respondCreated(ATTENDED_SUCCESSFULLY, $data);
                             } else {
                                 return $this->respondWithError(ALREADY_ATTENDED);
@@ -94,6 +95,7 @@ class ParticipantController extends ApiController {
                     $ifAttended = ApiQuery::checkIfAttended($request[TOURNAMENT_ID], $user[IDENTIFIER]);
                     if ($ifAttended) {
                         $data = $this->leaveTournament($request[TOURNAMENT_ID], $user);
+                        $data[CURRENT_PARTICIPANTS] = ApiQuery::getParticipants($request[TOURNAMENT_ID])->count();
                         return $this->respondCreated(LEFT_TOURNAMENT_SUCCESSFULLY, $data);
                     } else {
                         return $this->respondWithError(DID_NOT_ATTENDED);
@@ -126,7 +128,8 @@ class ParticipantController extends ApiController {
 
         return array(
             PAYMENT_TYPE => MONEY,
-            BUDGET => $user[BUDGET]
+            BUDGET => $user[BUDGET],
+            TICKET => $user[TICKET]
         );
     }
 
@@ -148,6 +151,7 @@ class ParticipantController extends ApiController {
 
         return array(
             PAYMENT_TYPE => TICKET,
+            BUDGET => $user[BUDGET],
             TICKET => $user[TICKET]
         );
     }
