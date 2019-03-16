@@ -85,6 +85,8 @@
       <path value="$PROJECT_DIR$/api/vendor/league/flysystem" />
       <path value="$PROJECT_DIR$/api/vendor/phpunit/php-code-coverage" />
       <path value="$PROJECT_DIR$/api/vendor/phpunit/php-token-stream" />
+      <path value="$PROJECT_DIR$/api/vendor/symfony/polyfill-iconv" />
+      <path value="$PROJECT_DIR$/api/vendor/symfony/polyfill-intl-idn" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />
