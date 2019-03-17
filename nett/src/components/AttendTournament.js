@@ -4,6 +4,7 @@ import {Button, Text} from 'native-base';
 import Dialog, { DialogContent } from 'react-native-popup-dialog';
 import {attend, leave} from "../services/ParticipantService";
 import {errorToast, successToast, warningToast} from "../services/ToastService";
+import {MONEY, SUCCESS, TICKET} from "../services/Constants";
 
 export default class AttendTournament extends Component {
 
@@ -19,7 +20,7 @@ export default class AttendTournament extends Component {
     attendWithMoney() {
         let params = {
             tournamentId: this.state.data.tournamentId,
-            paymentType: 'money'
+            paymentType: MONEY
         };
         this.$$attend(params);
     }
@@ -27,7 +28,7 @@ export default class AttendTournament extends Component {
     attendWithTicket() {
         let params = {
             tournamentId: this.state.data.tournamentId,
-            paymentType: 'ticket'
+            paymentType: TICKET
         };
         this.$$attend(params);
     }
@@ -45,7 +46,7 @@ export default class AttendTournament extends Component {
         attend(params)
             .then((res) => {
                 this.setState({loading: false});
-                if (res.status === 'success') {
+                if (res.status === SUCCESS) {
                     let data = Object.assign({}, this.state.data);
                     data.attended = true;
                     data.currentParticipants = res.data.currentParticipants;
@@ -56,6 +57,7 @@ export default class AttendTournament extends Component {
                 }
             })
             .catch((error) => {
+                this.setState({loading: false});
                 errorToast(error.message);
             });
     }
@@ -66,7 +68,7 @@ export default class AttendTournament extends Component {
         leave(params)
             .then((res) => {
                 this.setState({loading: false});
-                if (res.status === 'success') {
+                if (res.status === SUCCESS) {
                     let data = Object.assign({}, this.state.data);
                     data.attended = false;
                     data.currentParticipants = res.data.currentParticipants;
@@ -77,6 +79,7 @@ export default class AttendTournament extends Component {
                 }
             })
             .catch((error) => {
+                this.setState({loading: false});
                 errorToast(error.message);
             });
     }

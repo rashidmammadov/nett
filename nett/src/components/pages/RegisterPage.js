@@ -43,6 +43,7 @@ export default class RegisterPage extends Component {
                 }
             })
             .catch((error) => {
+                this.setState({loading: false});
                 errorToast(error.message);
             });
 	}

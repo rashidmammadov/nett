@@ -33,6 +33,7 @@ export default class LoginPage extends Component {
                 }
             })
             .catch((error) => {
+                this.setState({loading: false});
                 errorToast(error.message);
             });
 	}
