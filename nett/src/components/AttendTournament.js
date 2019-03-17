@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import {View} from 'react-native';
-import {Button, Text, Toast} from 'native-base';
+import {Button, Text} from 'native-base';
 import Dialog, { DialogContent } from 'react-native-popup-dialog';
 import {attend, leave} from "../services/ParticipantService";
+import {errorToast, successToast, warningToast} from "../services/ToastService";
 
 export default class AttendTournament extends Component {
 
@@ -41,53 +42,43 @@ export default class AttendTournament extends Component {
     $$attend(params) {
         this.setState({loading: true});
         this.setState({visible: false});
-        attend(params).then((res) => {
-            this.setState({loading: false});
-            if (res.status === 'success') {
-                let data = Object.assign({}, this.state.data);
-                data.attended = true;
-                data.currentParticipants = res.data.currentParticipants;
-                this.setState({data});
-
-                Toast.show({
-                    text: res.message,
-                    buttonText: 'tamam',
-                    type: 'success'
-                });
-            } else {
-                Toast.show({
-                    text: res.message,
-                    buttonText: 'tamam',
-                    type: 'warning'
-                });
-            }
-        });
+        attend(params)
+            .then((res) => {
+                this.setState({loading: false});
+                if (res.status === 'success') {
+                    let data = Object.assign({}, this.state.data);
+                    data.attended = true;
+                    data.currentParticipants = res.data.currentParticipants;
+                    this.setState({data});
+                    successToast(res.message);
+                } else {
+                    warningToast(res.message);
+                }
+            })
+            .catch((error) => {
+                errorToast(error.message);
+            });
     }
 
     $$leave(params) {
         this.setState({loading: true});
         this.setState({visible: false});
-        leave(params).then((res) => {
-            this.setState({loading: false});
-            if (res.status === 'success') {
-                let data = Object.assign({}, this.state.data);
-                data.attended = false;
-                data.currentParticipants = res.data.currentParticipants;
-                this.setState({data});
-
-                Toast.show({
-                    text: res.message,
-                    buttonText: 'tamam',
-                    type: 'success'
-                });
-            } else {
-                Toast.show({
-                    text: res.message,
-                    buttonText: 'tamam',
-                    type: 'warning'
-                });
-            }
-        });
+        leave(params)
+            .then((res) => {
+                this.setState({loading: false});
+                if (res.status === 'success') {
+                    let data = Object.assign({}, this.state.data);
+                    data.attended = false;
+                    data.currentParticipants = res.data.currentParticipants;
+                    this.setState({data});
+                    successToast(res.message);
+                } else {
+                    warningToast(res.message);
+                }
+            })
+            .catch((error) => {
+                errorToast(error.message);
+            });
     }
 
     render() {

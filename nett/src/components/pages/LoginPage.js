@@ -3,6 +3,9 @@ import {AsyncStorage, ScrollView} from 'react-native';
 import {Root, Container, Footer, Item, Input, Button, Text, Toast} from 'native-base';
 import {Actions} from 'react-native-router-flux';
 import {signIn} from '../../services/SignService.js';
+import {setUser} from "../../services/ConfigService";
+import {errorToast, warningToast} from "../../services/ToastService";
+import {RESET, SUCCESS, USER_STORAGE} from "../../services/Constants";
 
 export default class LoginPage extends Component {
 
@@ -18,19 +21,20 @@ export default class LoginPage extends Component {
             password: this.state.password
         };
         this.setState({loading: true});
-        signIn(user).then((res) => {
-            this.setState({loading: false});
-            if (res.status === 'success') {
-                AsyncStorage.setItem('user', JSON.stringify(res.data));
-                Actions.AppPage({type: 'reset'});
-            } else {
-                Toast.show({
-                    text: res.message,
-                    buttonText: 'tamam',
-                    type: 'danger'
-                });
-            }
-        });
+        signIn(user)
+            .then((res) => {
+                this.setState({loading: false});
+                if (res.status === SUCCESS) {
+                    setUser(res.data);
+                    AsyncStorage.setItem(USER_STORAGE, JSON.stringify(res.data));
+                    Actions.AppPage({type: RESET});
+                } else {
+                    warningToast(res.message);
+                }
+            })
+            .catch((error) => {
+                errorToast(error.message);
+            });
 	}
 
 	render() {

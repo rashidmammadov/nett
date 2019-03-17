@@ -4,6 +4,9 @@ import {Root, Container, Footer, Item, Input, Picker, Button, Text, Toast} from 
 import {Actions} from 'react-native-router-flux';
 import {regions} from '../../services/DataService.js';
 import {signUp} from '../../services/SignService.js';
+import {setUser} from "../../services/ConfigService";
+import {errorToast, successToast, warningToast} from "../../services/ToastService";
+import {RESET, SUCCESS, USER_STORAGE} from "../../services/Constants";
 
 export default class RegisterPage extends Component {
 
@@ -22,22 +25,26 @@ export default class RegisterPage extends Component {
 	}
 
 	getRegions() {
-	    regions().then((res) => {
-	        this.setState({loading: false});
-	        if (res.status === 'success') {
-	            this.setState({
-	                regions: res.data.regions,
-	                cities: Object.keys(res.data.regions)
-	            });
-	            this.setState({
-	                districts: res.data.regions[this.state.cities[34]]
-	            });
-	            this.setState({
-	                selectedCity: this.state.cities[34],
-	                selectedDistrict: this.state.districts[0]
-	            });
-	        }
-	    })
+	    regions()
+            .then((res) => {
+                this.setState({loading: false});
+                if (res.status === SUCCESS) {
+                    this.setState({
+                        regions: res.data.regions,
+                        cities: Object.keys(res.data.regions)
+                    });
+                    this.setState({
+                        districts: res.data.regions[this.state.cities[34]]
+                    });
+                    this.setState({
+                        selectedCity: this.state.cities[34],
+                        selectedDistrict: this.state.districts[0]
+                    });
+                }
+            })
+            .catch((error) => {
+                errorToast(error.message);
+            });
 	}
 
 	register() {
@@ -50,23 +57,20 @@ export default class RegisterPage extends Component {
             city: this.state.selectedCity,
             district: this.state.selectedDistrict
         };
-        signUp(user).then((res) => {
-            if (res.status === 'success') {
-                AsyncStorage.setItem('token', res.data.remember_token);
-                Actions.AppPage({type: 'reset'});
-                Toast.show({
-                    text: 'Hesap başarıyla oluşturuldu',
-                    buttonText: 'tamam',
-                    type: 'success'
-                });
-            } else {
-                Toast.show({
-                    text: res.message,
-                    buttonText: 'tamam',
-                    type: 'danger'
-                });
-            }
-        });
+        signUp(user)
+            .then((res) => {
+                if (res.status === SUCCESS) {
+                    setUser(res.data);
+                    AsyncStorage.setItem(USER_STORAGE, JSON.stringify(res.data));
+                    Actions.AppPage({type: RESET});
+                    successToast(res.message);
+                } else {
+                    warningToast(res.message);
+                }
+            })
+            .catch((error) => {
+                errorToast(error.message);
+            });
 	}
 
 	onCityChange(value) {
