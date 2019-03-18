@@ -19,7 +19,6 @@ export default class SearchPage extends Component {
                 price: '15 ₺',
                 participantCount: 24,
                 currentParticipants: 20
-
             }, {
                 tournamentId: 1,
                 attended: false,

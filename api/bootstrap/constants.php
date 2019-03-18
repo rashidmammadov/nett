@@ -45,6 +45,7 @@ define('INVALID_EMAIL_OR_PASSWORD', 'Geçersiz email veya şifre');
 define('INVALID_PAYMENT_TYPE', 'Geçersiz ödeme tipi');
 define('KNOCK_OUT', 'knock_out');
 define('LEFT_TOURNAMENT_SUCCESSFULLY', 'Turnuvadan başarıyla ayrıldın');
+define('LIKE_SIGN', 'like');
 define('LOGGED_IN_SUCCESSFULLY', 'Oturum başarıyla açıldı');
 define('LOGGED_OUT_SUCCESSFULLY', 'Oturum başarıyla kapatıldı');
 define('LOSER', 'loser');

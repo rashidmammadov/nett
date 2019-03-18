@@ -11,6 +11,7 @@ namespace App\Http\Controllers;
 use App\Http\Queries\MySQL\ApiQuery;
 use App\Http\Utility\CustomDate;
 use App\Http\Utility\Fixture;
+use App\Repository\Transformers\TournamentTransformer;
 use Illuminate\Http\Request;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -18,7 +19,11 @@ use Validator;
 
 class TournamentController extends ApiController {
 
-    public function __construct() { }
+    private $tournamentTransformer;
+
+    public function __construct(TournamentTransformer $tournamentTransformer) {
+        $this->tournamentTransformer = $tournamentTransformer;
+    }
 
     /**
      * @description: handle request to create new tournament
@@ -52,6 +57,23 @@ class TournamentController extends ApiController {
                     return $this->respondWithError(PERMISSION_DENIED);
                 }
             }
+        } catch(JWTException $e) {
+            $this->setStatusCode($e->getStatusCode());
+            return $this->respondWithError($e->getMessage());
+        }
+    }
+
+    public function get(Request $request) {
+        try {
+            $user = JWTAuth::parseToken()->authenticate();
+            $tournaments = ApiQuery::getTournaments($request, $user);
+            $tournamentsList = array();
+            foreach ($tournaments as $tournament) {
+                $tournament[CURRENT_PARTICIPANTS] = ApiQuery::getParticipants($tournament[TOURNAMENT_ID])->count();
+                $data = $this->tournamentTransformer->transform($tournament);
+                array_push($tournamentsList, $data);
+            }
+            return $this->respondCreated(SUCCESS, $tournamentsList);
         } catch(JWTException $e) {
             $this->setStatusCode($e->getStatusCode());
             return $this->respondWithError($e->getMessage());
