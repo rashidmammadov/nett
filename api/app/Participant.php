@@ -17,7 +17,7 @@ class Participant extends Model {
     public $incrementing = false;
 
     protected $fillable = [
-        TOURNAMENT_ID, PARTICIPANT_ID, PAYMENT_AMOUNT, PAYMENT_TYPE, EARNINGS, RANKING, POINT
+        TOURNAMENT_ID, PARTICIPANT_ID, PAYMENT_AMOUNT, PAYMENT_TYPE, EARNINGS, RANKING, POINT, REFERENCE_CODE
     ];
 
     public function tournament() {

@@ -36,7 +36,8 @@ class ApiQuery {
             TOURNAMENT_ID => $tournamentId,
             PARTICIPANT_ID => $participantId,
             PAYMENT_AMOUNT => $parameters[PAYMENT_AMOUNT],
-            PAYMENT_TYPE => $parameters[PAYMENT_TYPE]
+            PAYMENT_TYPE => $parameters[PAYMENT_TYPE],
+            REFERENCE_CODE => $parameters[REFERENCE_CODE]
         ]);
     }
 

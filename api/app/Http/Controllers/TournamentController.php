@@ -99,6 +99,10 @@ class TournamentController extends ApiController {
         foreach ($tournaments as $tournament) {
             $tournament[CURRENT_PARTICIPANTS] = ApiQuery::getParticipants($tournament[TOURNAMENT_ID])->count();
             $tournament[ATTENDED] = ApiQuery::checkIfAttended($tournament[TOURNAMENT_ID], $user[IDENTIFIER]);
+            if ($tournament[ATTENDED]) {
+                $participatedUser = ApiQuery::getParticipants($tournament[TOURNAMENT_ID], $user[IDENTIFIER])->first();
+                $tournament[REFERENCE_CODE] = $participatedUser[REFERENCE_CODE];
+            }
             $data = $this->tournamentTransformer->transform($tournament);
             array_push($tournamentsList, $data);
         }

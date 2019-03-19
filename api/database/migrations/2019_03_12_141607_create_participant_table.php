@@ -19,6 +19,7 @@ class CreateParticipantTable extends Migration {
             $table->double(EARNINGS)->nullable();
             $table->smallInteger(RANKING)->nullable();
             $table->smallInteger(POINT)->nullable();
+            $table->char(REFERENCE_CODE, 8)->nullable();
             $table->timestamps();
         });
     }

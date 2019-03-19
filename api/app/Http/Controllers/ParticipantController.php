@@ -10,6 +10,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Queries\MySQL\ApiQuery;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Validator;
@@ -118,9 +119,11 @@ class ParticipantController extends ApiController {
      */
     private function attendWithMoney($tournamentId, $user) {
         $participantId = $user[IDENTIFIER];
+        $referenceCode = Str::random(8);
         $params = array(
             PAYMENT_AMOUNT => MIN_AMOUNT,
-            PAYMENT_TYPE => MONEY
+            PAYMENT_TYPE => MONEY,
+            REFERENCE_CODE => $referenceCode
         );
         ApiQuery::attendTournament($tournamentId, $participantId, $params);
         $user[BUDGET] = number_format($user[BUDGET] - MIN_AMOUNT, 2, '.', '');
@@ -129,7 +132,8 @@ class ParticipantController extends ApiController {
         return array(
             PAYMENT_TYPE => MONEY,
             BUDGET => $user[BUDGET],
-            TICKET => $user[TICKET]
+            TICKET => $user[TICKET],
+            REFERENCE_CODE => $referenceCode
         );
     }
 
@@ -141,9 +145,11 @@ class ParticipantController extends ApiController {
      */
     private function attendWithTicket($tournamentId, $user) {
         $participantId = $user[IDENTIFIER];
+        $referenceCode = Str::random(8);
         $params = array(
             PAYMENT_AMOUNT => 0,
-            PAYMENT_TYPE => TICKET
+            PAYMENT_TYPE => TICKET,
+            REFERENCE_CODE => $referenceCode
         );
         ApiQuery::attendTournament($tournamentId, $participantId, $params);
         $user[TICKET] = ($user[TICKET] - 1);
@@ -152,7 +158,8 @@ class ParticipantController extends ApiController {
         return array(
             PAYMENT_TYPE => TICKET,
             BUDGET => $user[BUDGET],
-            TICKET => $user[TICKET]
+            TICKET => $user[TICKET],
+            REFERENCE_CODE => $referenceCode
         );
     }
 
@@ -166,7 +173,7 @@ class ParticipantController extends ApiController {
         $participant = ApiQuery::getParticipants($tournamentId, $user[IDENTIFIER])->first();
         ApiQuery::removeParticipant($tournamentId, $user->id);
         if (strtolower($participant[PAYMENT_TYPE]) == strtolower(MONEY)) {
-            $user[BUDGET] = ($user[BUDGET] + $participant[PAYMENT_AMOUNT]);
+            $user[BUDGET] = number_format($user[BUDGET] + $participant[PAYMENT_AMOUNT], 2, '.', '');
         } else if (strtolower($participant[PAYMENT_TYPE]) == strtolower(TICKET)) {
             $user[TICKET] = ($user[TICKET] + 1);
         }
