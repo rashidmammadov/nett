@@ -8,9 +8,8 @@
 
 namespace App\Repository\Transformers;
 
-
-use App\Http\Utility\Fixture;
 use App\Http\Utility\CustomDate;
+use App\Http\Utility\Fixture;
 
 class TournamentTransformer extends Transformer {
 
