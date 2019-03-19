@@ -63,21 +63,46 @@ class TournamentController extends ApiController {
         }
     }
 
+    /**
+     * @description: handle request to get tournaments
+     * @param Request $request
+     * @return mixed: tournament info
+     */
     public function get(Request $request) {
         try {
             $user = JWTAuth::parseToken()->authenticate();
-            $tournaments = ApiQuery::getTournaments($request, $user);
-            $tournamentsList = array();
-            foreach ($tournaments as $tournament) {
-                $tournament[CURRENT_PARTICIPANTS] = ApiQuery::getParticipants($tournament[TOURNAMENT_ID])->count();
-                $data = $this->tournamentTransformer->transform($tournament);
-                array_push($tournamentsList, $data);
+            $rules = array(
+                STATUS => 'required'
+            );
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return $this->respondValidationError(FIELDS_VALIDATION_FAILED, $validator->errors());
+            } else {
+                $tournaments = $this->getTournaments($request, $user);
+                return $this->respondCreated(SUCCESS, $tournaments);
             }
-            return $this->respondCreated(SUCCESS, $tournamentsList);
         } catch(JWTException $e) {
             $this->setStatusCode($e->getStatusCode());
             return $this->respondWithError($e->getMessage());
         }
+    }
+
+    /**
+     * @description: get tournaments which is mached with given parameters
+     * @param Request $request
+     * @param array $user
+     * @return mixed: tournament info
+     */
+    private function getTournaments($request, $user) {
+        $tournaments = ApiQuery::getTournaments($request, $user);
+        $tournamentsList = array();
+        foreach ($tournaments as $tournament) {
+            $tournament[CURRENT_PARTICIPANTS] = ApiQuery::getParticipants($tournament[TOURNAMENT_ID])->count();
+            $tournament[ATTENDED] = ApiQuery::checkIfAttended($tournament[TOURNAMENT_ID], $user[IDENTIFIER]);
+            $data = $this->tournamentTransformer->transform($tournament);
+            array_push($tournamentsList, $data);
+        }
+        return $tournamentsList;
     }
 
     /**
