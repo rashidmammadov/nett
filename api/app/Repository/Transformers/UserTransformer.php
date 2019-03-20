@@ -13,16 +13,18 @@ class UserTransformer extends Transformer {
 
     public function transform($user) {
         return [
-            TYPE => $user->type,
-            IDENTIFIER => $user->id,
-            USERNAME => $user->username,
-            NAME => $user->name,
-            SURNAME => $user->surname,
-            BIRTHDAY => $user->birthdat,
-            EMAIL => $user->email,
-            SEX => $user->sex,
-            REMEMBER_TOKEN => $user->remember_token,
-            STATE => $user->state
+            TYPE => $user[TYPE],
+            IDENTIFIER => $user[IDENTIFIER],
+            USERNAME => $user[USERNAME],
+            NAME => $user[NAME],
+            SURNAME => $user[SURNAME],
+            BIRTHDAY => $user[BIRTHDAY],
+            EMAIL => $user[EMAIL],
+            SEX => $user[SEX],
+            REMEMBER_TOKEN => $user[REMEMBER_TOKEN],
+            CITY => $user[CITY],
+            DISTRICT => $user[DISTRICT],
+            STATE => $user[STATE]
         ];
     }
 }
