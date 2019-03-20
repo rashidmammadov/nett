@@ -1,7 +1,7 @@
 import {apiUrl, requestHeader} from './ConfigService';
 
 export const attend = (data) => {
-    const URL = apiUrl + 'participant';
+    const URL = apiUrl + 'participants';
     return fetch(URL, {
         method: 'POST',
         headers: requestHeader(),
@@ -10,7 +10,7 @@ export const attend = (data) => {
 };
 
 export const leave = (data) => {
-    const URL = apiUrl + 'participant';
+    const URL = apiUrl + 'participants';
     return fetch(URL, {
         method: 'DELETE',
         headers: requestHeader(),
