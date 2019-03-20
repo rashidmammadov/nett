@@ -165,6 +165,7 @@ class ApiQuery {
     public static function getTournaments($parameters, $user) {
         $queryResult = Tournament::where(STATUS, EQUAL_SIGN, $parameters[STATUS])
             ->join(DB_USERS_TABLE, (DB_USERS_TABLE.'.'.IDENTIFIER), EQUAL_SIGN, DB_TOURNAMENT_TABLE.'.'.HOLDER_ID)
+            ->join(DB_GAME_TABLE, (DB_GAME_TABLE.'.'.GAME_ID), EQUAL_SIGN, DB_TOURNAMENT_TABLE.'.'.GAME_ID)
 
             ->where(DB_USERS_TABLE.'.'.CITY, LIKE_SIGN, $user[CITY])
             ->get();
