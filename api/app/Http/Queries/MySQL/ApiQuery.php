@@ -24,11 +24,39 @@ class ApiQuery {
         ]);
     }
 
+    /** -------------------- GAME QUERIES -------------------- **/
+
+    /**
+     * @description query to create new game
+     * @param $parameters
+     * @return mixed
+     */
     public static function setGame($parameters) {
-        Game::create([
+        $queryResult = Game::create([
             GAME_NAME => $parameters[GAME_NAME],
-            PLAYING_TYPE => json_encode($parameters[PLAYING_TYPE], JSON_UNESCAPED_UNICODE)
+            GAME_IMAGE => $parameters[GAME_IMAGE],
+            PLAYING_TYPE => json_encode($parameters[PLAYING_TYPE], JSON_UNESCAPED_UNICODE),
+            PLATFORMS => json_encode($parameters[PLATFORMS], JSON_UNESCAPED_UNICODE),
+            DEVELOPER => $parameters[DEVELOPER],
+            GAME_TYPE => $parameters[GAME_TYPE]
         ]);
+
+        return $queryResult;
+    }
+
+    /**
+     * @description query to get games
+     * @param integer $gameId
+     * @return mixed
+     */
+    public static function getGame($gameId = null) {
+        $queryResult = Game::where(function ($query) use ($gameId) {
+            if ($gameId) {
+                $query->where(GAME_ID, EQUAL_SIGN, $gameId);
+            }
+        })->get();
+
+        return $queryResult;
     }
 
     /** -------------------- PARTICIPANT QUERIES -------------------- **/

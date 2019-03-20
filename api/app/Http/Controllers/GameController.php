@@ -9,7 +9,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Queries\MySQL\ApiQuery;
-use App\Http\Utility\Game;
+use App\Repository\Transformers\GameTransformer;
 use Illuminate\Http\Request;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
@@ -17,8 +17,17 @@ use Validator;
 
 class GameController extends ApiController {
 
-    public function __construct() {}
+    private $gameTransformer;
 
+    public function __construct(GameTransformer $gameTransformer) {
+        $this->gameTransformer = $gameTransformer;
+    }
+
+    /**
+     * @description: handle request to create new game
+     * @param Request $request
+     * @return mixed: game info
+     */
     public function add(Request $request) {
         try {
             $admin = JWTAuth::parseToken()->authenticate();
@@ -32,7 +41,8 @@ class GameController extends ApiController {
                 return $this->respondValidationError(FIELDS_VALIDATION_FAILED, $validator->errors());
             } else {
                 if ($admin[TYPE] == ADMIN) {
-                    return $this->respondCreated(SUCCESS, $this->setGame($request));
+                    $result = $this->setGame($request);
+                    return $this->respondCreated(SUCCESS, $result);
                 } else {
                     return $this->respondWithError(PERMISSION_DENIED);
                 }
@@ -43,9 +53,42 @@ class GameController extends ApiController {
         }
     }
 
+    /**
+     * @description: handle request to get games list
+     * @param integer $gameId
+     * @return mixed: game info
+     */
+    public function get($gameId = null) {
+        try {
+            JWTAuth::parseToken()->authenticate();
+            $result = $this->getGames($gameId);
+            return $this->respondCreated(SUCCESS, $result);
+        } catch(JWTException $e) {
+            $this->setStatusCode($e->getStatusCode());
+            return $this->respondWithError($e->getMessage());
+        }
+    }
+
+    /**
+     * @description: send request to add new game
+     * @param Request $request
+     * @return mixed: query result
+     */
     private function setGame($request) {
-        $game = new Game($request);
-        ApiQuery::setGame($game::getGame());
-        return $game::getGame();
+        return ApiQuery::setGame($request);
+    }
+
+    /**
+     * @description: send request to get games
+     * @param integer $gameId
+     * @return mixed: query result
+     */
+    private function getGames($gameId = null) {
+        $games = ApiQuery::getGame($gameId);
+        $gameList = array();
+        foreach ($games as $game) {
+            array_push($gameList, $this->gameTransformer->transform($game));
+        }
+        return $gameId ? $gameList[0] : $gameList;
     }
 }
