@@ -85,7 +85,7 @@ export default class AttendTournament extends Component {
     }
 
     render() {
-        if (this.state.data.attended) {
+        if (this.state.data.attended === true) {
             return (
                 <View>
                     <Button small success onPress={() => { this.leave() }}>
@@ -111,10 +111,10 @@ export default class AttendTournament extends Component {
                                 Turnuvaya Ödemeyi Nasıl Yapacaksın?
                             </Text>
                             <View style={{flexDirection: 'row', marginTop: 16, justifyContent: 'space-between'}}>
-                                <Button small primary onPress={() => this.attendWithMoney()}>
+                                <Button small style={{backgroundColor: '#7F00FF'}} onPress={() => this.attendWithMoney()}>
                                     <Text uppercase={false} style={{fontFamily: 'GoogleSans-Regular'}}>Hesabımdan</Text>
                                 </Button>
-                                <Button small primary onPress={() => this.attendWithTicket()}>
+                                <Button small style={{backgroundColor: '#7F00FF'}} onPress={() => this.attendWithTicket()}>
                                     <Text uppercase={false} style={{fontFamily: 'GoogleSans-Regular'}}>Bilet
                                         Kullanarak</Text>
                                 </Button>
