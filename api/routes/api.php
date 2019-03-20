@@ -43,9 +43,9 @@ Route::group(['middleware' => 'cors', 'prefix' => '/v1'], function () {
     Route::post('/logout', 'UserController@logout');
     Route::post('/register', 'UserController@register');
 
-    Route::post('/participant', 'ParticipantController@attend');
-    Route::delete('/participant', 'ParticipantController@leave');
+    Route::post('/participants', 'ParticipantController@attend');
+    Route::delete('/participants', 'ParticipantController@leave');
 
-    Route::get('/tournament', 'TournamentController@get');
-    Route::post('/tournament', 'TournamentController@add');
+    Route::get('/tournaments', 'TournamentController@get');
+    Route::post('/tournaments', 'TournamentController@add');
 });
