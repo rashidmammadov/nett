@@ -1,6 +1,7 @@
 <?php
 
 define('ADDRESS', 'address');
+define('ADMIN', 'admin');
 define('ATTENDED', 'attended');
 define('ATTENDED_SUCCESSFULLY', 'Başarıyla katılım sağlandı');
 define('ALREADY_ATTENDED', 'Zaten bu tunuvaya katıldın');
@@ -24,6 +25,7 @@ define('DB_GAME_TABLE', 'game');
 define('DB_PARTICIPANT_TABLE', 'participant');
 define('DB_TOURNAMENT_TABLE', 'tournament');
 define('DB_USERS_TABLE', 'users');
+define('DEVELOPER', 'developer');
 define('DID_NOT_ATTENDED', 'Bu turnuvaya zaten katılmadın');
 define('DISTRICT', 'district');
 define('DRAWS', 'draws');
@@ -40,6 +42,7 @@ define('GAME', 'game');
 define('GAME_ID', 'gameId');
 define('GAME_IMAGE', 'gameImage');
 define('GAME_NAME', 'gameName');
+define('GAME_TYPE', 'gameType');
 define('GAMER', 'gamer');
 define('HOLDER', 'holder');
 define('HOLDER_ID', 'holderId');
@@ -82,7 +85,9 @@ define('PICTURE', 'picture');
 define('PHONE', 'phone');
 define('PRICE', 'price');
 define('PROMOTION', 'promotion');
+define('PLATFORMS', 'platforms');
 define('PLAYER', 'player');
+define('PLAYING_TYPE', 'playingType');
 define('POINT', 'point');
 define('RANKING', 'ranking');
 define('REFERENCE_CODE', 'referenceCode');

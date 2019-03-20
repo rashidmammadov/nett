@@ -3,6 +3,7 @@
 namespace App\Http\Queries\MySQL;
 
 use App\Fixture;
+use App\Game;
 use App\Participant;
 use App\Tournament;
 use App\User;
@@ -20,6 +21,13 @@ class ApiQuery {
         Fixture::create([
             TOURNAMENT_ID => $tournamentId,
             FIXTURE => json_encode($fixture, JSON_UNESCAPED_UNICODE)
+        ]);
+    }
+
+    public static function setGame($parameters) {
+        Game::create([
+            GAME_NAME => $parameters[GAME_NAME],
+            PLAYING_TYPE => json_encode($parameters[PLAYING_TYPE], JSON_UNESCAPED_UNICODE)
         ]);
     }
 

@@ -34,6 +34,8 @@ Route::group(['middleware' => 'cors', 'prefix' => '/v1'], function () {
             'migrate: '.$migrate;
     });
 
+    Route::post('/game', 'GameController@add');
+
     Route::get('/refreshUser', 'UserController@refreshUser');
     Route::post('/login', 'UserController@auth');
     Route::post('/logout', 'UserController@logout');

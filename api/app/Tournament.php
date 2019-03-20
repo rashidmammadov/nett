@@ -27,6 +27,10 @@ class Tournament extends Model {
         return $this->hasOne('App\Fixture');
     }
 
+    public function game() {
+        return $this->hasOne('App\Game');
+    }
+
     public function participant() {
         return $this->hasMany('App\Participant');
     }
