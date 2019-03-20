@@ -1,5 +1,9 @@
 export const MONEY = 'money';
 export const RESET = 'reset';
+export const STATUS = 'status';
 export const SUCCESS = 'success';
 export const TICKET = 'ticket';
+export const TOURNAMENT_STATUS_ACTIVE = 1;
+export const TOURNAMENT_STATUS_CLOSE = 0;
+export const TOURNAMENT_STATUS_OPEN = 2;
 export const USER_STORAGE = 'user';

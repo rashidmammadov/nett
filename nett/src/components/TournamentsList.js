@@ -9,7 +9,7 @@ export default class TournamentsList extends Component {
             <View>
                 <FlatList
                     data={this.props.tournaments}
-                    renderItem = {({item}) => <TournamentCard tournament={item} />}
+                    renderItem={({item}) => <TournamentCard tournament={item}/>}
                     keyExtractor={(item, index) => index.toString()}
                 />
             </View>

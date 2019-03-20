@@ -18,12 +18,14 @@ export default class TournamentCard extends Component {
             <Card style={{backgroundColor: '#303030', borderColor: '#303030'}}>
                 <CardItem style={{backgroundColor: 'transparent'}}>
                     <Left>
-                        <Thumbnail small source={this.state.data.holderImage} style={{backgroundColor: '#d3d3d3'}} />
+                        <Thumbnail small source={{uri: this.state.data.holder.picture}} style={{backgroundColor: '#d3d3d3'}} />
                         <Body>
                               <Text style={{fontFamily: 'GoogleSans-Regular', color: '#f8f8f8'}}>
-                                  {this.state.data.holder}
+                                  {this.state.data.holder.username}
                               </Text>
-                              <Text note style={{fontFamily: 'GoogleSans-Regular'}}>{this.state.data.location}</Text>
+                              <Text note style={{fontFamily: 'GoogleSans-Regular'}}>
+                                  {this.state.data.holder.city}/{this.state.data.holder.district}
+                              </Text>
                         </Body>
                     </Left>
                     <Right>
@@ -31,27 +33,39 @@ export default class TournamentCard extends Component {
                     </Right>
                 </CardItem>
                 <CardItem cardBody>
-                    <ImageBackground source={this.state.data.gameImage}
+                    <ImageBackground source={{uri: this.state.data.game.image}}
                            style={{height: 200, width: null, flex: 1}}>
                     </ImageBackground>
                 </CardItem>
                 <CardItem style={{backgroundColor: 'transparent'}}>
-                    <Left>
+                    <View style={{flex: 0.8, flexDirection: 'row'}}>
                         <Icon name='tag' size={24} color={'#f8f8f8'}/>
-                        <Text style={{fontFamily: 'GoogleSans-Regular', color: '#f8f8f8'}}>{this.state.data.gameName}</Text>
-                    </Left>
+                        <Text style={{fontFamily: 'GoogleSans-Regular', color: '#f8f8f8', marginLeft: 8}}>{this.state.data.game.name}</Text>
+                    </View>
                     <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                         <View style={{justifyContent: 'center', alignItems: 'center'}}>
                             <Text note style={{fontFamily: 'GoogleSans-Regular'}}>Tarih</Text>
-                            <Text style={{fontSize: 16, fontFamily: 'GoogleSans-Regular', color: '#f8f8f8'}}>{this.state.data.date}</Text>
+                            <Text style={{fontSize: 16, fontFamily: 'GoogleSans-Regular', color: '#f8f8f8'}}>
+                                {this.state.data.date}
+                            </Text>
+                        </View>
+                        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                            <Text note style={{fontFamily: 'GoogleSans-Regular'}}>Saat</Text>
+                            <Text style={{fontSize: 16, fontFamily: 'GoogleSans-Regular', color: '#f8f8f8'}}>
+                                {this.state.data.time}
+                            </Text>
                         </View>
                         <View style={{justifyContent: 'center', alignItems: 'center'}}>
                             <Text note style={{fontFamily: 'GoogleSans-Regular'}}>Ücret</Text>
-                            <Text style={{fontSize: 16, fontFamily: 'GoogleSans-Regular', color: '#f8f8f8'}}>{this.state.data.price}</Text>
+                            <Text style={{fontSize: 16, fontFamily: 'GoogleSans-Regular', color: '#f8f8f8'}}>
+                                {this.state.data.price.amount} {this.state.data.price.currency}
+                            </Text>
                         </View>
                         <View style={{justifyContent: 'center', alignItems: 'center'}}>
                             <Text note style={{fontFamily: 'GoogleSans-Regular'}}>Katılımcı</Text>
-                            <Text style={{fontSize: 16, fontFamily: 'GoogleSans-Regular', color: '#f8f8f8'}}>{this.state.data.participantCount}</Text>
+                            <Text style={{fontSize: 16, fontFamily: 'GoogleSans-Regular', color: '#f8f8f8'}}>
+                                {this.state.data.participantCount}
+                            </Text>
                         </View>
                     </View>
                 </CardItem>
