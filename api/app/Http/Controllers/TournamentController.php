@@ -93,7 +93,7 @@ class TournamentController extends ApiController {
     }
 
     /**
-     * @description: get tournaments which is mached with given parameters
+     * @description: get tournaments which is matched with given parameters
      * @param Request $request
      * @param array $user
      * @return mixed: tournament info
