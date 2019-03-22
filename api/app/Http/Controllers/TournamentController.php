@@ -45,11 +45,16 @@ class TournamentController extends ApiController {
                 return $this->respondValidationError(FIELDS_VALIDATION_FAILED, $validator->errors());
             } else {
                 if ($user->type == HOLDER) {
+                    $request[START_DATE] = (string)$request[START_DATE];
                     if ($request[START_DATE] > CustomDate::getCurrentMilliseconds()) {
-                        $request[STATUS] = 2;
-                        $tournament = $this->setTournament($user->id, $request);
-                        $this->setDefaultFixture($tournament);
-                        return $this->respondCreated(TOURNAMENT_CREATED_SUCCESSFULLY, $tournament);
+                        if (ApiQuery::checkTournamentsDifferenceIsOneDay($request, $user[IDENTIFIER])) {
+                            $request[STATUS] = TOURNAMENT_STATUS_OPEN;
+                            $tournament = $this->setTournament($user->id, $request);
+                            $this->setDefaultFixture($tournament);
+                            return $this->respondCreated(TOURNAMENT_CREATED_SUCCESSFULLY, $tournament);
+                        } else {
+                            return $this->respondWithError(ALREADY_HAVE_TOURNAMENT_ON_THIS_DATE);
+                        }
                     } else {
                         return $this->respondWithError(INVALID_DATE);
                     }
@@ -134,4 +139,5 @@ class TournamentController extends ApiController {
         $fixture::setDraws($draws);
         ApiQuery::setFixture($parameters[TOURNAMENT_ID], $fixture::getFixture());
     }
+
 }

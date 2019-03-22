@@ -144,6 +144,25 @@ class ApiQuery {
     }
 
     /**
+     * @description query to check if holder have any tournament on selected date.
+     * @param mixed $parameters
+     * @param integer $holderId
+     * @return mixed
+     */
+    public static function checkTournamentsDifferenceIsOneDay($parameters, $holderId) {
+        $queryResult = Tournament::where(HOLDER_ID, EQUAL_SIGN, $holderId)
+            ->where(function ($query) {
+                $query->where(STATUS, NOT_EQUAL_SIGN, TOURNAMENT_STATUS_CLOSE);
+            })
+            ->where(function ($query) use ($parameters) {
+                $query->where(START_DATE, EQUAL_OR_LESS_SIGN, intval($parameters[START_DATE]) + 86400000)
+                    ->where(START_DATE, EQUAL_OR_GREATER_SIGN, intval($parameters[START_DATE]) - 86400000);
+            })->doesntExist();
+
+        return $queryResult;
+    }
+
+    /**
      * @description query to get tournament general detail
      * @param integer $tournamentId
      * @return mixed
