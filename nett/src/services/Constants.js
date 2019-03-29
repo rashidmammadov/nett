@@ -1,4 +1,7 @@
+export const GROUP = 'Grup';
+export const KNOCK_OUT = 'Eleme';
 export const MONEY = 'money';
+export const RANKING = 'Sıralama';
 export const RESET = 'reset';
 export const STATUS = 'status';
 export const SUCCESS = 'success';

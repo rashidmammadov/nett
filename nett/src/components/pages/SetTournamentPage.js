@@ -1,13 +1,21 @@
 import React, {Component} from 'react';
 import {View, ScrollView} from 'react-native';
-import {ListItem, Text, Left, Body, DatePicker, Picker, Right, Button} from 'native-base';
+import {ListItem, Text, Left, Body, DatePicker, Picker, Right, Button, Thumbnail} from 'native-base';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import {games} from "../../services/DataService";
 import {add} from "../../services/TournamentService";
 import Icon from 'react-native-vector-icons/Feather';
-import {SUCCESS} from "../../services/Constants";
+import {SUCCESS, KNOCK_OUT, GROUP, RANKING} from "../../services/Constants";
 import {errorToast, successToast, warningToast} from "../../services/ToastService";
+import ActionSheet from 'react-native-actionsheet';
 import LoadingDialog from "../LoadingDialog";
+import Dialog, { DialogContent } from 'react-native-popup-dialog';
+
+const typeMap = {
+    knock_out: KNOCK_OUT,
+    group: GROUP,
+    ranking: RANKING
+};
 
 export default class SetTournamentPage extends Component {
 
@@ -19,6 +27,7 @@ export default class SetTournamentPage extends Component {
         }
         this.state = {
             loading: true,
+            visible: false,
             games: [],
             gameTypes: [],
             participantList: participantList,
@@ -29,6 +38,7 @@ export default class SetTournamentPage extends Component {
         };
 
         this.getGamesList();
+        this.onGameChange = this.onGameChange.bind(this);
         this.setDate = this.setDate.bind(this);
     }
 
@@ -38,6 +48,7 @@ export default class SetTournamentPage extends Component {
                 this.setState({loading: false});
                 if (res.status === SUCCESS) {
                     let games = res.data;
+                    games.push({'gameId': 0, 'gameName': 'İptal'});
                     this.setState({
                         games: games,
                         selectedGame: games[0],
@@ -79,7 +90,7 @@ export default class SetTournamentPage extends Component {
 
     setTournament() {
         let data = this.$$prepareData();
-        this.setState({loading: true});
+        this.setState({loading: true, visible: false});
         add(data)
             .then((res) => {
                 this.setState({loading: false});
@@ -118,12 +129,17 @@ export default class SetTournamentPage extends Component {
         const minDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 7);
         const maxDate = new Date(currentDate.getFullYear() + 1, currentDate.getMonth(), currentDate.getDate());
 
-        let gamePickers = this.state.games.map( (game) => {
-            return <Picker.Item key={game.gameId} value={game} label={game.gameName} />
+        let selectableGames = this.state.games.map((game) => {
+            let select = <View style={{width: 300, marginTop: 2, flexDirection: 'row'}}>
+                            <Thumbnail square small source={{uri: game.gameImage}}/>
+                            <Text style={{marginLeft: 16, marginTop: 8, fontFamily: 'GoogleSans-Regular'}}>{game.gameName}</Text>
+                        </View>;
+            let cancel = <Text style={{marginLeft: 16, fontFamily: 'GoogleSans-Regular'}}>{game.gameName}</Text>;
+            return game.gameId === 0 ? cancel : select;
         });
 
         let typePickers = this.state.gameTypes.map( (type, i) => {
-            return <Picker.Item key={i} value={type} label={type} />
+            return <Picker.Item key={i} value={type} label={typeMap[type]} />
         });
 
         let participantPickers = this.state.participantList.map((count, i) => {
@@ -131,30 +147,36 @@ export default class SetTournamentPage extends Component {
         });
 
         let showDefaultDate = () => {
-          return minDate.getDate() + '/' + (minDate.getMonth() + 1) + '/' + minDate.getFullYear()
+            return minDate.getDate() + '/' + (minDate.getMonth() + 1) + '/' + minDate.getFullYear()
         };
 
         return (
             <ScrollView>
+                <ActionSheet ref={o => this.SelectGame = o}
+                     title={'Turnuvası düzenlenecek oyunu seç'}
+                     options={selectableGames}
+                     cancelButtonIndex={this.state.games.length - 1}
+                     onPress={(index) => {
+                         index !== (this.state.games.length - 1) && this.onGameChange(this.state.games[index])
+                     }}
+                />
+
                 <LoadingDialog loading={this.state.loading}/>
                 <View style={{height: 64, backgroundColor: '#7F00FF'}}>
                 </View>
                 <View style={{padding: 16, marginTop: -64}}>
-                    <Text style={{color: '#f8f8f8', fontSize: 14, fontFamily: 'GoogleSans-Regular'}}>Turnuva Düzenle</Text>
+                    <Text style={{color: '#f8f8f8', fontFamily: 'GoogleSans-Regular'}}>Turnuva Düzenle</Text>
                     <View style={{marginBottom: 16, backgroundColor: '#303030'}}>
-                        <ListItem icon>
+                        <ListItem icon onPress={() => this.SelectGame.show()}>
                             <Left>
                                 <Icon name="hash" size={24} color={'#d3d3d3'} />
                             </Left>
                             <Body style={{borderColor: '#303030'}}>
                                 <Text  style={{color: '#d3d3d3', fontFamily: 'GoogleSans-Regular'}}>Oyun</Text>
                             </Body>
-                                <Picker mode="dropdown" placeholder="Oyun"
-                                    style={{color: '#d3d3d3', fontFamily: 'GoogleSans-Regular'}}
-                                    selectedValue={this.state.selectedGame}
-                                    onValueChange={this.onGameChange.bind(this)}>
-                                    {gamePickers}
-                                </Picker>
+                            <Text style={{color: '#d3d3d3', fontFamily: 'GoogleSans-Regular', marginRight: 24}}>
+                                {this.state.selectedGame && this.state.selectedGame.gameName}
+                            </Text>
                         </ListItem>
                         <ListItem icon>
                             <Left>
@@ -244,10 +266,28 @@ export default class SetTournamentPage extends Component {
                         </ListItem>
                     </View>
 
-                    <Button rounded block style={{backgroundColor: '#7F00FF'}} onPress={this.setTournament.bind(this)}
+                    <Button rounded block style={{backgroundColor: '#7F00FF'}}
+                            onPress={() => this.setState({visible: true})}
                             disabled={this.state.loading}>
                         <Text style={{fontFamily: 'GoogleSans-Regular'}}>OLUŞTUR</Text>
                     </Button>
+                    <Dialog visible={this.state.visible} onTouchOutside={() => { this.setState({visible: false}); }}>
+                        <DialogContent style={{margin: 16}}>
+                            <Text style={{color: '#303030', fontFamily: 'GoogleSans-Regular', fontWeight: 'bold'}}>
+                                Turnuvaya oluşturduğunuz anda yayımlanacaktır. Eğer yeterli katılımcı sayısına ulaşılamazsa
+                                turnuva otomatik iptal edilecek ve o ana kadar katılan tüm kullanıcıların katılım ücretleri iade edilecektir.
+                                Turnuva başlamasına 48 saat kalana kadar tarihi ileriye taşıyabilirsin.
+                            </Text>
+                            <View style={{flexDirection: 'row', marginTop: 16, justifyContent: 'space-between'}}>
+                                <Button small rounded bordered onPress={() => this.setState({visible: false})}>
+                                    <Text uppercase={false} style={{color: '#7F00FF', fontFamily: 'GoogleSans-Regular'}}>İptal Et</Text>
+                                </Button>
+                                <Button small rounded style={{backgroundColor: '#7F00FF'}} onPress={() => this.setTournament()}>
+                                    <Text uppercase={false} style={{color: '#f0f0f0', fontFamily: 'GoogleSans-Regular'}}>Onayla</Text>
+                                </Button>
+                            </View>
+                        </DialogContent>
+                    </Dialog>
                 </View>
             </ScrollView>
         );

@@ -111,11 +111,11 @@ export default class AttendTournament extends Component {
                                 Turnuvaya Ödemeyi Nasıl Yapacaksın?
                             </Text>
                             <View style={{flexDirection: 'row', marginTop: 16, justifyContent: 'space-between'}}>
-                                <Button small style={{backgroundColor: '#7F00FF'}} onPress={() => this.attendWithMoney()}>
-                                    <Text uppercase={false} style={{fontFamily: 'GoogleSans-Regular'}}>Hesabımdan</Text>
+                                <Button small rounded style={{backgroundColor: '#7F00FF'}} onPress={() => this.attendWithMoney()}>
+                                    <Text uppercase={false} style={{color: '#f0f0f0', fontFamily: 'GoogleSans-Regular'}}>Hesabımdan</Text>
                                 </Button>
-                                <Button small style={{backgroundColor: '#7F00FF'}} onPress={() => this.attendWithTicket()}>
-                                    <Text uppercase={false} style={{fontFamily: 'GoogleSans-Regular'}}>Bilet
+                                <Button small rounded style={{backgroundColor: '#7F00FF'}} onPress={() => this.attendWithTicket()}>
+                                    <Text uppercase={false} style={{color: '#f0f0f0', fontFamily: 'GoogleSans-Regular'}}>Bilet
                                         Kullanarak</Text>
                                 </Button>
                             </View>

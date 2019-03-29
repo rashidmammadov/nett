@@ -7,7 +7,7 @@ import SetTournamentPage from './SetTournamentPage.js';
 import Icon from 'react-native-vector-icons/Feather';
 import {style} from '../../assets/style/Custom.js';
 
-const tabPages = [<DashboardPage />, <SearchPage />, <SetTournamentPage />, <BudgetPage />, <DashboardPage />];
+const tabPages = [<DashboardPage />, <SearchPage />, <SearchPage />, <SetTournamentPage />, <BudgetPage />, <DashboardPage />];
 
 export default class AppPage extends Component {
 
@@ -52,22 +52,28 @@ export default class AppPage extends Component {
                                     style={this.state.activeTab === 1 ? style.footerActiveIcon : style.footerIcon} />
                             </Button>
                             <Button onPress={() => this.changeTab(2)}
-                                style={this.state.activeTab === 2 ? style.footerActiveTab : style.footerTab}
-                                active={this.state.activeTab === 2 ? true : false}>
-                                <Icon name="plus-square" size={24}
-                                    style={this.state.activeTab === 2 ? style.footerActiveIcon : style.footerIcon} />
+                                    style={this.state.activeTab === 2 ? style.footerActiveTab : style.footerTab}
+                                    active={this.state.activeTab === 2 ? true : false}>
+                                <Icon name="search" size={24}
+                                      style={this.state.activeTab === 2 ? style.footerActiveIcon : style.footerIcon} />
                             </Button>
                             <Button onPress={() => this.changeTab(3)}
                                 style={this.state.activeTab === 3 ? style.footerActiveTab : style.footerTab}
                                 active={this.state.activeTab === 3 ? true : false}>
-                                <Icon name="credit-card" size={24}
+                                <Icon name="plus-square" size={24}
                                     style={this.state.activeTab === 3 ? style.footerActiveIcon : style.footerIcon} />
                             </Button>
                             <Button onPress={() => this.changeTab(4)}
                                 style={this.state.activeTab === 4 ? style.footerActiveTab : style.footerTab}
                                 active={this.state.activeTab === 4 ? true : false}>
-                                <Icon name="user" size={24}
+                                <Icon name="credit-card" size={24}
                                     style={this.state.activeTab === 4 ? style.footerActiveIcon : style.footerIcon} />
+                            </Button>
+                            <Button onPress={() => this.changeTab(5)}
+                                style={this.state.activeTab === 5 ? style.footerActiveTab : style.footerTab}
+                                active={this.state.activeTab === 5 ? true : false}>
+                                <Icon name="user" size={24}
+                                    style={this.state.activeTab === 5 ? style.footerActiveIcon : style.footerIcon} />
                             </Button>
                         </FooterTab>
                     </Footer>

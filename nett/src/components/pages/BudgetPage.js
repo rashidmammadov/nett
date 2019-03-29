@@ -15,7 +15,7 @@ export default class BudgetPage extends Component {
                 <View style={{height: 64, backgroundColor: '#7F00FF'}}>
                 </View>
                 <View style={{padding: 16, marginTop: -64}}>
-                    <Text style={{color: '#f8f8f8', fontSize: 14, fontFamily: 'GoogleSans-Regular'}}>Bakiye: 85 ₺</Text>
+                    <Text style={{color: '#f8f8f8', fontFamily: 'GoogleSans-Regular'}}>Bakiye: 85 ₺</Text>
                     <Tabs>
                         <Tab heading="Para Yatır" tabStyle={{backgroundColor: '#303030'}}
                              textStyle={{color: '#a3a3a3', fontFamily: 'GoogleSans-Regular', fontWeight: 'normal'}}
