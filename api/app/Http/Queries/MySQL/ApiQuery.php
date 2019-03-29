@@ -192,6 +192,21 @@ class ApiQuery {
         return $queryResult;
     }
 
+    public static function getParticipantTournaments($parameters, $user) {
+        $queryResult = array();
+        $userTournaments = Participant::where(DB_PARTICIPANT_TABLE.'.'.PARTICIPANT_ID, EQUAL_SIGN, $user[IDENTIFIER])->get();
+
+        foreach ($userTournaments as $userTournament) {
+            $result = Tournament::where(TOURNAMENT_ID, EQUAL_SIGN, $userTournament[TOURNAMENT_ID])
+                ->where(STATUS, EQUAL_SIGN, $parameters[STATUS])
+                ->join(DB_USERS_TABLE, (DB_USERS_TABLE.'.'.IDENTIFIER), EQUAL_SIGN, DB_TOURNAMENT_TABLE.'.'.HOLDER_ID)
+                ->join(DB_GAME_TABLE, (DB_GAME_TABLE.'.'.GAME_ID), EQUAL_SIGN, DB_TOURNAMENT_TABLE.'.'.GAME_ID)
+                ->first();
+            array_push($queryResult, $result);
+        }
+        return $queryResult;
+    }
+
     /** -------------------- USER QUERIES -------------------- **/
 
     /**

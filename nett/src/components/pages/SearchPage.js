@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {View} from 'react-native';
-import LoadingDialog from "../LoadingDialog";
 import TournamentsList from '../TournamentsList.js';
 import {search} from "../../services/TournamentService";
 import {SUCCESS, TOURNAMENT_STATUS_OPEN} from "../../services/Constants";
 import {errorToast, warningToast} from "../../services/ToastService";
+import LoadingDialog from "../LoadingDialog";
 
 export default class SearchPage extends Component {
 
@@ -36,9 +36,9 @@ export default class SearchPage extends Component {
 
     render() {
         return (
-            <View>
-                <LoadingDialog loading={this.state.loading}/>
-                <TournamentsList tournaments={this.state.tournaments}/>
+            <View style={{flex: 1}}>
+                <LoadingDialog loading={this.state.loading} />
+                <TournamentsList loading={this.state.loading} tournaments={this.state.tournaments} />
             </View>
         );
     }

@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import {Root, Container, Header, Footer, FooterTab, Button, Body, Title} from 'native-base';
 import BudgetPage from './BudgetPage.js';
 import DashboardPage from './DashboardPage.js';
+import MyTournamentsPage from './MyTournamentsPage.js';
 import SearchPage from './SearchPage.js';
 import SetTournamentPage from './SetTournamentPage.js';
 import Icon from 'react-native-vector-icons/Feather';
 import {style} from '../../assets/style/Custom.js';
 
-const tabPages = [<DashboardPage />, <SearchPage />, <SearchPage />, <SetTournamentPage />, <BudgetPage />, <DashboardPage />];
+const tabPages = [<DashboardPage />, <MyTournamentsPage />, <SearchPage />, <SetTournamentPage />, <BudgetPage />, <DashboardPage />];
 
 export default class AppPage extends Component {
 

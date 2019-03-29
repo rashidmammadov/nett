@@ -1,6 +1,7 @@
 export const GROUP = 'Grup';
 export const KNOCK_OUT = 'Eleme';
 export const MONEY = 'money';
+export const NO_RESULT = 'Sonuç Bulunamadı';
 export const RANKING = 'Sıralama';
 export const RESET = 'reset';
 export const STATUS = 'status';

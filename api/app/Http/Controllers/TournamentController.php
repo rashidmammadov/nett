@@ -93,6 +93,30 @@ class TournamentController extends ApiController {
     }
 
     /**
+     * @description: handle request to get user`s tournaments
+     * @param Request $request
+     * @return mixed: tournament info
+     */
+    public function getMine(Request $request) {
+        try {
+            $user = JWTAuth::parseToken()->authenticate();
+            $rules = array(
+                STATUS => 'required'
+            );
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return $this->respondValidationError(FIELDS_VALIDATION_FAILED, $validator->errors());
+            } else {
+                $tournaments = $this->getMyTournaments($request, $user);
+                return $this->respondCreated(SUCCESS, $tournaments);
+            }
+        } catch(JWTException $e) {
+            $this->setStatusCode($e->getStatusCode());
+            return $this->respondWithError($e->getMessage());
+        }
+    }
+
+    /**
      * @description: get tournaments which is matched with given parameters
      * @param Request $request
      * @param array $user
@@ -102,16 +126,31 @@ class TournamentController extends ApiController {
         $tournaments = ApiQuery::getTournaments($request, $user);
         $tournamentsList = array();
         foreach ($tournaments as $tournament) {
-            $tournament[CURRENT_PARTICIPANTS] = ApiQuery::getParticipants($tournament[TOURNAMENT_ID])->count();
-            $tournament[ATTENDED] = ApiQuery::checkIfAttended($tournament[TOURNAMENT_ID], $user[IDENTIFIER]);
-            if ($tournament[ATTENDED]) {
-                $participatedUser = ApiQuery::getParticipants($tournament[TOURNAMENT_ID], $user[IDENTIFIER])->first();
-                $tournament[REFERENCE_CODE] = $participatedUser[REFERENCE_CODE];
-            }
-            $data = $this->tournamentTransformer->transform($tournament);
+            $data = $this->prepareTournamentGeneralData($tournament, $user);
             array_push($tournamentsList, $data);
         }
         return $tournamentsList;
+    }
+
+    /**
+     * @description: get user`s tournaments which is matched with given parameters
+     * @param Request $request
+     * @param array $user
+     * @return mixed: tournament info
+     */
+    private function getMyTournaments($request, $user) {
+        $result = array();
+        $tournaments = array();
+        if ($user[TYPE] === PLAYER) {
+            $tournaments = ApiQuery::getParticipantTournaments($request, $user);
+        }
+        foreach ($tournaments as $tournament) {
+            if ($tournament[TOURNAMENT_ID]) {
+                $data = $this->prepareTournamentGeneralData($tournament, $user, true);
+                array_push($result, $data);
+            }
+        }
+        return $result;
     }
 
     /**
@@ -138,6 +177,28 @@ class TournamentController extends ApiController {
         }
         $fixture::setDraws($draws);
         ApiQuery::setFixture($parameters[TOURNAMENT_ID], $fixture::getFixture());
+    }
+
+    /**
+     * @description: prepare tournament`s general data to show timeline post.
+     * @param $tournament
+     * @param $user
+     * @param boolean $attended - if get participant`s tournament don`t check twice.
+     * @return array
+     */
+    private function prepareTournamentGeneralData($tournament, $user, $attended = false) {
+        $tournament[CURRENT_PARTICIPANTS] = ApiQuery::getParticipants($tournament[TOURNAMENT_ID])->count();
+        if ($attended) {
+            $tournament[ATTENDED] = true;
+        } else {
+            $tournament[ATTENDED] = ApiQuery::checkIfAttended($tournament[TOURNAMENT_ID], $user[IDENTIFIER]);
+        }
+
+        if ($tournament[ATTENDED]) {
+            $participatedUser = ApiQuery::getParticipants($tournament[TOURNAMENT_ID], $user[IDENTIFIER])->first();
+            $tournament[REFERENCE_CODE] = $participatedUser[REFERENCE_CODE];
+        }
+        return $this->tournamentTransformer->transform($tournament);
     }
 
 }
