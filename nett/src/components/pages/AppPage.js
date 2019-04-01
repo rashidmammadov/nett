@@ -8,14 +8,12 @@ import SetTournamentPage from './SetTournamentPage.js';
 import Icon from 'react-native-vector-icons/Feather';
 import {style} from '../../assets/style/Custom.js';
 
-const tabPages = [<DashboardPage />, <MyTournamentsPage />, <SearchPage />, <SetTournamentPage />, <BudgetPage />, <DashboardPage />];
-
 export default class AppPage extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            activeTab: 0
+            activeTab: this.props.activeTab || 0
         };
         this.changeTab.bind(this);
     }
@@ -27,6 +25,8 @@ export default class AppPage extends Component {
     }
 
 	render() {
+        const tabPages = [<DashboardPage />, <MyTournamentsPage initialPage={this.props.initialPage} />, <SearchPage />, <SetTournamentPage />, <BudgetPage />, <DashboardPage />];
+
 		return (
 		    <Root>
                 <Container>

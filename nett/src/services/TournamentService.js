@@ -17,3 +17,11 @@ export const search = (data) => {
         headers: requestHeader()
     }).then((res) => res.json());
 };
+
+export const getMyTournaments = (data) => {
+    const URL = apiUrl + 'myTournaments?' + STATUS + '=' + encodeURIComponent(data.status);
+    return fetch(URL, {
+        method: 'GET',
+        headers: requestHeader()
+    }).then((res) => res.json());
+};

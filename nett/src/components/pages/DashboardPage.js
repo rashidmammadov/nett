@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import {ImageBackground, ScrollView, View} from 'react-native';
+import {ImageBackground, ScrollView, View, TouchableOpacity} from 'react-native';
 import {Text} from 'native-base';
 import StandingsChart from '../charts/StandingsChart.js';
+import {Actions} from "react-native-router-flux";
 
 export default class DashboardPage extends Component {
 
@@ -44,27 +45,30 @@ export default class DashboardPage extends Component {
 
                 <Text style={{color: '#f8f8f8', fontSize: 14, fontFamily: 'GoogleSans-Regular'}}>Turnuvalarım</Text>
                 <View style={{flexDirection: 'row', marginBottom: 16}}>
-                    <View transparent style={{flex: 1, marginRight: 8}}>
+                    <TouchableOpacity style={{flex: 1, marginRight: 8}}
+                                      onPress={() => Actions.AppPage({activeTab: 1, initialPage: 0})}>
                         <ImageBackground source={require('../../assets/images/active-tournament.png')}
                                          style={{ flex: 1, height: 64, width: null, resizeMode: 'cover', padding: 16}}>
                             <Text style={{color: '#d3d3d3', fontSize: 14, fontFamily: 'GoogleSans-Regular'}}>Aktif</Text>
                             <Text style={{color: '#d3d3d3', fontSize: 20, fontFamily: 'GoogleSans-Regular'}}>1</Text>
                         </ImageBackground>
-                    </View>
-                    <View transparent style={{flex: 1, marginLeft: 8, marginRight: 8}}>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{flex: 1, marginLeft: 8, marginRight: 8}}
+                                      onPress={() => Actions.AppPage({activeTab: 1, initialPage: 1})}>
                         <ImageBackground source={require('../../assets/images/registered-tournament.png')}
                                          style={{ flex: 1, height: 64, width: null, resizeMode: 'cover', padding: 16}}>
                             <Text style={{color: '#d3d3d3', fontSize: 14, fontFamily: 'GoogleSans-Regular'}}>Kayıtlı</Text>
                             <Text style={{color: '#d3d3d3', fontSize: 20, fontFamily: 'GoogleSans-Regular'}}>2</Text>
                         </ImageBackground>
-                    </View>
-                    <View transparent style={{flex: 1, marginLeft: 8}}>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{flex: 1, marginLeft: 8}}
+                                      onPress={() => Actions.AppPage({activeTab: 1, initialPage: 2})}>
                         <ImageBackground source={require('../../assets/images/ended-tournament.png')}
                                          style={{ flex: 1, height: 64, width: null, resizeMode: 'cover', padding: 16}}>
                             <Text style={{color: '#d3d3d3', fontSize: 14, fontFamily: 'GoogleSans-Regular'}}>Bitmiş</Text>
                             <Text style={{color: '#d3d3d3', fontSize: 20, fontFamily: 'GoogleSans-Regular'}}>4</Text>
                         </ImageBackground>
-                    </View>
+                    </TouchableOpacity>
                 </View>
             </ScrollView>
 		);
