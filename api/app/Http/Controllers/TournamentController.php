@@ -123,7 +123,7 @@ class TournamentController extends ApiController {
      * @return mixed: tournament info
      */
     private function getTournaments($request, $user) {
-        $tournaments = ApiQuery::getTournaments($request, $user);
+        $tournaments = ApiQuery::searchTournaments($request, $user);
         $tournamentsList = array();
         foreach ($tournaments as $tournament) {
             $data = $this->prepareTournamentGeneralData($tournament, $user);
@@ -142,7 +142,7 @@ class TournamentController extends ApiController {
         $result = array();
         $tournaments = array();
         if ($user[TYPE] === PLAYER) {
-            $tournaments = ApiQuery::getParticipantTournaments($request, $user);
+            $tournaments = ApiQuery::searchParticipantTournaments($request, $user);
         }
         foreach ($tournaments as $tournament) {
             if ($tournament[TOURNAMENT_ID]) {

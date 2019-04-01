@@ -176,12 +176,24 @@ class ApiQuery {
     }
 
     /**
+     * @description query to get all open status tournaments
+     * @return mixed
+     */
+    public static function getAllOpenTournaments() {
+        $queryResult = Tournament::where([
+            [STATUS, EQUAL_SIGN, TOURNAMENT_STATUS_OPEN]
+        ])->get();
+
+        return $queryResult;
+    }
+
+    /**
      * @description query to get tournament general detail
      * @param $parameters
      * @param $user
      * @return mixed
      */
-    public static function getTournaments($parameters, $user) {
+    public static function searchTournaments($parameters, $user) {
         $queryResult = Tournament::where(STATUS, EQUAL_SIGN, $parameters[STATUS])
             ->join(DB_USERS_TABLE, (DB_USERS_TABLE.'.'.IDENTIFIER), EQUAL_SIGN, DB_TOURNAMENT_TABLE.'.'.HOLDER_ID)
             ->join(DB_GAME_TABLE, (DB_GAME_TABLE.'.'.GAME_ID), EQUAL_SIGN, DB_TOURNAMENT_TABLE.'.'.GAME_ID)
@@ -192,7 +204,13 @@ class ApiQuery {
         return $queryResult;
     }
 
-    public static function getParticipantTournaments($parameters, $user) {
+    /**
+     * @description query to get participant`s tournament general detail
+     * @param $parameters
+     * @param $user
+     * @return mixed
+     */
+    public static function searchParticipantTournaments($parameters, $user) {
         $queryResult = array();
         $userTournaments = Participant::where(DB_PARTICIPANT_TABLE.'.'.PARTICIPANT_ID, EQUAL_SIGN, $user[IDENTIFIER])->get();
 
@@ -205,6 +223,17 @@ class ApiQuery {
             array_push($queryResult, $result);
         }
         return $queryResult;
+    }
+
+    /**
+     * @description query to update tournament`s status
+     * @param $tournament
+     * @param $status
+     * @return mixed
+     */
+    public static function updateTournamentStatus($tournament, $status) {
+        $tournament[STATUS] = $status;
+        $tournament->save();
     }
 
     /** -------------------- USER QUERIES -------------------- **/

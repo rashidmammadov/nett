@@ -24,8 +24,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $schedule->call('App\Console\Commands\Schedule@changeStartedTournamentsStatus')->twiceDaily(0, 12);
     }
 
     /**
