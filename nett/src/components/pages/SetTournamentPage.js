@@ -200,7 +200,7 @@ export default class SetTournamentPage extends Component {
                                 <Icon name="users" size={24} color={'#d3d3d3'} />
                             </Left>
                             <Body style={{borderColor: '#303030'}}>
-                                <Text  style={{color: '#d3d3d3', fontFamily: 'GoogleSans-Regular'}}>Katılımcı Sayı</Text>
+                                <Text  style={{color: '#d3d3d3', fontFamily: 'GoogleSans-Regular'}}>Katılımcı Sayısı</Text>
                             </Body>
                             <Picker
                                 mode="dropdown"
@@ -217,7 +217,7 @@ export default class SetTournamentPage extends Component {
                                 <Icon name="calendar" size={24} color={'#d3d3d3'} />
                             </Left>
                             <Body style={{borderColor: '#303030'}}>
-                                <Text  style={{color: '#d3d3d3', fontFamily: 'GoogleSans-Regular'}}>Başlangıc Tarihi</Text>
+                                <Text  style={{color: '#d3d3d3', fontFamily: 'GoogleSans-Regular'}}>Başlangıç Tarihi</Text>
                             </Body>
                             <Right style={{borderColor: '#303030'}}>
                                 <DatePicker defaultDate={minDate} minimumDate={minDate} maximumDate={maxDate}
@@ -235,7 +235,7 @@ export default class SetTournamentPage extends Component {
                                 <Icon name="clock" size={24} color={'#d3d3d3'} />
                             </Left>
                             <Body style={{borderColor: '#303030'}}>
-                                <Text  style={{color: '#d3d3d3', fontFamily: 'GoogleSans-Regular'}}>Başlangıc Saati</Text>
+                                <Text  style={{color: '#d3d3d3', fontFamily: 'GoogleSans-Regular'}}>Başlangıç Saati</Text>
                             </Body>
                             <Right style={{borderColor: '#303030'}}>
                                 <Text style={{color: '#d3d3d3', fontFamily: 'GoogleSans-Regular', marginRight: 8}}
