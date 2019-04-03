@@ -24,6 +24,18 @@ class ApiQuery {
         ]);
     }
 
+    /**
+     * @description query to get given tournament`s fixture
+     * @param $tournamentId
+     * @return
+     */
+    public static function getFixture($tournamentId)
+    {
+        $queryResult = Fixture::where(TOURNAMENT_ID, EQUAL_SIGN, $tournamentId)->first();
+
+        return $queryResult;
+    }
+
     /** -------------------- GAME QUERIES -------------------- **/
 
     /**
@@ -101,11 +113,13 @@ class ApiQuery {
      */
     public static function getParticipants($tournamentId, $participantId = null) {
         $queryResult = Participant::where(TOURNAMENT_ID, EQUAL_SIGN, $tournamentId)
+            ->join(DB_USERS_TABLE, (DB_USERS_TABLE . '.' . IDENTIFIER), EQUAL_SIGN, (DB_PARTICIPANT_TABLE . '.' . PARTICIPANT_ID))
             ->where(function ($query) use ($participantId) {
                 if ($participantId) {
                     $query->where(PARTICIPANT_ID, EQUAL_SIGN, $participantId);
                 }
-            })->get();
+            })
+            ->get();
 
         return $queryResult;
     }
@@ -171,6 +185,22 @@ class ApiQuery {
         $queryResult = Tournament::where([
             [TOURNAMENT_ID, EQUAL_SIGN, $tournamentId]
         ])->first();
+
+        return $queryResult;
+    }
+
+
+    /**
+     * @description query to get tournament with detail info
+     * @param integer $tournamentId
+     * @return mixed
+     */
+    public static function getTournamentWithDetail($tournamentId)
+    {
+        $queryResult = Tournament::where(TOURNAMENT_ID, EQUAL_SIGN, $tournamentId)
+            ->join(DB_USERS_TABLE, (DB_USERS_TABLE . '.' . IDENTIFIER), EQUAL_SIGN, DB_TOURNAMENT_TABLE . '.' . HOLDER_ID)
+            ->join(DB_GAME_TABLE, (DB_GAME_TABLE . '.' . GAME_ID), EQUAL_SIGN, DB_TOURNAMENT_TABLE . '.' . GAME_ID)
+            ->first();
 
         return $queryResult;
     }

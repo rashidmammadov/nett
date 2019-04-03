@@ -11,6 +11,7 @@ namespace App\Http\Controllers;
 use App\Http\Queries\MySQL\ApiQuery;
 use App\Http\Utility\CustomDate;
 use App\Http\Utility\Fixture;
+use App\Repository\Transformers\ParticipantTransformer;
 use App\Repository\Transformers\TournamentTransformer;
 use Illuminate\Http\Request;
 use JWTAuth;
@@ -19,9 +20,13 @@ use Validator;
 
 class TournamentController extends ApiController {
 
+    private $participantTransformer;
     private $tournamentTransformer;
 
-    public function __construct(TournamentTransformer $tournamentTransformer) {
+    public function __construct(ParticipantTransformer $participantTransformer,
+                                TournamentTransformer $tournamentTransformer)
+    {
+        $this->participantTransformer = $participantTransformer;
         $this->tournamentTransformer = $tournamentTransformer;
     }
 
@@ -87,6 +92,26 @@ class TournamentController extends ApiController {
                 return $this->respondCreated(SUCCESS, $tournaments);
             }
         } catch(JWTException $e) {
+            $this->setStatusCode($e->getStatusCode());
+            return $this->respondWithError($e->getMessage());
+        }
+    }
+
+    /**
+     * @description: handle request to get tournaments
+     * @param integer $tournamentId
+     * @return mixed: tournament info
+     */
+    public function getDetail($tournamentId)
+    {
+        try {
+            $user = JWTAuth::parseToken()->authenticate();
+            $tournament = ApiQuery::getTournamentWithDetail($tournamentId);
+            $tournament[PARTICIPANTS] = $this->prepareTournamentParticipantsData($tournamentId, $user);
+            $tournament[FIXTURE] = $this->prepareTournamentFixtureData($tournamentId);
+            $result = $this->prepareTournamentGeneralData($tournament, $user);
+            return $this->respondCreated(SUCCESS, $result);
+        } catch (JWTException $e) {
             $this->setStatusCode($e->getStatusCode());
             return $this->respondWithError($e->getMessage());
         }
@@ -201,4 +226,34 @@ class TournamentController extends ApiController {
         return $this->tournamentTransformer->transform($tournament);
     }
 
+    /**
+     * @description: prepare tournament`s participants data.
+     * @param integer $tournamentId
+     * @param $user
+     * @return mixed
+     */
+    private function prepareTournamentParticipantsData($tournamentId, $user)
+    {
+        $transformedParticipants = array();
+        $participants = ApiQuery::getParticipants($tournamentId);
+        foreach ($participants as $participant) {
+            if ($user[TYPE] == HOLDER || $user[TYPE] == ADMIN) {
+                array_push($transformedParticipants, $this->participantTransformer->transformForHolder($participant));
+            } else {
+                array_push($transformedParticipants, $this->participantTransformer->transform($participant));
+            }
+        }
+        return $transformedParticipants;
+    }
+
+    /**
+     * @description: prepare tournament`s fixture data.
+     * @param integer $tournamentId
+     * @return mixed
+     */
+    private function prepareTournamentFixtureData($tournamentId)
+    {
+        $data = ApiQuery::getFixture($tournamentId);
+        return json_decode($data[FIXTURE]);
+    }
 }

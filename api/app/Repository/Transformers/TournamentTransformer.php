@@ -41,7 +41,7 @@ class TournamentTransformer extends Transformer {
                 ADDRESS => $tournament[ADDRESS]
             ),
             PARTICIPANTS => $tournament[PARTICIPANTS],
-            FIXTURE => new Fixture()
+            FIXTURE => $tournament[FIXTURE]
         ];
     }
 }
