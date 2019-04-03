@@ -23,8 +23,7 @@ class TournamentController extends ApiController {
     private $participantTransformer;
     private $tournamentTransformer;
 
-    public function __construct(ParticipantTransformer $participantTransformer,
-                                TournamentTransformer $tournamentTransformer)
+    public function __construct(ParticipantTransformer $participantTransformer, TournamentTransformer $tournamentTransformer)
     {
         $this->participantTransformer = $participantTransformer;
         $this->tournamentTransformer = $tournamentTransformer;
