@@ -71,7 +71,7 @@ export default class StartPage extends Component {
                          activeTextStyle={{color: '#f8f8f8', fontFamily: 'GoogleSans-Regular', fontWeight: 'normal'}}>
                         <TournamentsList loading={!this.state.tournaments[0].loaded} tournaments={this.state.tournaments[0].data} />
                     </Tab>
-                    <Tab heading="Kayıtlı" tabStyle={{backgroundColor: '#303030'}}
+                    <Tab heading="Bekleyen" tabStyle={{backgroundColor: '#303030'}}
                          style={{backgroundColor: '#000'}}
                          textStyle={{color: '#a3a3a3', fontFamily: 'GoogleSans-Regular', fontWeight: 'normal'}}
                          activeTabStyle={{backgroundColor: '#303030'}}

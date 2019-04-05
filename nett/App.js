@@ -18,6 +18,7 @@ import RegisterPage from './src/components/pages/RegisterPage.js';
 import SearchPage from './src/components/pages/SearchPage.js';
 import SetTournamentPage from './src/components/pages/SetTournamentPage.js';
 import StartPage from './src/components/pages/StartPage.js';
+import TournamentPage from './src/components/pages/TournamentPage.js';
 
 type Props = {};
 export default class App extends Component<Props> {
@@ -33,6 +34,8 @@ export default class App extends Component<Props> {
                 <Scene key="SearchPage" component={SearchPage} hideNavBar={true}/>
                 <Scene key="SetTournamentPage" component={SetTournamentPage} hideNavBar={true}/>
                 <Scene key="StartPage" component={StartPage} initial={true} hideNavBar={true}/>
+                <Scene key="TournamentPage" component={TournamentPage} title="Turnuva Detayı" hideNavBar={true}
+                       back={true}/>
             </Scene>
         );
 

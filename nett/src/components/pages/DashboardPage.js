@@ -57,7 +57,11 @@ export default class DashboardPage extends Component {
                                       onPress={() => Actions.AppPage({activeTab: 1, initialPage: 1})}>
                         <ImageBackground source={require('../../assets/images/registered-tournament.png')}
                                          style={{ flex: 1, height: 64, width: null, resizeMode: 'cover', padding: 16}}>
-                            <Text style={{color: '#d3d3d3', fontSize: 14, fontFamily: 'GoogleSans-Regular'}}>Kayıtlı</Text>
+                            <Text style={{
+                                color: '#d3d3d3',
+                                fontSize: 14,
+                                fontFamily: 'GoogleSans-Regular'
+                            }}>Bekleyen</Text>
                             <Text style={{color: '#d3d3d3', fontSize: 20, fontFamily: 'GoogleSans-Regular'}}>2</Text>
                         </ImageBackground>
                     </TouchableOpacity>

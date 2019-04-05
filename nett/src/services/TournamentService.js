@@ -18,6 +18,14 @@ export const search = (data) => {
     }).then((res) => res.json());
 };
 
+export const getTournament = (tournamentId) => {
+    const URL = apiUrl + 'tournaments/' + tournamentId;
+    return fetch(URL, {
+        method: 'GET',
+        headers: requestHeader()
+    }).then((res) => res.json());
+};
+
 export const getMyTournaments = (data) => {
     const URL = apiUrl + 'myTournaments?' + STATUS + '=' + encodeURIComponent(data.status);
     return fetch(URL, {
