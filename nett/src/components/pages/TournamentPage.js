@@ -7,6 +7,7 @@ import {SUCCESS} from "../../services/Constants";
 import {errorToast, warningToast} from "../../services/ToastService";
 import LoadingDialog from "../LoadingDialog";
 import Icon from 'react-native-vector-icons/Feather';
+import TournamentDetail from './tabs/TournamentDetail.js';
 import ParticipantsList from './tabs/ParticipantsList.js';
 import KnockOutFixture from './tabs/KnockOutFixture.js';
 
@@ -65,6 +66,7 @@ export default class TournamentPage extends Component {
                          textStyle={{color: '#a3a3a3', fontFamily: 'GoogleSans-Regular', fontWeight: 'normal'}}
                          activeTabStyle={{backgroundColor: '#303030'}}
                          activeTextStyle={{color: '#f8f8f8', fontFamily: 'GoogleSans-Regular', fontWeight: 'normal'}}>
+                        <TournamentDetail/>
                     </Tab>
                     <Tab heading="Katılımcılar" tabStyle={{backgroundColor: '#303030'}}
                          style={{backgroundColor: '#000'}}

@@ -10,4 +10,6 @@ export const TICKET = 'ticket';
 export const TOURNAMENT_STATUS_ACTIVE = 1;
 export const TOURNAMENT_STATUS_CLOSE = 0;
 export const TOURNAMENT_STATUS_OPEN = 2;
+export const UNDEFINED_USERNAME = '---';
 export const USER_STORAGE = 'user';
+export const VERSUS = 'vs';

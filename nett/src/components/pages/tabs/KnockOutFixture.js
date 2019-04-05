@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {ScrollView, View, TouchableOpacity} from 'react-native';
 import {List, ListItem, Badge, Text, Left, Body, Right} from 'native-base';
+import {style} from '../../../assets/style/Custom.js';
+import {UNDEFINED_USERNAME, VERSUS} from '../../../services/Constants';
 
 export default class KnockOutFixture extends Component {
 
@@ -17,18 +19,8 @@ export default class KnockOutFixture extends Component {
                 "draws": [{
                     "drawTitle": "1/4",
                     "matches": [{
-                        "available": true,
-                        "home": {"id": 1, "username": "reshid", "point": 5},
-                        "away": {"id": 2, "username": "rashidmammadov", "point": 1},
-                        "homePoint": null,
-                        "awayPoint": null,
-                        "winner": null,
-                        "loser": null,
-                        "date": "12/04/2019 01:46",
-                        "updatedAt": "22/03/2019 14:19"
-                    }, {
                         "available": false,
-                        "home": {"id": 1, "username": "rashidmammadov", "point": 5},
+                        "home": {"id": 1, "username": "rashidmammadov", "point": 12},
                         "away": {"id": 2, "username": "cananozbaykal", "point": 1},
                         "homePoint": null,
                         "awayPoint": null,
@@ -38,8 +30,28 @@ export default class KnockOutFixture extends Component {
                         "updatedAt": "22/03/2019 14:19"
                     }, {
                         "available": false,
-                        "home": {"id": 1, "username": "rashidmammadov", "point": 5},
-                        "away": {"id": 2, "username": "cananozbaykal", "point": 1},
+                        "home": {"id": 3, "username": "yasindongelli", "point": 0},
+                        "away": {"id": 4, "username": "mammadosmanov", "point": 3},
+                        "homePoint": null,
+                        "awayPoint": null,
+                        "winner": null,
+                        "loser": null,
+                        "date": "12/04/2019 01:46",
+                        "updatedAt": "22/03/2019 14:19"
+                    }, {
+                        "available": false,
+                        "home": {"id": 5, "username": "nihattalibzade", "point": 5},
+                        "away": {"id": 6, "username": "faridmammadov", "point": 2},
+                        "homePoint": null,
+                        "awayPoint": null,
+                        "winner": null,
+                        "loser": null,
+                        "date": "12/04/2019 01:46",
+                        "updatedAt": "22/03/2019 14:19"
+                    }, {
+                        "available": false,
+                        "home": {"id": 7, "username": "johndoe", "point": 0},
+                        "away": {"id": 8, "username": "beatmeifyoucan", "point": 8},
                         "homePoint": null,
                         "awayPoint": null,
                         "winner": null,
@@ -51,8 +63,8 @@ export default class KnockOutFixture extends Component {
                     "drawTitle": "1/2",
                     "matches": [{
                         "available": false,
-                        "home": {"id": 1, "username": "rashidmammadov", "point": 5},
-                        "away": {"id": 2, "username": "cananozbaykal", "point": 1},
+                        "home": {"id": 1, "username": "rashidmammadov", "point": 4},
+                        "away": {"id": 4, "username": "mammadosmanov", "point": 3},
                         "homePoint": null,
                         "awayPoint": null,
                         "winner": null,
@@ -61,8 +73,8 @@ export default class KnockOutFixture extends Component {
                         "updatedAt": "22/03/2019 14:19"
                     }, {
                         "available": false,
-                        "home": {"id": 1, "username": "rashidmammadov", "point": 5},
-                        "away": {"id": 2, "username": "cananozbaykal", "point": 1},
+                        "home": {"id": 5, "username": "nihattalibzade", "point": 2},
+                        "away": {"id": 8, "username": "beatmeifyoucan", "point": 0},
                         "homePoint": null,
                         "awayPoint": null,
                         "winner": null,
@@ -74,8 +86,8 @@ export default class KnockOutFixture extends Component {
                     "drawTitle": "3th",
                     "matches": [{
                         "available": false,
-                        "home": {"id": 1, "username": "rashidmammadov", "point": 5},
-                        "away": {"id": 2, "username": "cananozbaykal", "point": 1},
+                        "home": {"id": 4, "username": "mammadosmanov", "point": null},
+                        "away": {"id": 8, "username": "beatmeifyoucan", "point": null},
                         "homePoint": null,
                         "awayPoint": null,
                         "winner": null,
@@ -87,8 +99,8 @@ export default class KnockOutFixture extends Component {
                     "drawTitle": "final",
                     "matches": [{
                         "available": false,
-                        "home": {"id": 1, "username": "rashidmammadov", "point": 5},
-                        "away": {"id": 2, "username": "cananozbaykal", "point": 1},
+                        "home": {"id": 1, "username": "rashidmammadov", "point": null},
+                        "away": {"id": 5, "username": "nihattalibzade", "point": null},
                         "homePoint": null,
                         "awayPoint": null,
                         "winner": null,
@@ -104,27 +116,21 @@ export default class KnockOutFixture extends Component {
     render() {
         let matches = (data) => {
             let view = data.map(function (match, i) {
-                return <ListItem key={i} style={{paddingLeft: 0, paddingRight: 16}}>
-                    <Body style={{
-                        marginLeft: 0,
-                        flex: 1,
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center'
-                    }}>
-                    <Left style={{flex: 1}}>
-                        <Text style={{flex: 1, color: '#f8f8f8', fontFamily: 'GoogleSans-Regular'}} numberOfLines={1}>
-                            {match.home.username ? match.home.username : '---'}
+                return <ListItem key={i} style={style.knockOutContainer}>
+                    <Body style={style.knockOutInnerContainer}>
+                    <Left style={style.flex}>
+                        <Text style={[style.flex, style.fontFamily, style.primaryTextColor]} numberOfLines={1}>
+                            {match.home.username ? match.home.username : UNDEFINED_USERNAME}
                         </Text>
                     </Left>
-                    <Badge style={{width: 72, backgroundColor: '#f8f8f8', marginLeft: 8, marginRight: 8}}>
-                        <Text style={{fontSize: 14, color: '#303030', fontFamily: 'GoogleSans-Regular'}}>
-                            {match.available ? (match.home.point + ' - ' + match.away.point) : 'vs'}
+                    <Badge style={style.knockOutBadge}>
+                        <Text style={[style.fontFamily, style.secondaryTextColor, style.boldFont, style.smallFont]}>
+                            {match.home.point !== null && match.away.point !== null ? (match.home.point + ' - ' + match.away.point) : VERSUS}
                         </Text>
                     </Badge>
-                    <Right style={{flex: 1}}>
-                        <Text style={{flex: 1, color: '#f8f8f8', fontFamily: 'GoogleSans-Regular'}} numberOfLines={1}>
-                            {match.away.username ? match.away.username : '---'}
+                    <Right style={style.flex}>
+                        <Text style={[style.flex, style.fontFamily, style.primaryTextColor]} numberOfLines={1}>
+                            {match.away.username ? match.away.username : UNDEFINED_USERNAME}
                         </Text>
                     </Right>
                     </Body>
@@ -134,14 +140,15 @@ export default class KnockOutFixture extends Component {
         };
 
         let rounds = this.state.fixture.draws.map((draw, i) => {
-            let view = <View key={i}><ListItem style={{backgroundColor: '#303030'}} itemDivider>
-                <Left>
-                    <Text style={{fontFamily: 'GoogleSans-Regular', color: '#f8f8f8'}}>{draw.drawTitle}</Text>
-                </Left>
-                <Right style={{flex: 1}}>
-                    <Text note style={{flex: 1, fontFamily: 'GoogleSans-Regular'}}>{draw.matches[0].date}</Text>
-                </Right>
-            </ListItem>
+            let view = <View key={i}>
+                <ListItem style={style.secondaryBGColor} itemDivider>
+                    <Left>
+                        <Text style={[style.fontFamily, style.primaryTextColor]}>{draw.drawTitle}</Text>
+                    </Left>
+                    <Right style={style.flex}>
+                        <Text note style={[style.flex, style.fontFamily]}>{draw.matches[0].date}</Text>
+                    </Right>
+                </ListItem>
                 {matches(draw.matches)}
             </View>;
             return view

@@ -23,6 +23,7 @@ class TournamentTransformer extends Transformer {
             CURRENT_PARTICIPANTS => $tournament[CURRENT_PARTICIPANTS],
             STATUS => $tournament[STATUS],
             REFERENCE_CODE => $tournament[REFERENCE_CODE],
+            TOURNAMENT_TYPE => $tournament[TOURNAMENT_TYPE],
             PRICE => array(
                 AMOUNT => MIN_AMOUNT,
                 CURRENCY => TURKISH_LIRA,
