@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {ImageBackground, View, TouchableOpacity} from 'react-native';
-import {Tab, Tabs, Root, Left, Body, Title, Header} from "native-base";
+import {Tab, Tabs, Left, Body, Title, Header} from "native-base";
 import {Actions} from "react-native-router-flux";
 import {getTournament} from "../../services/TournamentService";
 import {SUCCESS} from "../../services/Constants";
@@ -18,7 +18,7 @@ export default class TournamentPage extends Component {
         this.state = {
             loading: true,
             tournament: {}
-        }
+        };
     }
 
     componentDidMount() {
@@ -51,7 +51,6 @@ export default class TournamentPage extends Component {
                     <Body>
                     <Title style={{
                         color: '#f8f8f8',
-                        fontSize: 20,
                         fontFamily: 'GoogleSans-Regular'
                     }}>{this.props.title}</Title>
                     </Body>

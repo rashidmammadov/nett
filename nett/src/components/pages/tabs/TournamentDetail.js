@@ -16,8 +16,7 @@ export default class TournamentDetail extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading: true,
-            detail: this.props.detail
+            loading: true
         }
     }
 
@@ -34,7 +33,7 @@ export default class TournamentDetail extends Component {
                         </Body>
                         <Right style={style.flex}>
                             <Text style={[style.fontFamily, style.primaryTextColor]}>
-                                {this.state.detail.game ? this.state.detail.game.name : '-'}
+                                {this.props.detail.game ? this.props.detail.game.name : '-'}
                             </Text>
                         </Right>
                     </ListItem>
@@ -47,7 +46,7 @@ export default class TournamentDetail extends Component {
                         </Body>
                         <Right style={style.flex}>
                             <Text style={[style.fontFamily, style.primaryTextColor]}>
-                                {typeMap[this.state.detail.tournamentType]}
+                                {typeMap[this.props.detail.tournamentType]}
                             </Text>
                         </Right>
                     </ListItem>
@@ -60,7 +59,7 @@ export default class TournamentDetail extends Component {
                         </Body>
                         <Right style={style.flex}>
                             <Text style={[style.fontFamily, style.primaryTextColor]}>
-                                {this.state.detail.time} {this.state.detail.date}
+                                {this.props.detail.time} {this.props.detail.date}
                             </Text>
                         </Right>
                     </ListItem>
@@ -73,7 +72,7 @@ export default class TournamentDetail extends Component {
                         </Body>
                         <Right style={style.flex}>
                             <Text style={[style.fontFamily, style.primaryTextColor]}>
-                                {this.state.detail.participantCount}
+                                {this.props.detail.participantCount}
                             </Text>
                         </Right>
                     </ListItem>
@@ -86,7 +85,7 @@ export default class TournamentDetail extends Component {
                         </Body>
                         <Right style={style.flex}>
                             <Text style={[style.fontFamily, style.primaryTextColor]}>
-                                {this.state.detail.price ? this.state.detail.price.amount + ' ' + this.state.detail.price.currency : '-'}
+                                {this.props.detail.price ? this.props.detail.price.amount + ' ' + this.props.detail.price.currency : '-'}
                             </Text>
                         </Right>
                     </ListItem>

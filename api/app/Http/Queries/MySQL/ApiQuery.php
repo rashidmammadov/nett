@@ -172,22 +172,14 @@ class ApiQuery {
             })->get();
 
         foreach ($tournaments as $tournament) {
-            Log::info('tournament id : ' . $tournament[TOURNAMENT_ID]);
-            Log::info('start date in millisecond : ' . $tournament[START_DATE]);
-            Log::info('given date in millisecond : ' . $parameters[START_DATE]);
-            Log::info('t. date - p. date is : ' . ($tournament[START_DATE] - $parameters[START_DATE]));
-            Log::info('p. date - t. date is : : ' . ($parameters[START_DATE] - $tournament[START_DATE]));
             if (($tournament[START_DATE] - $parameters[START_DATE]) < 86400000 && ($parameters[START_DATE] - $tournament[START_DATE]) < 86400000) {
-                Log::info('there is already have tournament in given date');
+                Log::info('holder: ' . $holderId . ' try to set tournament in same day');
+                Log::info('given date is: ' . $parameters[START_DATE]);
+                Log::info('exist date is: ' . $tournament[START_DATE]);
                 $queryResult = false;
                 return $queryResult;
             }
         }
-
-        /*where(function ($query) use ($parameters) {
-            $query->where(START_DATE, EQUAL_OR_LESS_SIGN, intval($parameters[START_DATE]) + 86400000)
-                ->where(START_DATE, EQUAL_OR_GREATER_SIGN, intval($parameters[START_DATE]) - 86400000);
-        })->doesntExist();*/
 
         return $queryResult;
     }

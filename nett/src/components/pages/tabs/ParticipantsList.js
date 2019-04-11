@@ -7,13 +7,11 @@ export default class ParticipantsList extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            participants: this.props.participants
-        };
+        this.state = {};
     }
 
     render() {
-        let participants = this.state.participants && this.state.participants.map((participant, i) => {
+        let participants = this.props.participants && this.props.participants.map((participant, i) => {
             return <ListItem avatar key={i}>
                 <Left>
                     <Thumbnail small source={{uri: participant.picture}}/>
@@ -29,7 +27,7 @@ export default class ParticipantsList extends Component {
             </ListItem>
         });
 
-        if (this.state.participants) {
+        if (this.props.participants && this.props.participants.length > 0) {
             return (
                 <ScrollView>
                     <List>

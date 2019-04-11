@@ -8,9 +8,7 @@ export default class KnockOutFixture extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            fixture: this.props.fixture
-        };
+        this.state = {};
     }
 
     render() {
@@ -40,7 +38,7 @@ export default class KnockOutFixture extends Component {
             return view;
         };
 
-        let rounds = this.state.fixture && his.state.fixture.draws.map((draw, i) => {
+        let rounds = this.props.fixture && this.props.fixture.draws.map((draw, i) => {
             let view = <View key={i}>
                 <ListItem style={style.secondaryBGColor} itemDivider>
                     <Left>
@@ -55,7 +53,7 @@ export default class KnockOutFixture extends Component {
             return view
         });
 
-        if (this.state.fixture) {
+        if (this.props.fixture) {
             return (
                 <ScrollView>
                     <List>

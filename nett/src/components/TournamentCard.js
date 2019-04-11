@@ -33,7 +33,7 @@ export default class TournamentCard extends Component {
                         <AttendTournament data={this.props.tournament}/>
                     </Right>
                 </CardItem>
-                <TouchableOpacity onPress={() => Actions.TournamentPage({activeTab: this.state.data.tournamentId})}>
+                <TouchableOpacity onPress={() => Actions.TournamentPage({tournamentId: this.state.data.tournamentId})}>
                     <CardItem cardBody>
                         <ImageBackground source={{uri: this.state.data.game.image}}
                                          style={{height: 200, width: null, flex: 1}}>
