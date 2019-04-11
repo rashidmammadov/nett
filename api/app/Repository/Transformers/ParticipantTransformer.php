@@ -19,7 +19,8 @@ class ParticipantTransformer extends Transformer
             USERNAME => $participant[USERNAME],
             NAME => $participant[NAME],
             SURNAME => $participant[SURNAME],
-            PICTURE => $participant[PICTURE]
+            PICTURE => $participant[PICTURE],
+            TOURNAMENT_RANKING => $participant[TOURNAMENT_RANKING]
         ];
     }
 
@@ -31,6 +32,7 @@ class ParticipantTransformer extends Transformer
             NAME => $participant[NAME],
             SURNAME => $participant[SURNAME],
             PICTURE => $participant[PICTURE],
+            TOURNAMENT_RANKING => $participant[TOURNAMENT_RANKING],
             PAYMENT_TYPE => $participant[PAYMENT_TYPE],
             PAYMENT_AMOUNT => $participant[PAYMENT_AMOUNT],
             REFERENCE_CODE => $participant[REFERENCE_CODE]

@@ -17,7 +17,7 @@ export default class TournamentPage extends Component {
         super(props);
         this.state = {
             loading: true,
-            tournament: null
+            tournament: {}
         }
     }
 
@@ -57,7 +57,7 @@ export default class TournamentPage extends Component {
                     </Body>
                 </Header>
                 <ImageBackground
-                    source={{uri: 'https://s3.eu-central-1.amazonaws.com/images.gamesatis.com/products/images/000/023/869/big/fifa-19.jpg'}}
+                    source={{uri: this.state.tournament.game && this.state.tournament.game.image}}
                     style={{height: 96, width: null, resizeMode: 'cover'}}>
                 </ImageBackground>
                 <Tabs>
@@ -66,21 +66,21 @@ export default class TournamentPage extends Component {
                          textStyle={{color: '#a3a3a3', fontFamily: 'GoogleSans-Regular', fontWeight: 'normal'}}
                          activeTabStyle={{backgroundColor: '#303030'}}
                          activeTextStyle={{color: '#f8f8f8', fontFamily: 'GoogleSans-Regular', fontWeight: 'normal'}}>
-                        <TournamentDetail/>
+                        <TournamentDetail detail={this.state.tournament}/>
                     </Tab>
                     <Tab heading="Katılımcılar" tabStyle={{backgroundColor: '#303030'}}
                          style={{backgroundColor: '#000'}}
                          textStyle={{color: '#a3a3a3', fontFamily: 'GoogleSans-Regular', fontWeight: 'normal'}}
                          activeTabStyle={{backgroundColor: '#303030'}}
                          activeTextStyle={{color: '#f8f8f8', fontFamily: 'GoogleSans-Regular', fontWeight: 'normal'}}>
-                        <ParticipantsList/>
+                        <ParticipantsList participants={this.state.tournament.participants}/>
                     </Tab>
                     <Tab heading="Fikstür" tabStyle={{backgroundColor: '#303030'}}
                          style={{backgroundColor: '#000'}}
                          textStyle={{color: '#a3a3a3', fontFamily: 'GoogleSans-Regular', fontWeight: 'normal'}}
                          activeTabStyle={{backgroundColor: '#303030'}}
                          activeTextStyle={{color: '#f8f8f8', fontFamily: 'GoogleSans-Regular', fontWeight: 'normal'}}>
-                        <KnockOutFixture/>
+                        <KnockOutFixture fixture={this.state.tournament.fixture}/>
                     </Tab>
                 </Tabs>
             </View>

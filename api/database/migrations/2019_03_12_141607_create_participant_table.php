@@ -17,7 +17,7 @@ class CreateParticipantTable extends Migration {
             $table->double(PAYMENT_AMOUNT)->nullable();
             $table->char(PAYMENT_TYPE)->nullable();
             $table->double(EARNINGS)->nullable();
-            $table->smallInteger(RANKING)->nullable();
+            $table->smallInteger(TOURNAMENT_RANKING)->nullable();
             $table->smallInteger(POINT)->nullable();
             $table->char(REFERENCE_CODE, 8)->nullable();
             $table->timestamps();

@@ -17,26 +17,7 @@ export default class TournamentDetail extends Component {
         super(props);
         this.state = {
             loading: true,
-            detail: {
-                "tournamentId": 17,
-                "attended": false,
-                "date": "09/04",
-                "time": "05:00",
-                "participantCount": "16",
-                "currentParticipants": 0,
-                "status": "2",
-                "referenceCode": null,
-                "tournamentType": "knock_out",
-                "price": {
-                    "amount": 15,
-                    "currency": "₺"
-                },
-                "game": {
-                    "id": "1",
-                    "name": "PES 2019",
-                    "image": "https://steamcdn-a.akamaihd.net/steam/apps/770240/header.jpg?t=1535587388"
-                }
-            }
+            detail: this.props.detail
         }
     }
 
@@ -53,7 +34,7 @@ export default class TournamentDetail extends Component {
                         </Body>
                         <Right style={style.flex}>
                             <Text style={[style.fontFamily, style.primaryTextColor]}>
-                                {this.state.detail.game.name}
+                                {this.state.detail.game ? this.state.detail.game.name : '-'}
                             </Text>
                         </Right>
                     </ListItem>
@@ -105,7 +86,7 @@ export default class TournamentDetail extends Component {
                         </Body>
                         <Right style={style.flex}>
                             <Text style={[style.fontFamily, style.primaryTextColor]}>
-                                {this.state.detail.price.amount} {this.state.detail.price.currency}
+                                {this.state.detail.price ? this.state.detail.price.amount + ' ' + this.state.detail.price.currency : '-'}
                             </Text>
                         </Right>
                     </ListItem>

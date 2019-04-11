@@ -150,6 +150,7 @@ class TournamentController extends ApiController {
         $tournaments = ApiQuery::searchTournaments($request, $user);
         $tournamentsList = array();
         foreach ($tournaments as $tournament) {
+            $tournament[FIXTURE] = null;
             $data = $this->prepareTournamentGeneralData($tournament, $user);
             array_push($tournamentsList, $data);
         }
@@ -170,6 +171,7 @@ class TournamentController extends ApiController {
         }
         foreach ($tournaments as $tournament) {
             if ($tournament[TOURNAMENT_ID]) {
+                $tournament[FIXTURE] = null;
                 $data = $this->prepareTournamentGeneralData($tournament, $user, true);
                 array_push($result, $data);
             }

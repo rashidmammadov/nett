@@ -15,8 +15,6 @@ class Match {
         AVAILABLE => false,
         HOME => null,
         AWAY => null,
-        HOME_POINT => null,
-        AWAY_POINT => null,
         WINNER => null,
         LOSER => null,
         DATE => null,
@@ -27,8 +25,6 @@ class Match {
         !empty($parameters[AVAILABLE])  && self::setAvailable($parameters[AVAILABLE]);
         !empty($parameters[HOME])       && self::setHome($parameters[HOME]);
         !empty($parameters[AWAY])       && self::setAway($parameters[AWAY]);
-        !empty($parameters[HOME_POINT]) && self::setAwayPoint($parameters[HOME_POINT]);
-        !empty($parameters[AWAY_POINT]) && self::setAwayPoint($parameters[AWAY_POINT]);
         !empty($parameters[WINNER])     && self::setWinner($parameters[WINNER]);
         !empty($parameters[LOSER])      && self::setLoser($parameters[LOSER]);
         !empty($parameters[DATE])       && self::setDate($parameters[DATE]);
@@ -48,14 +44,6 @@ class Match {
     public static function getAway() { return self::$match[AWAY]; }
 
     public static function setAway($value) { self::$match[AWAY] = $value; }
-
-    public static function getHomePoint() { return self::$match[HOME_POINT]; }
-
-    public static function setHomePoint($value) { self::$match[HOME_POINT] = $value; }
-
-    public static function getAwayPoint() { return self::$match[AWAY_POINT]; }
-
-    public static function setAwayPoint($value) { self::$match[AWAY_POINT] = $value; }
 
     public static function getWinner() { return self::$match[WINNER]; }
 

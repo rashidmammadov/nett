@@ -7,6 +7,7 @@ use App\Game;
 use App\Participant;
 use App\Tournament;
 use App\User;
+use Illuminate\Support\Facades\Log;
 
 class ApiQuery {
 
@@ -164,14 +165,29 @@ class ApiQuery {
      * @return mixed
      */
     public static function checkTournamentsDifferenceIsOneDay($parameters, $holderId) {
-        $queryResult = Tournament::where(HOLDER_ID, EQUAL_SIGN, $holderId)
+        $queryResult = true;
+        $tournaments = Tournament::where(HOLDER_ID, EQUAL_SIGN, $holderId)
             ->where(function ($query) {
-                $query->where(STATUS, NOT_EQUAL_SIGN, TOURNAMENT_STATUS_CLOSE);
-            })
-            ->where(function ($query) use ($parameters) {
-                $query->where(START_DATE, EQUAL_OR_LESS_SIGN, intval($parameters[START_DATE]) + 86400000)
-                    ->where(START_DATE, EQUAL_OR_GREATER_SIGN, intval($parameters[START_DATE]) - 86400000);
-            })->doesntExist();
+                $query->where(STATUS, EQUAL_SIGN, TOURNAMENT_STATUS_OPEN);
+            })->get();
+
+        foreach ($tournaments as $tournament) {
+            Log::info('tournament id : ' . $tournament[TOURNAMENT_ID]);
+            Log::info('start date in millisecond : ' . $tournament[START_DATE]);
+            Log::info('given date in millisecond : ' . $parameters[START_DATE]);
+            Log::info('t. date - p. date is : ' . ($tournament[START_DATE] - $parameters[START_DATE]));
+            Log::info('p. date - t. date is : : ' . ($parameters[START_DATE] - $tournament[START_DATE]));
+            if (($tournament[START_DATE] - $parameters[START_DATE]) < 86400000 && ($parameters[START_DATE] - $tournament[START_DATE]) < 86400000) {
+                Log::info('there is already have tournament in given date');
+                $queryResult = false;
+                return $queryResult;
+            }
+        }
+
+        /*where(function ($query) use ($parameters) {
+            $query->where(START_DATE, EQUAL_OR_LESS_SIGN, intval($parameters[START_DATE]) + 86400000)
+                ->where(START_DATE, EQUAL_OR_GREATER_SIGN, intval($parameters[START_DATE]) - 86400000);
+        })->doesntExist();*/
 
         return $queryResult;
     }

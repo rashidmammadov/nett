@@ -25,6 +25,12 @@ export const style = StyleSheet.create({
     boldFont: {
         fontWeight: 'bold'
     },
+    alignCenter: {
+        alignItems: 'center'
+    },
+    alignColumn: {
+        flexDirection: 'column'
+    },
 
     knockOutContainer: {
         paddingLeft: 0,
