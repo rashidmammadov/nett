@@ -14,7 +14,7 @@ export default class ParticipantsList extends Component {
         let participants = this.props.participants && this.props.participants.map((participant, i) => {
             return <ListItem avatar key={i}>
                 <Left>
-                    <Thumbnail small source={{uri: participant.picture}}/>
+                    <Thumbnail style={style.imageBGColor} small source={{uri: participant.picture}}/>
                 </Left>
                 <Body>
                 <Text style={[style.fontFamily, style.primaryTextColor]}>{participant.username}</Text>
@@ -23,6 +23,8 @@ export default class ParticipantsList extends Component {
                 <Right>
                     <Text note
                           style={style.fontFamily}>{participant.tournamentRanking ? '#'.tournamentRanking : '-'}</Text>
+                    <Text note
+                          style={style.fontFamily}>{participant.referenceCode ? participant.referenceCode : ''}</Text>
                 </Right>
             </ListItem>
         });

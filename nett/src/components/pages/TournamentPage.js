@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ImageBackground, View, TouchableOpacity} from 'react-native';
+import {BackHandler, ImageBackground, View, TouchableOpacity} from 'react-native';
 import {Tab, Tabs, Left, Body, Title, Header} from "native-base";
 import {Actions} from "react-native-router-flux";
 import {getTournament} from "../../services/TournamentService";
@@ -19,6 +19,8 @@ export default class TournamentPage extends Component {
             loading: true,
             tournament: {}
         };
+
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
 
     componentDidMount() {
@@ -36,6 +38,17 @@ export default class TournamentPage extends Component {
                 this.setState({loading: false});
                 errorToast(error.message);
             });
+
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+
+    handleBackButtonClick() {
+        Actions.pop();
+        return true;
     }
 
     render() {
@@ -44,7 +57,7 @@ export default class TournamentPage extends Component {
                 <LoadingDialog loading={this.state.loading}/>
                 <Header style={{backgroundColor: '#303030'}}>
                     <Left>
-                        <TouchableOpacity transparent onPress={() => Actions.pop()}>
+                        <TouchableOpacity transparent onPress={() => this.handleBackButtonClick()}>
                             <Icon name='arrow-left' color={'#f8f8f8'} size={24}/>
                         </TouchableOpacity>
                     </Left>

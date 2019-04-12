@@ -17,6 +17,7 @@ class UserTransformer extends Transformer {
             IDENTIFIER => $user[IDENTIFIER],
             USERNAME => $user[USERNAME],
             NAME => $user[NAME],
+            PICTURE => $user[PICTURE],
             SURNAME => $user[SURNAME],
             BIRTHDAY => $user[BIRTHDAY],
             EMAIL => $user[EMAIL],

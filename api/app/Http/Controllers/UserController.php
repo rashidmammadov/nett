@@ -108,6 +108,7 @@ class UserController extends ApiController {
                     if ($request[PASSWORD] != $request[PASSWORD_CONFIRMATION]) {
                         return $this->respondWithError(PASSWORD_VALIDATION_FAILED);
                     } else {
+                        $request[PICTURE] = $this->addRandomAvatar();
                         ApiQuery::setUser($request);
                         return $this->login($request, true);
                     }
@@ -154,6 +155,16 @@ class UserController extends ApiController {
         }
 
         return $this->respondCreated(LOGGED_IN_SUCCESSFULLY, $this->userTransformer->transform($user));
+    }
+
+    /**
+     * @description: set random avatar for user.
+     * @return mixed
+     */
+    private function addRandomAvatar()
+    {
+        $imageUrl = env('HOST_NAME') . env('AVATARS_PATH') . rand(MIN_AVATAR_COUNT, MAX_AVATAR_COUNT) . '.png';
+        return $imageUrl;
     }
 
 }

@@ -19,6 +19,9 @@ export const style = StyleSheet.create({
     secondaryBGColor: {
         backgroundColor: '#303030'
     },
+    imageBGColor: {
+        backgroundColor: '#d3d3d3'
+    },
     smallFont: {
         fontSize: 14
     },

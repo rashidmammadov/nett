@@ -340,7 +340,8 @@ class ApiQuery {
             EMAIL => $user[EMAIL],
             PASSWORD => \Hash::make($user[PASSWORD]),
             CITY => $user[CITY],
-            DISTRICT => $user[DISTRICT]
+            DISTRICT => $user[DISTRICT],
+            PICTURE => $user[PICTURE]
         ]);
     }
 }
