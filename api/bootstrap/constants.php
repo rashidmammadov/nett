@@ -65,6 +65,7 @@ define('LOGGED_IN_SUCCESSFULLY', 'Oturum başarıyla açıldı');
 define('LOGGED_OUT_SUCCESSFULLY', 'Oturum başarıyla kapatıldı');
 define('LOSER', 'loser');
 define('MATCHES', 'matches');
+define('MATCH_ID', 'matchId');
 define('MAX_AVATAR_COUNT', 31);
 define('MAXIMUM_PARTICIPANTS_COUNT_LIMIT', 'Turnuva katılımcı sayısı limiti dolmuştur');
 define('MESSAGE', 'message');

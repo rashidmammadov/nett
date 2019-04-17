@@ -28,13 +28,25 @@ class ApiQuery {
     /**
      * @description query to get given tournament`s fixture
      * @param $tournamentId
-     * @return
+     * @return mixed
      */
     public static function getFixture($tournamentId)
     {
         $queryResult = Fixture::where(TOURNAMENT_ID, EQUAL_SIGN, $tournamentId)->first();
-
         return $queryResult;
+    }
+
+    /**
+     * @description query to update given tournament`s fixture
+     * @param $tournamentId
+     * @param $fixture
+     * @return mixed
+     */
+    public static function updateFixture($tournamentId, $fixture)
+    {
+        $queryResult = self::getFixture($tournamentId);
+        $queryResult[FIXTURE] = json_encode($fixture, JSON_UNESCAPED_UNICODE);
+        $queryResult->save();
     }
 
     /** -------------------- GAME QUERIES -------------------- **/

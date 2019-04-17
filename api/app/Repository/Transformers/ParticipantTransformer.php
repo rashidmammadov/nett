@@ -38,4 +38,13 @@ class ParticipantTransformer extends Transformer
             REFERENCE_CODE => $participant[REFERENCE_CODE]
         ];
     }
+
+    public function transformForFixture($participant)
+    {
+        return [
+            PARTICIPANT_ID => $participant[PARTICIPANT_ID],
+            USERNAME => $participant[USERNAME],
+            POINT => $participant[POINT]
+        ];
+    }
 }

@@ -12,6 +12,7 @@ namespace App\Http\Utility;
 class Match {
 
     private static $match = array(
+        MATCH_ID => null,
         AVAILABLE => false,
         HOME => null,
         AWAY => null,
@@ -22,6 +23,7 @@ class Match {
     );
 
     public function __construct($parameters = null) {
+        !empty($parameters[MATCH_ID]) && self::setMatchId($parameters[MATCH_ID]);
         !empty($parameters[AVAILABLE])  && self::setAvailable($parameters[AVAILABLE]);
         !empty($parameters[HOME])       && self::setHome($parameters[HOME]);
         !empty($parameters[AWAY])       && self::setAway($parameters[AWAY]);
@@ -32,6 +34,16 @@ class Match {
     }
 
     public static function getMatch() { return self::$match; }
+
+    public static function getMatchId()
+    {
+        return self::$match[MATCH_ID];
+    }
+
+    public static function setMatchId($value)
+    {
+        self::$match[MATCH_ID] = $value;
+    }
 
     public static function getAvailable() { return self::$match[AVAILABLE]; }
 
