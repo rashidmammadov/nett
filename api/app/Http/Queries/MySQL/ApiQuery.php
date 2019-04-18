@@ -353,7 +353,8 @@ class ApiQuery {
             PASSWORD => \Hash::make($user[PASSWORD]),
             CITY => $user[CITY],
             DISTRICT => $user[DISTRICT],
-            PICTURE => $user[PICTURE]
+            PICTURE => $user[PICTURE],
+            ONESIGNAL_DEVICE_ID => $user[ONESIGNAL_DEVICE_ID]
         ]);
     }
 }

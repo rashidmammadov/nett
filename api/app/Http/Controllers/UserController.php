@@ -6,6 +6,7 @@ use App\Http\Queries\MySQL\ApiQuery;
 use App\Repository\Transformers\UserTransformer;
 use Illuminate\Http\Request;
 use \Illuminate\Http\Response as Res;
+use Illuminate\Support\Facades\Log;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
@@ -57,6 +58,12 @@ class UserController extends ApiController {
         } else {
             $user = ApiQuery::getUserByEmail($request[EMAIL]);
             if ($user) {
+                /** add one signal device id **/
+                if ($request[ONESIGNAL_DEVICE_ID]) {
+                    $user[ONESIGNAL_DEVICE_ID] = $request[ONESIGNAL_DEVICE_ID];
+                    $user->save();
+                }
+
                 $remember_token = $user->remember_token;
                 if ($remember_token == NULL){
                     return $this->login($request, false);

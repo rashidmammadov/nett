@@ -6,7 +6,7 @@ import {regions} from '../../services/DataService.js';
 import {signUp} from '../../services/SignService.js';
 import {setUser} from "../../services/ConfigService";
 import {errorToast, successToast, warningToast} from "../../services/ToastService";
-import {RESET, SUCCESS, USER_STORAGE} from "../../services/Constants";
+import {ONESIGNAL_DEVICE_ID, RESET, SUCCESS, USER_STORAGE} from "../../services/Constants";
 
 export default class RegisterPage extends Component {
 
@@ -18,11 +18,18 @@ export default class RegisterPage extends Component {
 		    cities: [],
 		    selectedCity: null,
 		    districts: [],
-		    selectedDistrict: null
+            selectedDistrict: null,
+            deviceId: null
 		};
 		this.getRegions.bind();
 		this.getRegions();
 	}
+
+    async componentDidMount() {
+        AsyncStorage.getItem(ONESIGNAL_DEVICE_ID).then((deviceId) => {
+            this.setState({deviceId: deviceId});
+        });
+    }
 
 	getRegions() {
 	    regions()
@@ -56,7 +63,8 @@ export default class RegisterPage extends Component {
             password: this.state.password,
             passwordConfirmation: this.state.passwordConfirmation,
             city: this.state.selectedCity,
-            district: this.state.selectedDistrict
+            district: this.state.selectedDistrict,
+            onesignalDeviceId: this.state.deviceId
         };
         signUp(user)
             .then((res) => {

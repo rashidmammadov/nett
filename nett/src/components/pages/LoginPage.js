@@ -5,20 +5,30 @@ import {Actions} from 'react-native-router-flux';
 import {signIn} from '../../services/SignService.js';
 import {setUser} from "../../services/ConfigService";
 import {errorToast, warningToast} from "../../services/ToastService";
-import {RESET, SUCCESS, USER_STORAGE} from "../../services/Constants";
+import {ONESIGNAL_APPID, RESET, SUCCESS, USER_STORAGE} from "../../services/Constants";
 
 export default class LoginPage extends Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {loading: false};
+        this.state = {
+            loading: false,
+            deviceId: null
+        };
 		this.navigator = this.props.navigator;
 	}
+
+    async componentDidMount() {
+        AsyncStorage.getItem(ONESIGNAL_APPID).then((deviceId) => {
+            this.setState({deviceId: deviceId});
+        });
+    }
 
 	login() {
 	    let user = {
             email: this.state.email,
-            password: this.state.password
+            password: this.state.password,
+            onesignalDeviceId: this.state.deviceId
         };
         this.setState({loading: true});
         signIn(user)

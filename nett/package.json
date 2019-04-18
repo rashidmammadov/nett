@@ -13,6 +13,7 @@
     "react-native-actionsheet": "^2.4.2",
     "react-native-circular-progress": "^1.1.0",
     "react-native-modal-datetime-picker": "^6.0.0",
+    "react-native-onesignal": "^3.2.12",
     "react-native-popup-dialog": "^0.17.0",
     "react-native-router-flux": "^4.0.6",
     "react-native-svg": "^9.2.4",
