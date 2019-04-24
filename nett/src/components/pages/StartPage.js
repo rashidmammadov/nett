@@ -30,7 +30,7 @@ export default class StartPage extends Component {
 				if (res.status === SUCCESS) {
 					setUser(res.data);
 					AsyncStorage.setItem(USER_STORAGE, JSON.stringify(res.data));
-					Actions.AppPage({type: RESET});
+                    this.props.renderPage();
 				} else {
 					AsyncStorage.removeItem(USER_STORAGE);
 					Actions.LoginPage({type: RESET});

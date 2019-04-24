@@ -14,7 +14,8 @@
         "laravel/tinker": "^1.0",
         "tymon/jwt-auth": "^0.5.12",
         "ext-json": "*",
-        "intervention/image": "dev-master"
+        "intervention/image": "dev-master",
+        "ext-curl": "*"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
