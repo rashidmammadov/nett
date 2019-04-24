@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Http\Queries\MySQL\ApiQuery;
 use App\Http\Utility\CustomDate;
 use App\Http\Utility\Fixture;
+use App\Http\Utility\PushNotification;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Console\Command;
 
@@ -19,26 +20,27 @@ class Schedule extends Command {
         Log::info('TOTAL OPEN TOURNAMENTS COUNT: ' . count($tournaments));
         $resultCount = 0;
         foreach ($tournaments as $tournament) {
-            // TODO: send notifications..
-            if ($tournament[START_DATE] - $currentDate <= 86400000) {
+            //if ($tournament[START_DATE] - $currentDate <= 86400000) {
                 $resultCount++;
                 $participants = $this->getParticipants($tournament[TOURNAMENT_ID]);
-                if (count($participants) < $tournament[PARTICIPANT_COUNT] - 2) {
-                    ApiQuery::updateTournamentStatus($tournament, TOURNAMENT_STATUS_CANCEL);
-                    Log::info('PARTICIPANT COUNT: ' . count($participants));
-                    Log::info('NEEDED PARTICIPANT COUNT: ' . $tournament[PARTICIPANT_COUNT]);
-                    Log::info('TOURNAMENT ' . $tournament[TOURNAMENT_ID] . ' STATUS CHANGED: FROM OPEN TO CANCEL');
-                    $this->payBack($participants);
-                } else {
-                    ApiQuery::updateTournamentStatus($tournament, TOURNAMENT_STATUS_ACTIVE);
-                    Log::info('TOURNAMENT ' . $tournament[TOURNAMENT_ID] . ' STATUS CHANGED: FROM OPEN TO ACTIVE');
-
-                    $fixture = $this->getFixture($tournament[TOURNAMENT_ID]);
-                    $updatedFixture = Fixture::setKnockOutStartDraws($fixture, $participants);
-                    $this->updateFixture($tournament[TOURNAMENT_ID], $updatedFixture);
-                    Log::info('FIXTURE UPDATED AS: ' . json_encode($updatedFixture));
-                }
-            }
+            PushNotification::tournamentCancelled($tournament, $participants);
+            /** if (count($participants) < $tournament[PARTICIPANT_COUNT] - 2) {
+                    * ApiQuery::updateTournamentStatus($tournament, TOURNAMENT_STATUS_CANCEL);
+                    * Log::info('PARTICIPANT COUNT: ' . count($participants));
+                    * Log::info('NEEDED PARTICIPANT COUNT: ' . $tournament[PARTICIPANT_COUNT]);
+                    * Log::info('TOURNAMENT ' . $tournament[TOURNAMENT_ID] . ' STATUS CHANGED: FROM OPEN TO CANCEL');
+                    * $this->payBack($participants);
+             * PushNotification::tournamentCancelled($tournament, $participants);
+             * } else {
+                    * ApiQuery::updateTournamentStatus($tournament, TOURNAMENT_STATUS_ACTIVE);
+                    * Log::info('TOURNAMENT ' . $tournament[TOURNAMENT_ID] . ' STATUS CHANGED: FROM OPEN TO ACTIVE');
+                    * $fixture = $this->getFixture($tournament[TOURNAMENT_ID]);
+                    * $updatedFixture = Fixture::setKnockOutStartDraws($fixture, $participants);
+                    * $this->updateFixture($tournament[TOURNAMENT_ID], $updatedFixture);
+                    * Log::info('FIXTURE UPDATED AS: ' . json_encode($updatedFixture));
+             * PushNotification::tournamentStarts($tournament, $participants);
+             * }**/
+            //}
         }
         Log::info('STATUS CHANGED TOURNAMENTS COUNT: ' . $resultCount);
     }

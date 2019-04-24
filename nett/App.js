@@ -21,9 +21,10 @@ import SearchPage from './src/components/pages/SearchPage.js';
 import SetTournamentPage from './src/components/pages/SetTournamentPage.js';
 import StartPage from './src/components/pages/StartPage.js';
 import TournamentPage from './src/components/pages/TournamentPage.js';
-import {ONESIGNAL_DEVICE_ID, ONESIGNAL_APPID} from "./src/services/Constants";
+import {ONESIGNAL_DEVICE_ID, ONESIGNAL_APPID, RESET} from "./src/services/Constants";
 
 //type Props = {};
+let tournamentId = null;
 export default class App extends Component {
 
     constructor(props) {
@@ -55,10 +56,23 @@ export default class App extends Component {
         console.log('Data: ', openResult.notification.payload.additionalData);
         console.log('isActive: ', openResult.notification.isAppInFocus);
         console.log('openResult: ', openResult);
+
+        if (openResult.notification.payload.additionalData) {
+            tournamentId = openResult.notification.payload.additionalData.tournamentId;
+        }
     }
 
     onIds(device) {
         console.log('Device info: ', device);
+    }
+
+    renderPage() {
+        console.log('PASSED TOURNAMEND ID: ', tournamentId);
+        if (tournamentId) {
+            Actions.TournamentPage({tournamentId: tournamentId});
+        } else {
+            Actions.AppPage({type: RESET});
+        }
     }
 
     render() {
@@ -72,7 +86,8 @@ export default class App extends Component {
                 <Scene key="RegisterPage" component={RegisterPage} hideNavBar={true}/>
                 <Scene key="SearchPage" component={SearchPage} hideNavBar={true}/>
                 <Scene key="SetTournamentPage" component={SetTournamentPage} hideNavBar={true}/>
-                <Scene key="StartPage" component={StartPage} initial={true} hideNavBar={true}/>
+                <Scene key="StartPage" component={StartPage} initial={true} renderPage={this.renderPage.bind(this)}
+                       hideNavBar={true}/>
                 <Scene key="TournamentPage" component={TournamentPage} title="Turnuva Detayı" hideNavBar={true}
                        back={true}/>
             </Scene>
