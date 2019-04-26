@@ -1,6 +1,7 @@
 export const DEACTIVE_USER_STATE = 0;
 export const ONESIGNAL_DEVICE_ID = 'onesignalDeviceId';
 export const GROUP = 'Grup';
+export const GOOGLE_ANALYTICS_ID = 'UA-132575859-1';
 export const KNOCK_OUT = 'Eleme';
 export const MONEY = 'money';
 export const NO_RESULT = 'Sonuç Bulunamadı';

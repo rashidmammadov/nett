@@ -6,6 +6,7 @@ import {setUser} from "../../services/ConfigService";
 import {errorToast,  warningToast} from "../../services/ToastService";
 import {style} from '../../assets/style/Custom.js';
 import {DEACTIVE_USER_STATE, RESET, SUCCESS, USER_STORAGE} from "../../services/Constants";
+import {googleTrack} from "../../services/GoogleAnalytics";
 
 export default class StartPage extends Component {
 
@@ -16,34 +17,54 @@ export default class StartPage extends Component {
 
 	async componentDidMount() {
 	    AsyncStorage.getItem(USER_STORAGE).then((value) => {
+			googleTrack('Start Page', 'get user data from storage', value);
 	        if (value) {
 	            this.refreshToken();
 	        } else {
+				googleTrack('Start Page', 'redirect to login page');
 	            Actions.LoginPage({type: RESET});
 	        }
 	    });
 	}
 
 	refreshToken() {
+		googleTrack('Start Page', 'send request to refresh token');
 		refreshUser()
 			.then((res) => {
 				if (res.status === SUCCESS) {
-					setUser(res.data);
-					AsyncStorage.setItem(USER_STORAGE, JSON.stringify(res.data));
-                    if (Number(res.data.state) === DEACTIVE_USER_STATE) {
-                        Actions.ActivateProfilePage({user: res.data, type: RESET});
-                    } else {
-                        this.props.renderPage();
-                    }
+					this.$$userRefreshedSuccessfully(res);
 				} else {
-					AsyncStorage.removeItem(USER_STORAGE);
-					Actions.LoginPage({type: RESET});
-					warningToast(res.message);
+					this.$$userRefreshedWarning(res);
 				}
 			})
 			.catch((error) => {
-				errorToast(error.message);
+				this.$$userRefreshedError(error);
 			});
+	}
+
+	$$userRefreshedSuccessfully(res) {
+		setUser(res.data);
+		AsyncStorage.setItem(USER_STORAGE, JSON.stringify(res.data));
+		googleTrack('Start Page', 'response of refreshed token', res.data);
+
+		if (Number(res.data.state) === DEACTIVE_USER_STATE) {
+			googleTrack('Start Page', 'redirect to activate profile page', res.data);
+			Actions.ActivateProfilePage({user: res.data, type: RESET});
+		} else {
+			this.props.renderPage();
+		}
+	}
+
+	$$userRefreshedWarning(res) {
+		AsyncStorage.removeItem(USER_STORAGE);
+		googleTrack('Start Page', 'warning of refreshed token', res.message);
+		Actions.LoginPage({type: RESET});
+		warningToast(res.message);
+	}
+
+	$$userRefreshedError(error) {
+		errorToast(error.message);
+		googleTrack('Start Page', 'error of refreshed token', error.message);
 	}
 
 	render() {

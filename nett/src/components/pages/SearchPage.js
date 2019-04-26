@@ -5,11 +5,13 @@ import {search} from "../../services/TournamentService";
 import {SUCCESS, TOURNAMENT_STATUS_OPEN} from "../../services/Constants";
 import {errorToast, warningToast} from "../../services/ToastService";
 import LoadingDialog from "../LoadingDialog";
+import {googleTrack} from "../../services/GoogleAnalytics";
 
 export default class SearchPage extends Component {
 
     constructor(props) {
         super(props);
+        googleTrack('Search Page', 'search page opened');
         this.state = {
             loading: true,
             tournaments: []

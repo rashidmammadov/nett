@@ -22,14 +22,15 @@ import SearchPage from './src/components/pages/SearchPage.js';
 import SetTournamentPage from './src/components/pages/SetTournamentPage.js';
 import StartPage from './src/components/pages/StartPage.js';
 import TournamentPage from './src/components/pages/TournamentPage.js';
-import {ONESIGNAL_DEVICE_ID, ONESIGNAL_APPID, RESET} from "./src/services/Constants";
+import {ONESIGNAL_DEVICE_ID, ONESIGNAL_APPID, RESET} from './src/services/Constants';
+import {googleTrack} from './src/services/GoogleAnalytics';
 
-//type Props = {};
 let tournamentId = null;
 export default class App extends Component {
 
     constructor(props) {
         super(props);
+        googleTrack('Init', 'open app');
         OneSignal.init(ONESIGNAL_APPID);
 
         OneSignal.addEventListener('received', this.onReceived);
@@ -61,6 +62,7 @@ export default class App extends Component {
         if (openResult.notification.payload.additionalData) {
             tournamentId = openResult.notification.payload.additionalData.tournamentId;
         }
+        googleTrack('App Page', 'open app from notification', openResult.notification.payload.additionalData);
     }
 
     onIds(device) {

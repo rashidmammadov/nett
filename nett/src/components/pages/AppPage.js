@@ -7,6 +7,7 @@ import SearchPage from './SearchPage.js';
 import SetTournamentPage from './SetTournamentPage.js';
 import Icon from 'react-native-vector-icons/Feather';
 import {style} from '../../assets/style/Custom.js';
+import {googleTrack} from '../../services/GoogleAnalytics';
 
 export default class AppPage extends Component {
 
@@ -19,9 +20,10 @@ export default class AppPage extends Component {
     }
 
     changeTab(tab) {
+        googleTrack('App Page', 'change app tab', tab);
         this.setState({
             activeTab: tab
-        })
+        });
     }
 
 	render() {
