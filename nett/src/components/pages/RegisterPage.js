@@ -71,7 +71,7 @@ export default class RegisterPage extends Component {
                 if (res.status === SUCCESS) {
                     setUser(res.data);
                     AsyncStorage.setItem(USER_STORAGE, JSON.stringify(res.data));
-                    Actions.AppPage({type: RESET});
+                    Actions.ActivateProfilePage({user: res.data});
                     successToast(res.message);
                 } else {
                     warningToast(res.message);

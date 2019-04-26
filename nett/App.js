@@ -11,6 +11,7 @@ import React, {Component} from 'react';
 import {AsyncStorage} from 'react-native';
 import {Actions, Scene, Router} from 'react-native-router-flux';
 import OneSignal from 'react-native-onesignal';
+import ActivateProfilePage from './src/components/pages/ActivateProfilePage.js';
 import AppPage from './src/components/pages/AppPage.js';
 import BudgetPage from './src/components/pages/BudgetPage.js';
 import DashboardPage from './src/components/pages/DashboardPage.js';
@@ -78,6 +79,7 @@ export default class App extends Component {
     render() {
         const scenes = Actions.create(
             <Scene key="root">
+                <Scene key="ActivateProfilePage" component={ActivateProfilePage} hideNavBar={true}/>
                 <Scene key="AppPage" component={AppPage} title="nett" hideNavBar={true}/>
                 <Scene key="BudgetPage" component={BudgetPage} hideNavBar={true}/>
                 <Scene key="DashboardPage" component={DashboardPage} hideNavBar={true}/>

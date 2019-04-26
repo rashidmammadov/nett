@@ -19,6 +19,9 @@ export const style = StyleSheet.create({
     secondaryBGColor: {
         backgroundColor: '#303030'
     },
+    customBGColor: {
+        backgroundColor: '#7F00FF'
+    },
     imageBGColor: {
         backgroundColor: '#d3d3d3'
     },
@@ -33,6 +36,21 @@ export const style = StyleSheet.create({
     },
     alignColumn: {
         flexDirection: 'column'
+    },
+    padding16: {
+        padding: 16
+    },
+    height64: {
+        height: 64
+    },
+    innerMarginTop: {
+        marginTop: -64
+    },
+    marginTop16: {
+        marginTop: 16
+    },
+    marginBottom16: {
+        marginBottom: 16
     },
 
     knockOutContainer: {

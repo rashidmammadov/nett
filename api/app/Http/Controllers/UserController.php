@@ -125,6 +125,36 @@ class UserController extends ApiController {
     }
 
     /**
+     * @description handle request to activate user.
+     * @param Request $request
+     * @return mixed
+     */
+    public function activate(Request $request)
+    {
+        try {
+            $user = JWTAuth::parseToken()->authenticate();
+            $rules = array(
+                NAME => 'required',
+                SURNAME => 'required',
+                PHONE => 'required',
+                BIRTHDAY => 'required'
+            );
+
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return $this->respondValidationError(FIELDS_VALIDATION_FAILED, $validator->errors());
+            } else {
+                $data = ApiQuery::updateUser($user[IDENTIFIER], $request);
+                return $this->respondCreated(USER_ACTIVATED, $this->userTransformer->transform($data));
+            }
+        } catch (JWTException $e) {
+            $this->setStatusCode($e->getStatusCode());
+            return $this->respondWithError($e->getMessage());
+        }
+
+    }
+
+    /**
      * @description: logout user and clear token.
      * @return mixed
      */

@@ -5,7 +5,7 @@ import {Actions} from 'react-native-router-flux';
 import {signIn} from '../../services/SignService.js';
 import {setUser} from "../../services/ConfigService";
 import {errorToast, warningToast} from "../../services/ToastService";
-import {ONESIGNAL_APPID, RESET, SUCCESS, USER_STORAGE} from "../../services/Constants";
+import {DEACTIVE_USER_STATE, ONESIGNAL_APPID, RESET, SUCCESS, USER_STORAGE} from "../../services/Constants";
 
 export default class LoginPage extends Component {
 
@@ -37,7 +37,11 @@ export default class LoginPage extends Component {
                 if (res.status === SUCCESS) {
                     setUser(res.data);
                     AsyncStorage.setItem(USER_STORAGE, JSON.stringify(res.data));
-                    Actions.AppPage({type: RESET});
+                    if (res.data.state === DEACTIVE_USER_STATE) {
+                        Actions.ActivateProfilePage({user: res.data});
+                    } else {
+                        Actions.AppPage({type: RESET});
+                    }
                 } else {
                     warningToast(res.message);
                 }

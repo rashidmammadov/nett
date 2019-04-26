@@ -1,4 +1,13 @@
-import {apiUrl, requestHeader, user} from './ConfigService';
+import {apiUrl, requestHeader} from './ConfigService';
+
+export const activate = (user) => {
+    const URL = apiUrl + 'activate';
+    return fetch(URL, {
+        method: 'PUT',
+        headers: requestHeader(),
+        body: JSON.stringify(user)
+    }).then((res) => res.json());
+};
 
 export const signIn = (user) => {
     const URL = apiUrl + 'login';

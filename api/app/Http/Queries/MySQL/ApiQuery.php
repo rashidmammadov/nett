@@ -357,4 +357,22 @@ class ApiQuery {
             ONESIGNAL_DEVICE_ID => $user[ONESIGNAL_DEVICE_ID]
         ]);
     }
+
+    /**
+     * @description query to update user.
+     * @param $userId
+     * @param $parameters
+     * @return mixed
+     */
+    public static function updateUser($userId, $parameters)
+    {
+        $user = self::getUserById($userId);
+        !empty($parameters[NAME]) && ($user[NAME] = $parameters[NAME]);
+        !empty($parameters[SURNAME]) && ($user[SURNAME] = $parameters[SURNAME]);
+        !empty($parameters[PHONE]) && ($user[PHONE] = $parameters[PHONE]);
+        !empty($parameters[BIRTHDAY]) && ($user[BIRTHDAY] = $parameters[BIRTHDAY]);
+        ($user[STATE] == USER_STATE_DISABLE) && ($user[STATE] = USER_STATE_ACTIVE);
+        $user->save();
+        return $user;
+    }
 }

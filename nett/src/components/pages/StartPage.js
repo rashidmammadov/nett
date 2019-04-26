@@ -5,7 +5,7 @@ import {refreshUser} from "../../services/SignService";
 import {setUser} from "../../services/ConfigService";
 import {errorToast,  warningToast} from "../../services/ToastService";
 import {style} from '../../assets/style/Custom.js';
-import {RESET, SUCCESS, USER_STORAGE} from "../../services/Constants";
+import {DEACTIVE_USER_STATE, RESET, SUCCESS, USER_STORAGE} from "../../services/Constants";
 
 export default class StartPage extends Component {
 
@@ -30,7 +30,11 @@ export default class StartPage extends Component {
 				if (res.status === SUCCESS) {
 					setUser(res.data);
 					AsyncStorage.setItem(USER_STORAGE, JSON.stringify(res.data));
-                    this.props.renderPage();
+                    if (Number(res.data.state) === DEACTIVE_USER_STATE) {
+                        Actions.ActivateProfilePage({user: res.data, type: RESET});
+                    } else {
+                        this.props.renderPage();
+                    }
 				} else {
 					AsyncStorage.removeItem(USER_STORAGE);
 					Actions.LoginPage({type: RESET});

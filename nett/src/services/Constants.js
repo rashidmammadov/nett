@@ -1,3 +1,4 @@
+export const DEACTIVE_USER_STATE = 0;
 export const ONESIGNAL_DEVICE_ID = 'onesignalDeviceId';
 export const GROUP = 'Grup';
 export const KNOCK_OUT = 'Eleme';
