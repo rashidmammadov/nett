@@ -71,6 +71,17 @@ export const style = StyleSheet.create({
         marginRight: 8
     },
 
+    tabTextStyle: {
+        color: '#a3a3a3',
+        fontFamily: 'GoogleSans-Regular',
+        fontWeight: 'normal'
+    },
+    tabActiveTextStyle: {
+        color: '#f8f8f8',
+        fontFamily: 'GoogleSans-Regular',
+        fontWeight: 'normal'
+    },
+
     columnCenter: {
         flex: 1,
         flexDirection: 'column',

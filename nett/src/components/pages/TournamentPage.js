@@ -7,9 +7,11 @@ import {SUCCESS} from "../../services/Constants";
 import {errorToast, warningToast} from "../../services/ToastService";
 import LoadingDialog from "../LoadingDialog";
 import Icon from 'react-native-vector-icons/Feather';
+import {style} from "../../assets/style/Custom";
 import TournamentDetail from './tabs/TournamentDetail.js';
 import ParticipantsList from './tabs/ParticipantsList.js';
 import KnockOutFixture from './tabs/KnockOutFixture.js';
+import {googleTrack} from "../../services/GoogleAnalytics";
 
 export default class TournamentPage extends Component {
 
@@ -25,18 +27,22 @@ export default class TournamentPage extends Component {
 
     componentDidMount() {
         let tournamentId = this.props.tournamentId;
+        googleTrack('Tournament Page', 'send request to get tournament data', 'tournament: '.tournamentId);
         getTournament(tournamentId)
             .then((res) => {
                 this.setState({loading: false});
                 if (res.status === SUCCESS) {
                     this.setState({tournament: res.data});
+                    googleTrack('Tournament Page', 'success response of tournament data', res.data);
                 } else {
                     warningToast(res.message);
+                    googleTrack('Tournament Page', 'warning response of tournament data', res.message);
                 }
             })
             .catch((error) => {
                 this.setState({loading: false});
                 errorToast(error.message);
+                googleTrack('Tournament Page', 'error response of tournament data', error.message);
             });
 
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
@@ -53,19 +59,16 @@ export default class TournamentPage extends Component {
 
     render() {
         return (
-            <View transparent style={{flex: 1}}>
+            <View transparent style={style.flex}>
                 <LoadingDialog loading={this.state.loading}/>
-                <Header style={{backgroundColor: '#303030'}}>
+                <Header style={style.secondaryBGColor}>
                     <Left>
                         <TouchableOpacity transparent onPress={() => this.handleBackButtonClick()}>
                             <Icon name='arrow-left' color={'#f8f8f8'} size={24}/>
                         </TouchableOpacity>
                     </Left>
                     <Body>
-                    <Title style={{
-                        color: '#f8f8f8',
-                        fontFamily: 'GoogleSans-Regular'
-                    }}>{this.props.title}</Title>
+                    <Title style={[style.primaryTextColor, style.fontFamily]}>{this.props.title}</Title>
                     </Body>
                 </Header>
                 <ImageBackground
@@ -73,25 +76,25 @@ export default class TournamentPage extends Component {
                     style={{height: 96, width: null, resizeMode: 'cover'}}>
                 </ImageBackground>
                 <Tabs>
-                    <Tab heading="Genel" tabStyle={{backgroundColor: '#303030'}}
-                         style={{backgroundColor: '#000'}}
-                         textStyle={{color: '#a3a3a3', fontFamily: 'GoogleSans-Regular', fontWeight: 'normal'}}
-                         activeTabStyle={{backgroundColor: '#303030'}}
-                         activeTextStyle={{color: '#f8f8f8', fontFamily: 'GoogleSans-Regular', fontWeight: 'normal'}}>
+                    <Tab heading="Genel" tabStyle={style.secondaryBGColor}
+                         style={style.primaryBGColor}
+                         textStyle={style.tabTextStyle}
+                         activeTabStyle={style.secondaryBGColor}
+                         activeTextStyle={style.tabActiveTextStyle}>
                         <TournamentDetail detail={this.state.tournament}/>
                     </Tab>
-                    <Tab heading="Katılımcılar" tabStyle={{backgroundColor: '#303030'}}
-                         style={{backgroundColor: '#000'}}
-                         textStyle={{color: '#a3a3a3', fontFamily: 'GoogleSans-Regular', fontWeight: 'normal'}}
-                         activeTabStyle={{backgroundColor: '#303030'}}
-                         activeTextStyle={{color: '#f8f8f8', fontFamily: 'GoogleSans-Regular', fontWeight: 'normal'}}>
+                    <Tab heading="Katılımcılar" tabStyle={style.secondaryBGColor}
+                         style={style.primaryBGColor}
+                         textStyle={style.tabTextStyle}
+                         activeTabStyle={style.secondaryBGColor}
+                         activeTextStyle={style.tabActiveTextStyle}>
                         <ParticipantsList participants={this.state.tournament.participants}/>
                     </Tab>
-                    <Tab heading="Fikstür" tabStyle={{backgroundColor: '#303030'}}
-                         style={{backgroundColor: '#000'}}
-                         textStyle={{color: '#a3a3a3', fontFamily: 'GoogleSans-Regular', fontWeight: 'normal'}}
-                         activeTabStyle={{backgroundColor: '#303030'}}
-                         activeTextStyle={{color: '#f8f8f8', fontFamily: 'GoogleSans-Regular', fontWeight: 'normal'}}>
+                    <Tab heading="Fikstür" tabStyle={style.secondaryBGColor}
+                         style={style.primaryBGColor}
+                         textStyle={style.tabTextStyle}
+                         activeTabStyle={style.secondaryBGColor}
+                         activeTextStyle={style.tabActiveTextStyle}>
                         <KnockOutFixture fixture={this.state.tournament.fixture}/>
                     </Tab>
                 </Tabs>
