@@ -7,6 +7,15 @@ export const style = StyleSheet.create({
     fontFamily: {
         fontFamily: 'GoogleSans-Regular'
     },
+    bold: {
+        fontWeight: 'bold'
+    },
+    colorGreen: {
+        color: 'green'
+    },
+    colorLight: {
+        color: '#d3d3d3'
+    },
     primaryTextColor: {
         color: '#f8f8f8'
     },
@@ -18,6 +27,9 @@ export const style = StyleSheet.create({
     },
     secondaryBGColor: {
         backgroundColor: '#303030'
+    },
+    customColor: {
+        color: '#7F00FF'
     },
     customBGColor: {
         backgroundColor: '#7F00FF'
@@ -37,6 +49,9 @@ export const style = StyleSheet.create({
     alignColumn: {
         flexDirection: 'column'
     },
+    alignRow: {
+        flexDirection: 'row'
+    },
     padding16: {
         padding: 16
     },
@@ -51,6 +66,18 @@ export const style = StyleSheet.create({
     },
     marginBottom16: {
         marginBottom: 16
+    },
+    marginRight24: {
+        marginRight: 24
+    },
+    marginRight8: {
+        marginRight: 8
+    },
+    borderColor: {
+        borderColor: '#303030'
+    },
+    spaceBetween: {
+        justifyContent: 'space-between'
     },
 
     knockOutContainer: {
@@ -80,6 +107,21 @@ export const style = StyleSheet.create({
         color: '#f8f8f8',
         fontFamily: 'GoogleSans-Regular',
         fontWeight: 'normal'
+    },
+
+    actionSheetView: {
+        width: 300,
+        marginTop: 2,
+        flexDirection: 'row'
+    },
+    actionSheetText: {
+        marginLeft: 16,
+        marginTop: 8,
+        fontFamily: 'GoogleSans-Regular'
+    },
+    actionSheetCancel: {
+        marginLeft: 16,
+        fontFamily: 'GoogleSans-Regular'
     },
 
     columnCenter: {

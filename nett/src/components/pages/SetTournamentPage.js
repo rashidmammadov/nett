@@ -10,6 +10,8 @@ import {errorToast, successToast, warningToast} from "../../services/ToastServic
 import ActionSheet from 'react-native-actionsheet';
 import LoadingDialog from "../LoadingDialog";
 import Dialog, { DialogContent } from 'react-native-popup-dialog';
+import {style} from "../../assets/style/Custom";
+import {googleTrack} from "../../services/GoogleAnalytics";
 
 const typeMap = {
     knock_out: KNOCK_OUT,
@@ -43,6 +45,7 @@ export default class SetTournamentPage extends Component {
     }
 
     getGamesList() {
+        googleTrack('Set Tournament Page', 'send request to get games');
         games()
             .then((res) => {
                 this.setState({loading: false});
@@ -55,13 +58,16 @@ export default class SetTournamentPage extends Component {
                         gameTypes: games[0].playingType,
                         selectedType: games[0].playingType[0]
                     });
+                    googleTrack('Set Tournament Page', 'response of game data', res.data);
                 } else {
                     warningToast(res.message);
+                    googleTrack('Set Tournament Page', 'warning of game data', res.message);
                 }
             })
             .catch((error) => {
                 this.setState({loading: false});
                 errorToast(error.message);
+                googleTrack('Set Tournament Page', 'error of game data', error.message);
             });
     }
 
@@ -91,18 +97,22 @@ export default class SetTournamentPage extends Component {
     setTournament() {
         let data = this.$$prepareData();
         this.setState({loading: true, visible: false});
+        googleTrack('Set Tournament Page', 'send request to set tournament', data);
         add(data)
             .then((res) => {
                 this.setState({loading: false});
                 if (res.status === SUCCESS) {
-                    successToast(res.message)
+                    successToast(res.message);
+                    googleTrack('Set Tournament Page', 'response of set tournament', res.message);
                 } else {
                     warningToast(res.message);
+                    googleTrack('Set Tournament Page', 'warning of set tournament', res.message);
                 }
             })
             .catch((error) => {
                 this.setState({loading: false});
                 errorToast(error.message);
+                googleTrack('Set Tournament Page', 'error of set tournament', error.message);
             });
     }
 
@@ -130,11 +140,11 @@ export default class SetTournamentPage extends Component {
         const maxDate = new Date(currentDate.getFullYear() + 1, currentDate.getMonth(), currentDate.getDate());
 
         let selectableGames = this.state.games.map((game) => {
-            let select = <View style={{width: 300, marginTop: 2, flexDirection: 'row'}}>
+            let select = <View style={style.actionSheetView}>
                             <Thumbnail square small source={{uri: game.gameImage}}/>
-                            <Text style={{marginLeft: 16, marginTop: 8, fontFamily: 'GoogleSans-Regular'}}>{game.gameName}</Text>
+                <Text style={style.actionSheetText}>{game.gameName}</Text>
                         </View>;
-            let cancel = <Text style={{marginLeft: 16, fontFamily: 'GoogleSans-Regular'}}>{game.gameName}</Text>;
+            let cancel = <Text style={style.actionSheetCancel}>{game.gameName}</Text>;
             return game.gameId === 0 ? cancel : select;
         });
 
@@ -162,19 +172,19 @@ export default class SetTournamentPage extends Component {
                 />
 
                 <LoadingDialog loading={this.state.loading}/>
-                <View style={{height: 64, backgroundColor: '#7F00FF'}}>
+                <View style={[style.height64, style.customBGColor]}>
                 </View>
-                <View style={{padding: 16, marginTop: -64}}>
-                    <Text style={{color: '#f8f8f8', fontFamily: 'GoogleSans-Regular'}}>Turnuva Düzenle</Text>
-                    <View style={{marginBottom: 16, backgroundColor: '#303030'}}>
+                <View style={[style.padding16, style.innerMarginTop]}>
+                    <Text style={[style.primaryTextColor, style.fontFamily]}>Turnuva Düzenle</Text>
+                    <View style={[style.marginBottom16, style.secondaryBGColor]}>
                         <ListItem icon onPress={() => this.SelectGame.show()}>
                             <Left>
                                 <Icon name="hash" size={24} color={'#d3d3d3'} />
                             </Left>
-                            <Body style={{borderColor: '#303030'}}>
-                                <Text  style={{color: '#d3d3d3', fontFamily: 'GoogleSans-Regular'}}>Oyun</Text>
+                            <Body style={style.borderColor}>
+                            <Text style={[style.colorLight, style.fontFamily]}>Oyun</Text>
                             </Body>
-                            <Text style={{color: '#d3d3d3', fontFamily: 'GoogleSans-Regular', marginRight: 24}}>
+                            <Text style={[style.colorLight, style.fontFamily, style.marginRight24]}>
                                 {this.state.selectedGame && this.state.selectedGame.gameName}
                             </Text>
                         </ListItem>
@@ -182,13 +192,13 @@ export default class SetTournamentPage extends Component {
                             <Left>
                                 <Icon name="list" size={24} color={'#d3d3d3'} />
                             </Left>
-                            <Body style={{borderColor: '#303030'}}>
-                                <Text  style={{color: '#d3d3d3', fontFamily: 'GoogleSans-Regular'}}>Turnuva Tipi</Text>
+                            <Body style={style.borderColor}>
+                            <Text style={[style.colorLight, style.fontFamily]}>Turnuva Tipi</Text>
                             </Body>
                             <Picker
                                 mode="dropdown"
                                 placeholder="Oyun"
-                                style={{color: '#d3d3d3', fontFamily: 'GoogleSans-Regular'}}
+                                style={[style.colorLight, style.fontFamily]}
                                 selectedValue={this.state.selectedType}
                                 onValueChange={this.onTypeChange.bind(this)}
                                 >
@@ -199,13 +209,13 @@ export default class SetTournamentPage extends Component {
                             <Left>
                                 <Icon name="users" size={24} color={'#d3d3d3'} />
                             </Left>
-                            <Body style={{borderColor: '#303030'}}>
-                                <Text  style={{color: '#d3d3d3', fontFamily: 'GoogleSans-Regular'}}>Katılımcı Sayısı</Text>
+                            <Body style={style.borderColor}>
+                            <Text style={[style.colorLight, style.fontFamily]}>Katılımcı Sayısı</Text>
                             </Body>
                             <Picker
                                 mode="dropdown"
                                 placeholder="Oyun"
-                                style={{color: '#d3d3d3', fontFamily: 'GoogleSans-Regular'}}
+                                style={[style.colorLight, style.fontFamily]}
                                 selectedValue={this.state.selectedParticipant}
                                 onValueChange={this.onParticipantChange.bind(this)}
                                 >
@@ -216,17 +226,17 @@ export default class SetTournamentPage extends Component {
                             <Left>
                                 <Icon name="calendar" size={24} color={'#d3d3d3'} />
                             </Left>
-                            <Body style={{borderColor: '#303030'}}>
-                                <Text  style={{color: '#d3d3d3', fontFamily: 'GoogleSans-Regular'}}>Başlangıç Tarihi</Text>
+                            <Body style={style.borderColor}>
+                            <Text style={[style.colorLight, style.fontFamily]}>Başlangıç Tarihi</Text>
                             </Body>
-                            <Right style={{borderColor: '#303030'}}>
+                            <Right style={style.borderColor}>
                                 <DatePicker defaultDate={minDate} minimumDate={minDate} maximumDate={maxDate}
-                                    locale={"tr"} timeZoneOffsetInMinutes={undefined}
-                                    modalTransparent={false}
-                                    animationType={"fade"} placeHolderText={showDefaultDate()}
-                                    textStyle={{ color: '#d3d3d3', fontFamily: 'GoogleSans-Regular'}}
-                                    placeHolderTextStyle={{ color: "#d3d3d3" }}
-                                    onDateChange={this.setDate} disabled={false}
+                                            locale={"tr"} timeZoneOffsetInMinutes={undefined}
+                                            modalTransparent={false}
+                                            animationType={"fade"} placeHolderText={showDefaultDate()}
+                                            textStyle={[style.colorLight, style.fontFamily]}
+                                            placeHolderTextStyle={style.colorLight}
+                                            onDateChange={this.setDate} disabled={false}
                                 />
                             </Right>
                         </ListItem>
@@ -234,11 +244,11 @@ export default class SetTournamentPage extends Component {
                             <Left>
                                 <Icon name="clock" size={24} color={'#d3d3d3'} />
                             </Left>
-                            <Body style={{borderColor: '#303030'}}>
-                                <Text  style={{color: '#d3d3d3', fontFamily: 'GoogleSans-Regular'}}>Başlangıç Saati</Text>
+                            <Body style={style.borderColor}>
+                            <Text style={[style.colorLight, style.fontFamily]}>Başlangıç Saati</Text>
                             </Body>
-                            <Right style={{borderColor: '#303030'}}>
-                                <Text style={{color: '#d3d3d3', fontFamily: 'GoogleSans-Regular', marginRight: 8}}
+                            <Right style={style.borderColor}>
+                                <Text style={[style.colorLight, style.fontFamily, style.marginRight8]}
                                       onPress={() => this.setState({isTimeVisible: true})}>
                                         {this.state.selectedTime.getHours() + ':' + this.state.selectedTime.getMinutes()}
                                 </Text>
@@ -252,38 +262,40 @@ export default class SetTournamentPage extends Component {
                         </ListItem>
                     </View>
 
-                    <View style={{marginBottom: 16, backgroundColor: '#303030'}}>
+                    <View style={[style.marginBottom16, style.secondaryBGColor]}>
                         <ListItem icon>
                             <Left>
                                 <Icon name="dollar-sign" size={24} color={'#d3d3d3'} />
                             </Left>
-                            <Body style={{borderColor: '#303030'}}>
-                                <Text style={{color: '#d3d3d3', fontFamily: 'GoogleSans-Regular'}}>Tahmini Kazanç</Text>
+                            <Body style={style.borderColor}>
+                            <Text style={[style.colorLight, style.fontFamily]}>Tahmini Kazanç</Text>
                             </Body>
-                            <Right style={{borderColor: '#303030'}}>
-                                <Text style={{color: 'green', fontFamily: 'GoogleSans-Regular', marginRight: 8}}>{this.state.income} ₺</Text>
+                            <Right style={style.borderColor}>
+                                <Text
+                                    style={[style.colorGreen, style.fontFamily, style.marginRight8]}>{this.state.income} ₺</Text>
                             </Right>
                         </ListItem>
                     </View>
 
-                    <Button rounded block style={{backgroundColor: '#7F00FF'}}
+                    <Button rounded block style={style.customBGColor}
                             onPress={() => this.setState({visible: true})}
                             disabled={this.state.loading}>
-                        <Text style={{fontFamily: 'GoogleSans-Regular'}}>OLUŞTUR</Text>
+                        <Text style={style.fontFamily}>OLUŞTUR</Text>
                     </Button>
                     <Dialog visible={this.state.visible} onTouchOutside={() => { this.setState({visible: false}); }}>
                         <DialogContent style={{margin: 16}}>
-                            <Text style={{color: '#303030', fontFamily: 'GoogleSans-Regular', fontWeight: 'bold'}}>
+                            <Text style={[style.secondaryTextColor, style.fontFamily, style.bold]}>
                                 Turnuvaya oluşturduğunuz anda yayımlanacaktır. Eğer yeterli katılımcı sayısına ulaşılamazsa
                                 turnuva otomatik iptal edilecek ve o ana kadar katılan tüm kullanıcıların katılım ücretleri iade edilecektir.
-                                Turnuva başlamasına 48 saat kalana kadar tarihi ileriye taşıyabilirsin.
                             </Text>
-                            <View style={{flexDirection: 'row', marginTop: 16, justifyContent: 'space-between'}}>
+                            <View style={[style.alignRow, style.marginTop16, style.spaceBetween]}>
                                 <Button small rounded bordered onPress={() => this.setState({visible: false})}>
-                                    <Text uppercase={false} style={{color: '#7F00FF', fontFamily: 'GoogleSans-Regular'}}>İptal Et</Text>
+                                    <Text uppercase={false} style={[style.customColor, style.fontFamily]}>İptal
+                                        Et</Text>
                                 </Button>
-                                <Button small rounded style={{backgroundColor: '#7F00FF'}} onPress={() => this.setTournament()}>
-                                    <Text uppercase={false} style={{color: '#f0f0f0', fontFamily: 'GoogleSans-Regular'}}>Onayla</Text>
+                                <Button small rounded style={style.customBGColor} onPress={() => this.setTournament()}>
+                                    <Text uppercase={false}
+                                          style={[style.primaryTextColor, style.fontFamily]}>Onayla</Text>
                                 </Button>
                             </View>
                         </DialogContent>

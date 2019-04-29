@@ -33,16 +33,16 @@ export default class TournamentPage extends Component {
                 this.setState({loading: false});
                 if (res.status === SUCCESS) {
                     this.setState({tournament: res.data});
-                    googleTrack('Tournament Page', 'success response of tournament data', res.data);
+                    googleTrack('Tournament Page', 'response of tournament data', res.data);
                 } else {
                     warningToast(res.message);
-                    googleTrack('Tournament Page', 'warning response of tournament data', res.message);
+                    googleTrack('Tournament Page', 'warning of tournament data', res.message);
                 }
             })
             .catch((error) => {
                 this.setState({loading: false});
                 errorToast(error.message);
-                googleTrack('Tournament Page', 'error response of tournament data', error.message);
+                googleTrack('Tournament Page', 'error of tournament data', error.message);
             });
 
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
