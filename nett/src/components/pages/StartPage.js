@@ -12,7 +12,7 @@ export default class StartPage extends Component {
 
 	constructor(props) {
 		super(props);
-		//AsyncStorage.removeItem(USER_STORAGE);
+		AsyncStorage.removeItem(USER_STORAGE);
 	}
 
 	async componentDidMount() {
@@ -47,7 +47,7 @@ export default class StartPage extends Component {
 		AsyncStorage.setItem(USER_STORAGE, JSON.stringify(res.data));
 		googleTrack('Start Page', 'response of refreshed token', res.data);
 
-		if (Number(res.data.state) === DEACTIVE_USER_STATE) {
+		if (res.data.state && Number(res.data.state) === DEACTIVE_USER_STATE) {
 			googleTrack('Start Page', 'redirect to activate profile page', res.data);
 			Actions.ActivateProfilePage({user: res.data, type: RESET});
 		} else {

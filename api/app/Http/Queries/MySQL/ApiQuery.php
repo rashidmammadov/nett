@@ -162,7 +162,7 @@ class ApiQuery {
             GAME_ID => $tournament[GAME_ID],
             TOURNAMENT_TYPE => $tournament[TOURNAMENT_TYPE],
             PARTICIPANT_COUNT => $tournament[PARTICIPANT_COUNT],
-            START_DATE => $tournament[START_DATE],
+            START_DATE => strval($tournament[START_DATE]),
             STATUS => $tournament[STATUS],
             DAYS => $tournament[DAYS]
         ]);
@@ -370,7 +370,7 @@ class ApiQuery {
         !empty($parameters[NAME]) && ($user[NAME] = $parameters[NAME]);
         !empty($parameters[SURNAME]) && ($user[SURNAME] = $parameters[SURNAME]);
         !empty($parameters[PHONE]) && ($user[PHONE] = $parameters[PHONE]);
-        !empty($parameters[BIRTHDAY]) && ($user[BIRTHDAY] = $parameters[BIRTHDAY]);
+        !empty($parameters[BIRTHDAY]) && ($user[BIRTHDAY] = strval($parameters[BIRTHDAY]));
         ($user[STATE] == USER_STATE_DISABLE) && ($user[STATE] = USER_STATE_ACTIVE);
         $user->save();
         return $user;

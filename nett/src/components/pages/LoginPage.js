@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
 import {AsyncStorage, ScrollView} from 'react-native';
-import {Root, Container, Footer, Item, Input, Button, Text, Toast} from 'native-base';
+import {Root, Container, Footer, Item, Input, Button, Text} from 'native-base';
 import {Actions} from 'react-native-router-flux';
 import {signIn} from '../../services/SignService.js';
 import {setUser} from "../../services/ConfigService";
 import {errorToast, warningToast} from "../../services/ToastService";
-import {DEACTIVE_USER_STATE, ONESIGNAL_APPID, RESET, SUCCESS, USER_STORAGE} from "../../services/Constants";
+import {
+    DEACTIVE_USER_STATE,
+    ONESIGNAL_APPID,
+    ONESIGNAL_DEVICE_ID,
+    RESET,
+    SUCCESS,
+    USER_STORAGE
+} from "../../services/Constants";
 import {googleTrack} from "../../services/GoogleAnalytics";
 
 export default class LoginPage extends Component {
@@ -20,7 +27,7 @@ export default class LoginPage extends Component {
 	}
 
     async componentDidMount() {
-        AsyncStorage.getItem(ONESIGNAL_APPID).then((deviceId) => {
+        AsyncStorage.getItem(ONESIGNAL_DEVICE_ID).then((deviceId) => {
             this.setState({deviceId: deviceId});
         });
     }
@@ -40,7 +47,7 @@ export default class LoginPage extends Component {
                     setUser(res.data);
                     AsyncStorage.setItem(USER_STORAGE, JSON.stringify(res.data));
                     googleTrack('Login Page', 'response for login', res.data);
-                    if (res.data.state === DEACTIVE_USER_STATE) {
+                    if (res.data.state && Number(res.data.state) === DEACTIVE_USER_STATE) {
                         Actions.ActivateProfilePage({user: res.data});
                     } else {
                         Actions.AppPage({type: RESET});
