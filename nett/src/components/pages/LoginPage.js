@@ -6,6 +6,7 @@ import {signIn} from '../../services/SignService.js';
 import {setUser} from "../../services/ConfigService";
 import {errorToast, warningToast} from "../../services/ToastService";
 import {DEACTIVE_USER_STATE, ONESIGNAL_APPID, RESET, SUCCESS, USER_STORAGE} from "../../services/Constants";
+import {googleTrack} from "../../services/GoogleAnalytics";
 
 export default class LoginPage extends Component {
 
@@ -31,12 +32,14 @@ export default class LoginPage extends Component {
             onesignalDeviceId: this.state.deviceId
         };
         this.setState({loading: true});
+        googleTrack('Login Page', 'send request to login', user);
         signIn(user)
             .then((res) => {
                 this.setState({loading: false});
                 if (res.status === SUCCESS) {
                     setUser(res.data);
                     AsyncStorage.setItem(USER_STORAGE, JSON.stringify(res.data));
+                    googleTrack('Login Page', 'response for login', res.data);
                     if (res.data.state === DEACTIVE_USER_STATE) {
                         Actions.ActivateProfilePage({user: res.data});
                     } else {
@@ -44,11 +47,13 @@ export default class LoginPage extends Component {
                     }
                 } else {
                     warningToast(res.message);
+                    googleTrack('Login Page', 'warning for login', res.message);
                 }
             })
             .catch((error) => {
                 this.setState({loading: false});
                 errorToast(error.message);
+                googleTrack('Login Page', 'error for login', error.message);
             });
 	}
 
@@ -67,7 +72,7 @@ export default class LoginPage extends Component {
                                 onChangeText={(value) => this.setState({password: value})}
                                 value={this.state.password}/>
                         </Item>
-                        <Button disabled={this.state.loading ? true : false} block onPress={this.login.bind(this)}>
+                        <Button disabled={!!this.state.loading} block onPress={this.login.bind(this)}>
                             <Text>GİRİŞ</Text>
                         </Button>
                         <Footer style={{position: 'absolute', bottom:0, backgroundColor: '#fff'}}>
