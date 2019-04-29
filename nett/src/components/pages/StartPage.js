@@ -12,7 +12,7 @@ export default class StartPage extends Component {
 
 	constructor(props) {
 		super(props);
-		AsyncStorage.removeItem(USER_STORAGE);
+        //AsyncStorage.removeItem(USER_STORAGE);
 	}
 
 	async componentDidMount() {
