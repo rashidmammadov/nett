@@ -8,6 +8,7 @@ import {activate} from "../../services/SignService.js";
 import {RESET, SUCCESS, USER_STORAGE} from "../../services/Constants";
 import {setUser} from "../../services/ConfigService";
 import {errorToast, warningToast} from "../../services/ToastService";
+import {googleTrack} from "../../services/GoogleAnalytics";
 
 const currentDate = new Date();
 let days = [];
@@ -84,20 +85,24 @@ export default class ActivateProfilePage extends Component {
 
     $$activateUser(user) {
         this.setState({loading: true});
+        googleTrack('Activate Profile Page', 'send request to activate profile', user);
         activate(user)
             .then((res) => {
                 this.setState({loading: false});
                 if (res.status === SUCCESS) {
                     setUser(res.data);
                     AsyncStorage.setItem(USER_STORAGE, JSON.stringify(res.data));
+                    googleTrack('Activate Profile Page', 'response of activate profile', res.data);
                     Actions.AppPage({type: RESET});
                 } else {
                     warningToast(res.message);
+                    googleTrack('Activate Profile Page', 'warning of activate profile', res.message);
                 }
             })
             .catch((error) => {
                 this.setState({loading: false});
                 errorToast(error.message);
+                googleTrack('Activate Profile Page', 'error of activate profile', error.data);
             });
     }
 
