@@ -19,6 +19,7 @@ import LoginPage from './src/components/pages/LoginPage.js';
 import MyTournamentsPage from './src/components/pages/MyTournamentsPage.js';
 import RegisterPage from './src/components/pages/RegisterPage.js';
 import SearchPage from './src/components/pages/SearchPage.js';
+import SetScorePage from './src/components/pages/SetScorePage.js';
 import SetTournamentPage from './src/components/pages/SetTournamentPage.js';
 import StartPage from './src/components/pages/StartPage.js';
 import TournamentPage from './src/components/pages/TournamentPage.js';
@@ -89,6 +90,8 @@ export default class App extends Component {
                 <Scene key="MyTournamentsPage" component={MyTournamentsPage} hideNavBar={true}/>
                 <Scene key="RegisterPage" component={RegisterPage} hideNavBar={true}/>
                 <Scene key="SearchPage" component={SearchPage} hideNavBar={true}/>
+                <Scene key="SetScorePage" component={SetScorePage} title="Maç Skoru" hideNavBar={true}
+                       back={true}/>
                 <Scene key="SetTournamentPage" component={SetTournamentPage} hideNavBar={true}/>
                 <Scene key="StartPage" component={StartPage} initial={true} renderPage={this.renderPage.bind(this)}
                        hideNavBar={true}/>

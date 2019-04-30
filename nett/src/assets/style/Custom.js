@@ -40,6 +40,9 @@ export const style = StyleSheet.create({
     smallFont: {
         fontSize: 14
     },
+    largeFont: {
+        fontSize: 24
+    },
     boldFont: {
         fontWeight: 'bold'
     },
@@ -61,6 +64,9 @@ export const style = StyleSheet.create({
     innerMarginTop: {
         marginTop: -64
     },
+    margin16: {
+        margin: 16
+    },
     marginTop16: {
         marginTop: 16
     },
@@ -78,6 +84,9 @@ export const style = StyleSheet.create({
     },
     spaceBetween: {
         justifyContent: 'space-between'
+    },
+    width64: {
+        width: 64
     },
 
     knockOutContainer: {

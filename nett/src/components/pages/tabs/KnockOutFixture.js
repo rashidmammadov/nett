@@ -1,39 +1,49 @@
 import React, {Component} from 'react';
-import {ScrollView, View} from 'react-native';
+import {ScrollView, View, TouchableOpacity} from 'react-native';
 import {List, ListItem, Badge, Text, Left, Body, Right} from 'native-base';
 import {style} from '../../../assets/style/Custom.js';
 import {UNDEFINED_USERNAME, VERSUS} from '../../../services/Constants';
+import {Actions} from "react-native-router-flux";
 
 export default class KnockOutFixture extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            visible: false
+        };
     }
 
     render() {
         let matches = (data) => {
             let view = data.map(function (match, i) {
-                return <ListItem key={i} style={style.knockOutContainer}>
-                    <Body style={style.knockOutInnerContainer}>
-                    <Left style={style.flex}>
-                        <Text style={[style.flex, style.fontFamily, style.primaryTextColor]} numberOfLines={1}>
-                            {match.home && match.home.username ? match.home.username : UNDEFINED_USERNAME}
-                        </Text>
-                    </Left>
-                    <Badge style={style.knockOutBadge}>
-                        <Text style={[style.fontFamily, style.secondaryTextColor, style.boldFont, style.smallFont]}>
-                            {match.home && match.home.point !== null && match.away && match.away.point !== null ?
-                                (match.home.point + ' - ' + match.away.point) : VERSUS}
-                        </Text>
-                    </Badge>
-                    <Right style={style.flex}>
-                        <Text style={[style.flex, style.fontFamily, style.primaryTextColor]} numberOfLines={1}>
-                            {match.away && match.away.username ? match.away.username : UNDEFINED_USERNAME}
-                        </Text>
-                    </Right>
-                    </Body>
-                </ListItem>;
+                if (match.home || match.away) {
+                    return <ListItem key={i} style={style.knockOutContainer}>
+                        <Body style={style.knockOutInnerContainer}>
+                        <Left style={style.flex}>
+                            <Text style={[style.flex, style.fontFamily, style.primaryTextColor]} numberOfLines={1}>
+                                {match.home && match.home.username ? match.home.username : UNDEFINED_USERNAME}
+                            </Text>
+                        </Left>
+                        <TouchableOpacity onPress={() => {
+                            Actions.SetScorePage({match: match})
+                        }}>
+                            <Badge style={style.knockOutBadge}>
+                                <Text
+                                    style={[style.fontFamily, style.secondaryTextColor, style.boldFont, style.smallFont]}>
+                                    {match.home && match.home.point !== null && match.away && match.away.point !== null ?
+                                        (match.home.point + ' - ' + match.away.point) : VERSUS}
+                                </Text>
+                            </Badge>
+                        </TouchableOpacity>
+                        <Right style={style.flex}>
+                            <Text style={[style.flex, style.fontFamily, style.primaryTextColor]} numberOfLines={1}>
+                                {match.away && match.away.username ? match.away.username : UNDEFINED_USERNAME}
+                            </Text>
+                        </Right>
+                        </Body>
+                    </ListItem>;
+                }
             });
             return view;
         };
