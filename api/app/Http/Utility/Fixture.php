@@ -8,6 +8,7 @@
 
 namespace App\Http\Utility;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use App\Repository\Transformers\ParticipantTransformer;
 
@@ -75,16 +76,19 @@ class Fixture {
         $matchCount = self::MAX_PARTICIPANT / 2;
 
         $draws = array();
+        $counter = 0;
         while ($matchCount != 1) {
-            $draw = self::setDefaultDraw($matchCount, (1 . '/' . $matchCount), $startDate);
+            $draw = self::setDefaultDraw($matchCount, (1 . '/' . $matchCount), $startDate, $counter);
             array_push($draws, $draw);
             $matchCount = $matchCount / 2;
             if ($matchCount == 1) {
-                $thirdPlace = self::setDefaultDraw(1, '3th', $startDate);
+                $thirdPlace = self::setDefaultDraw(1, '3th', $startDate, $counter);
                 array_push($draws, $thirdPlace);
-                $final = self::setDefaultDraw(1, 'final', $startDate);
+                $final = self::setDefaultDraw(1, 'final', $startDate, $counter);
                 array_push($draws, $final);
             }
+            $counter++;
+            $startDate = $startDate + 3600000; // add one hour on each tour.
         }
 
         return $draws;
@@ -173,19 +177,22 @@ class Fixture {
         return $matchObjectsArray;
     }
 
-    private static function setDefaultDraw($count, $title, $date) {
+    private static function setDefaultDraw($count, $title, $date, $tour)
+    {
         $draw = array(
             DRAW_TITLE => $title,
-            MATCHES => self::setDefaultMatches($count, CustomDate::getDateFromMilliseconds($date))
+            MATCHES => self::setDefaultMatches($count, CustomDate::getDateFromMilliseconds($date), $tour)
         );
         return $draw;
     }
 
-    private static function setDefaultMatches($count, $date) {
+    private static function setDefaultMatches($count, $date, $tour)
+    {
         $matches = array();
         for ($i = 0; $i < $count; $i++) {
             $match = new Match(array(
-                MATCH_ID => ($i + 1),
+                TOUR_ID => $tour,
+                MATCH_ID => $i,
                 UPDATED_AT => CustomDate::getDateFromMilliseconds()
             ));
             $match::setDate($date);

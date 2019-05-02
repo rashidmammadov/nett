@@ -77,6 +77,7 @@ define('NEW_', 'new');
 define('NOT_EQUAL_SIGN', '!=');
 define('ONESIGNAL_DEVICE_ID', 'onesignalDeviceId');
 define('TIME', 'time');
+define('TOUR_ID', 'tourId');
 define('TOURNAMENT_STATUS_ACTIVE', 1);
 define('TOURNAMENT_STATUS_CANCEL', 3);
 define('TOURNAMENT_STATUS_CLOSE', 0);

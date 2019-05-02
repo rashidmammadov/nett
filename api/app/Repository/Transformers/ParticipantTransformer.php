@@ -44,7 +44,8 @@ class ParticipantTransformer extends Transformer
         return [
             PARTICIPANT_ID => $participant[PARTICIPANT_ID],
             USERNAME => $participant[USERNAME],
-            POINT => $participant[POINT]
+            POINT => $participant[POINT],
+            PICTURE => $participant[PICTURE]
         ];
     }
 }

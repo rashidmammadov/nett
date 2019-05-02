@@ -12,6 +12,7 @@ namespace App\Http\Utility;
 class Match {
 
     private static $match = array(
+        TOUR_ID => null,
         MATCH_ID => null,
         AVAILABLE => false,
         HOME => null,
@@ -23,7 +24,8 @@ class Match {
     );
 
     public function __construct($parameters = null) {
-        !empty($parameters[MATCH_ID]) && self::setMatchId($parameters[MATCH_ID]);
+        $parameters[TOUR_ID] >= 0 && self::setTourId($parameters[TOUR_ID]);
+        $parameters[MATCH_ID] >= 0 && self::setMatchId($parameters[MATCH_ID]);
         !empty($parameters[AVAILABLE])  && self::setAvailable($parameters[AVAILABLE]);
         !empty($parameters[HOME])       && self::setHome($parameters[HOME]);
         !empty($parameters[AWAY])       && self::setAway($parameters[AWAY]);
@@ -34,6 +36,16 @@ class Match {
     }
 
     public static function getMatch() { return self::$match; }
+
+    public static function getTourId()
+    {
+        return self::$match[TOUR_ID];
+    }
+
+    public static function setTourId($value)
+    {
+        self::$match[TOUR_ID] = $value;
+    }
 
     public static function getMatchId()
     {

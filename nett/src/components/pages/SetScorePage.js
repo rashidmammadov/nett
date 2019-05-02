@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {ScrollView, View, TouchableOpacity, BackHandler} from 'react-native';
-import {Badge, Body, Header, Input, Item, Left, List, ListItem, Right, Text, Thumbnail, Title} from 'native-base';
+import {Badge, Body, Header, Input, Left, List, ListItem, Right, Text, Thumbnail, Title} from 'native-base';
 import {Actions} from "react-native-router-flux";
 import Icon from 'react-native-vector-icons/Feather';
 import {style} from "../../assets/style/Custom";
