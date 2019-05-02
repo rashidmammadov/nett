@@ -44,20 +44,17 @@ class Schedule extends Command {
         Log::info('STATUS CHANGED TOURNAMENTS COUNT: ' . $resultCount);
     }
 
-    private function getFixture($tournamentId)
-    {
+    private function getFixture($tournamentId) {
         $fixture = ApiQuery::getFixture($tournamentId);
         return json_decode($fixture[FIXTURE], true);
     }
 
-    private function getParticipants($tournamentId)
-    {
+    private function getParticipants($tournamentId) {
         $participants = ApiQuery::getParticipants($tournamentId);
         return $participants;
     }
 
-    private function payBack($participants)
-    {
+    private function payBack($participants) {
         foreach ($participants as $participant) {
             $user = ApiQuery::getUserById($participant[PARTICIPANT_ID]);
             if (strtolower($participant[PAYMENT_TYPE]) == strtolower(MONEY)) {
@@ -71,8 +68,7 @@ class Schedule extends Command {
         }
     }
 
-    private function updateFixture($tournamentId, $fixture)
-    {
+    private function updateFixture($tournamentId, $fixture) {
         ApiQuery::updateFixture($tournamentId, $fixture);
     }
 }

@@ -30,8 +30,7 @@ class ApiQuery {
      * @param $tournamentId
      * @return mixed
      */
-    public static function getFixture($tournamentId)
-    {
+    public static function getFixture($tournamentId) {
         $queryResult = Fixture::where(TOURNAMENT_ID, EQUAL_SIGN, $tournamentId)->first();
         return $queryResult;
     }
@@ -42,8 +41,7 @@ class ApiQuery {
      * @param $fixture
      * @return mixed
      */
-    public static function updateFixture($tournamentId, $fixture)
-    {
+    public static function updateFixture($tournamentId, $fixture) {
         $queryResult = self::getFixture($tournamentId);
         $queryResult[FIXTURE] = json_encode($fixture, JSON_UNESCAPED_UNICODE);
         $queryResult->save();
@@ -215,8 +213,7 @@ class ApiQuery {
      * @param integer $tournamentId
      * @return mixed
      */
-    public static function getTournamentWithDetail($tournamentId)
-    {
+    public static function getTournamentWithDetail($tournamentId) {
         $queryResult = Tournament::where(TOURNAMENT_ID, EQUAL_SIGN, $tournamentId)
             ->join(DB_USERS_TABLE, (DB_USERS_TABLE . '.' . IDENTIFIER), EQUAL_SIGN, DB_TOURNAMENT_TABLE . '.' . HOLDER_ID)
             ->join(DB_GAME_TABLE, (DB_GAME_TABLE . '.' . GAME_ID), EQUAL_SIGN, DB_TOURNAMENT_TABLE . '.' . GAME_ID)
@@ -364,8 +361,7 @@ class ApiQuery {
      * @param $parameters
      * @return mixed
      */
-    public static function updateUser($userId, $parameters)
-    {
+    public static function updateUser($userId, $parameters) {
         $user = self::getUserById($userId);
         !empty($parameters[NAME]) && ($user[NAME] = $parameters[NAME]);
         !empty($parameters[SURNAME]) && ($user[SURNAME] = $parameters[SURNAME]);

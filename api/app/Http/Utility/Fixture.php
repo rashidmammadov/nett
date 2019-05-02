@@ -100,8 +100,7 @@ class Fixture {
      * @param $participants - holds the participants list of tournament.
      * @return mixed
      */
-    public static function setKnockOutStartDraws($fixtureData, $participants)
-    {
+    public static function setKnockOutStartDraws($fixtureData, $participants) {
         $fixture = new Fixture($fixtureData);
         $draws = $fixture::getDraws();
         $drawIndex = 0;
