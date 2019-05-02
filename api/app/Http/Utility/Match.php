@@ -37,25 +37,13 @@ class Match {
 
     public static function getMatch() { return self::$match; }
 
-    public static function getTourId()
-    {
-        return self::$match[TOUR_ID];
-    }
+    public static function getTourId() { return self::$match[TOUR_ID]; }
 
-    public static function setTourId($value)
-    {
-        self::$match[TOUR_ID] = $value;
-    }
+    public static function setTourId($value) { self::$match[TOUR_ID] = $value; }
 
-    public static function getMatchId()
-    {
-        return self::$match[MATCH_ID];
-    }
+    public static function getMatchId() { return self::$match[MATCH_ID]; }
 
-    public static function setMatchId($value)
-    {
-        self::$match[MATCH_ID] = $value;
-    }
+    public static function setMatchId($value) { self::$match[MATCH_ID] = $value; }
 
     public static function getAvailable() { return self::$match[AVAILABLE]; }
 
