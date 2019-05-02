@@ -233,8 +233,7 @@ class TournamentController extends ApiController {
      * @param $user
      * @return mixed
      */
-    private function prepareTournamentParticipantsData($tournamentId, $user)
-    {
+    private function prepareTournamentParticipantsData($tournamentId, $user) {
         $transformedParticipants = array();
         $participants = ApiQuery::getParticipants($tournamentId);
         foreach ($participants as $participant) {
@@ -252,8 +251,7 @@ class TournamentController extends ApiController {
      * @param integer $tournamentId
      * @return mixed
      */
-    private function prepareTournamentFixtureData($tournamentId)
-    {
+    private function prepareTournamentFixtureData($tournamentId) {
         $data = ApiQuery::getFixture($tournamentId);
         return json_decode($data[FIXTURE]);
     }

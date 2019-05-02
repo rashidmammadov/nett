@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {ScrollView, View, TouchableOpacity, BackHandler} from 'react-native';
-import {Badge, Body, Header, Input, Left, List, ListItem, Right, Text, Thumbnail, Title} from 'native-base';
+import {Badge, Body, Button, Header, Input, Left, List, ListItem, Right, Text, Thumbnail, Title} from 'native-base';
 import {Actions} from "react-native-router-flux";
 import Icon from 'react-native-vector-icons/Feather';
 import {style} from "../../assets/style/Custom";
@@ -39,6 +39,13 @@ export default class SetScorePage extends Component {
 
     setAwayPoint(value) {
         this.setState({awayPoint: value});
+    }
+
+    setScore() {
+        let match = Object.assign({}, this.props.match);
+        match.home.point = this.state.homePoint;
+        match.away.point = this.state.awayPoint;
+        this.props.setMatchScore(match);
     }
 
     render() {
@@ -90,6 +97,10 @@ export default class SetScorePage extends Component {
                         </Right>
                         </Body>
                     </ListItem>
+
+                    <Button small rounded style={style.customBGColor} onPress={() => this.setScore()}>
+                        <Text uppercase={false} style={{color: '#f0f0f0', fontFamily: 'GoogleSans-Regular'}}>Hesabımdan</Text>
+                    </Button>
                 </List>
             </ScrollView>
         );

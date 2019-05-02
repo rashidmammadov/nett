@@ -10,11 +10,25 @@ export default class KnockOutFixture extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            visible: false
+            visible: false,
+            fixture: this.props.fixture
         };
     }
 
     render() {
+        let setMatchScore = (result) => {
+            let data = Object.assign({}, this.state.fixture);
+            data.draws.forEach(function (draw) {
+                draw.matches.forEach(function (match) {
+                    if (match.tourId === result.tourId && match.matchId === result.matchId) {
+                        match.home.point = result.home.point;
+                        match.away.away = result.away.point;
+                    }
+                });
+            });
+            this.setState({data});
+        };
+
         let matches = (data) => {
             let view = data.map(function (match, i) {
                 if (match.home || match.away) {
@@ -26,7 +40,7 @@ export default class KnockOutFixture extends Component {
                             </Text>
                         </Left>
                         <TouchableOpacity onPress={() => {
-                            Actions.SetScorePage({match: match})
+                            Actions.SetScorePage({match: match, setMatchScore: setMatchScore})
                         }}>
                             <Badge style={style.knockOutBadge}>
                                 <Text
@@ -48,7 +62,7 @@ export default class KnockOutFixture extends Component {
             return view;
         };
 
-        let rounds = this.props.fixture && this.props.fixture.draws.map((draw, i) => {
+        let rounds = this.state.fixture && this.state.fixture.draws.map((draw, i) => {
             let view = <View key={i}>
                 <ListItem style={style.secondaryBGColor} itemDivider>
                     <Left>
@@ -63,7 +77,7 @@ export default class KnockOutFixture extends Component {
             return view
         });
 
-        if (this.props.fixture) {
+        if (this.state.fixture) {
             return (
                 <ScrollView>
                     <List>
