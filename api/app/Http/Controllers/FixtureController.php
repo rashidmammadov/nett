@@ -42,7 +42,8 @@ class FixtureController extends ApiController {
                 if ($user[TYPE] == HOLDER && $tournament[HOLDER_ID] == $user[IDENTIFIER]) {
                     if ($tournament[STATUS] === TOURNAMENT_STATUS_ACTIVE) {
                         if ($request[TOURNAMENT_TYPE] == KNOCK_OUT) {
-                            $this->setKnockOutFixtureResult($request);
+                            $data = $this->setKnockOutFixtureResult($request);
+                            return $this->respondCreated(MATCH_RESULT_UPDATED_SUCCESSFULLY, $data);
                         }
                     } else {
                         return $this->respondWithError(STATUS_MUST_BE_ACTIVE_FOR_CHANGE);
@@ -58,35 +59,38 @@ class FixtureController extends ApiController {
     }
 
     private function setKnockOutFixtureResult($request) {
+        $tourId = $request[TOUR_ID];
+        $matchId = $request[MATCH_ID];
         $queryResult = ApiQuery::getFixture($request[TOURNAMENT_ID]);
         $jsonData = json_decode($queryResult[FIXTURE], true);
         $fixture = new Fixture($jsonData);
         $draws = $fixture::getDraws();
 
-        foreach ($draws as $draw) {
-            foreach ($draw[MATCHES] as $match) {
-                if ($match[TOUR_ID] == $request[TOUR_ID] && $match[MATCH_ID] == $request[MATCH_ID]) {
-                    $matchObject = new Match($match);
-                    $home = $matchObject::getHome();
-                    $away = $matchObject::getAway();
+        /** find winner of given match */
+        $match = $draws[$tourId][MATCHES][$matchId];
+        $updatedMatch = Match::setMatchWinner($match, $request[HOME_POINT], $request[AWAY_POINT]);
+        $draws[$tourId][MATCHES][$matchId] = $updatedMatch;
 
-                    $home[POINT] = $request[HOME_POINT];
-                    $away[POINT] = $request[AWAY_POINT];
-
-                    if ($request[HOME_POINT] > $request[AWAY_POINT]) {
-                        $matchObject::setWinner($home);
-                        $matchObject::setLoser($away);
-                    } else if ($request[HOME_POINT] < $request[AWAY_POINT]) {
-                        $matchObject::setWinner($away);
-                        $matchObject::setLoser($home);
-                    }
-
-                    $matchObject::setHome($home);
-                    $matchObject::setAway($away);
-                    $matchObject::setUpdatedAt(CustomDate::getDateFromMilliseconds());
-                    Log::info(json_encode($matchObject::getMatch()));
-                }
-            }
+        if (count($draws[$tourId][MATCHES]) == 2) {
+            /** set 3th and final matches players if round is semi-final */
+            $winner = $updatedMatch[WINNER];
+            $loser = $updatedMatch[LOSER];
+            $thirdPlaceDraw = $draws[$tourId + 1];
+            $finalDraw = $draws[$tourId + 2];
+            $draws[$tourId + 1] = Fixture::setKnockOutNextDraw($thirdPlaceDraw, $loser);
+            $draws[$tourId + 2] = Fixture::setKnockOutNextDraw($finalDraw, $winner);
+        } else if (count($draws[$tourId][MATCHES]) > 2) {
+            /** append winner player to the next round */
+            $winner = $updatedMatch[WINNER];
+            $nextDraw = $draws[$tourId + 1];
+            $draws[$tourId + 1] = Fixture::setKnockOutNextDraw($nextDraw, $winner);
         }
+
+        // TODO: update participant`s point..
+        /** set updated draws */
+        $fixture::setDraws($draws);
+        ApiQuery::updateFixture($request[TOURNAMENT_ID], $fixture::getFixture());
+
+        return $fixture::getFixture();
     }
 }

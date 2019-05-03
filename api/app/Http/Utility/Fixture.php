@@ -131,6 +131,41 @@ class Fixture {
         return $fixture::getFixture();
     }
 
+    /**
+     * @description set next round player.
+     * @param $draw - holds the given round data.
+     * @param $player - holds the previous round winner.
+     * @return mixed
+     */
+    public static function setKnockOutNextDraw($draw, $player) {
+        if ($draw) {
+            $matches = $draw[MATCHES];
+            $findingOpponent = false;
+            for ($i = 0; $i < count($matches); $i++) {
+                if (!$findingOpponent) {
+                    $matchObject = new Match($matches[$i]);
+                    if (!$matches[$i][HOME] && !$matches[$i][AWAY]) {
+                        $matchObject::setHome($player);
+                        $matchObject::setWinner(null);
+                        $matchObject::setAvailable(false);
+                        $matchObject::setUpdatedAt(CustomDate::getDateFromMilliseconds());
+                        $findingOpponent = true;
+                        Log::info('SET HOME PLAYER', $matchObject::getHome());
+                    } else if ($matches[$i][HOME] && !$matches[$i][AWAY]) {
+                        $matchObject::setAway($player);
+                        $matchObject::setWinner(null);
+                        $matchObject::setAvailable(true);
+                        $matchObject::setUpdatedAt(CustomDate::getDateFromMilliseconds());
+                        $findingOpponent = true;
+                        Log::info('SET AWAY PLAYER', $matchObject::getAway());
+                    }
+                    $draw[MATCHES][$i] = $matchObject::getMatch();
+                }
+            }
+        }
+        return $draw;
+    }
+
     public static function set() {
         //Storage::disk('local')->put('fixtures/' . $fixture[TOURNAMENT_ID] . '.json', json_encode($fixture));
         //return $fixture;
@@ -142,8 +177,7 @@ class Fixture {
      * @param $participants - holds the participants list of tournament.
      * @return mixed
      */
-    private static function knockOutStartMatches($drawMatches, $participants)
-    {
+    private static function knockOutStartMatches($drawMatches, $participants) {
         $participantTransformer = new ParticipantTransformer();
         $currentDate = new CustomDate();
 
@@ -160,6 +194,7 @@ class Fixture {
 
             $matchObject::setHome($homePlayer);
             $matchObject::setAway($awayPlayer);
+            $matchObject::setAvailable(false);
             $matchObject::setUpdatedAt($currentDate::getDateFromMilliseconds());
             if (!is_null($homePlayer) && !is_null($awayPlayer)) {
                 $matchObject::setAvailable(true);
@@ -176,8 +211,7 @@ class Fixture {
         return $matchObjectsArray;
     }
 
-    private static function setDefaultDraw($count, $title, $date, $tour)
-    {
+    private static function setDefaultDraw($count, $title, $date, $tour) {
         $draw = array(
             DRAW_TITLE => $title,
             MATCHES => self::setDefaultMatches($count, CustomDate::getDateFromMilliseconds($date), $tour)
@@ -185,8 +219,7 @@ class Fixture {
         return $draw;
     }
 
-    private static function setDefaultMatches($count, $date, $tour)
-    {
+    private static function setDefaultMatches($count, $date, $tour) {
         $matches = array();
         for ($i = 0; $i < $count; $i++) {
             $match = new Match(array(

@@ -67,6 +67,7 @@ define('LOSER', 'loser');
 define('MATCH', 'match');
 define('MATCHES', 'matches');
 define('MATCH_ID', 'matchId');
+define('MATCH_RESULT_UPDATED_SUCCESSFULLY', 'Maç sonucu başarıyla güncellendi');
 define('MAX_AVATAR_COUNT', 31);
 define('MAXIMUM_PARTICIPANTS_COUNT_LIMIT', 'Turnuva katılımcı sayısı limiti dolmuştur');
 define('MESSAGE', 'message');
