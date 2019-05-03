@@ -147,6 +147,18 @@ class ApiQuery {
         ])->delete();
     }
 
+    /**
+     * @description query to update participant point
+     * @param integer $tournamentId
+     * @param integer $participantId
+     * @param integer $point
+     */
+    public static function updateParticipantPoint($tournamentId, $participantId, $point) {
+        Participant::where(TOURNAMENT_ID, EQUAL_SIGN, $tournamentId)
+            ->where(PARTICIPANT_ID, EQUAL_SIGN, $participantId)
+            ->update([POINT => $point]);
+    }
+
     /** -------------------- TOURNAMENT QUERIES -------------------- **/
 
     /**
