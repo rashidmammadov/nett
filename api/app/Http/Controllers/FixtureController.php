@@ -12,6 +12,7 @@ use App\Http\Queries\MySQL\ApiQuery;
 use App\Http\Utility\CustomDate;
 use App\Http\Utility\Fixture;
 use App\Http\Utility\Match;
+use App\Http\Utility\Participant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use JWTAuth;
@@ -87,8 +88,12 @@ class FixtureController extends ApiController {
         /** find winner of given match */
         $match = $draws[$tourId][MATCHES][$matchId];
         if ($match[AVAILABLE]) {
+            $isFinal = false;
             $updatedMatch = Match::setMatchWinner($match, $request[HOME_POINT], $request[AWAY_POINT]);
             $draws[$tourId][MATCHES][$matchId] = $updatedMatch;
+            if ($tourId == count($draws) - 1 || $draws[$tourId][DRAW_TITLE] == 'final') {
+                $isFinal = true;
+            }
 
             $winner = $updatedMatch[WINNER];
             $loser = $updatedMatch[LOSER];
@@ -107,11 +112,18 @@ class FixtureController extends ApiController {
             /** update player`s point */
             $maxPoint = max($request[HOME_POINT], $request[AWAY_POINT]);
             $minPoint = min($request[HOME_POINT], $request[AWAY_POINT]);
-            $this->calculatePlayerPoint($request[TOURNAMENT_ID], $winner[PARTICIPANT_ID], $maxPoint, true);
-            $this->calculatePlayerPoint($request[TOURNAMENT_ID], $loser[PARTICIPANT_ID], $minPoint, false);
+            Participant::calculatePlayerPoint($request[TOURNAMENT_ID], $winner[PARTICIPANT_ID], $maxPoint, true);
+            Participant::calculatePlayerPoint($request[TOURNAMENT_ID], $loser[PARTICIPANT_ID], $minPoint, false);
 
             // TODO: send notification to players..
-            // TODO: set tournament ranking..
+
+            if ($isFinal) {
+                $rankings = Fixture::setKnockOutRanking($jsonData);
+                Participant::setKnockOutFixtureRankingAndEarnings($request[TOURNAMENT_ID], $rankings);
+                // TODO: give money to users..
+                // TODO: update tournament status..
+            }
+
             /** set updated draws */
             $fixture::setDraws($draws);
             ApiQuery::updateFixture($request[TOURNAMENT_ID], $fixture::getFixture());
@@ -120,26 +132,5 @@ class FixtureController extends ApiController {
         } else {
             return false;
         }
-    }
-
-    /**
-     * @description: update participant`s point
-     * @param $tournamentId - tournament id
-     * @param $participantId - participant id
-     * @param $point - holds the user`s goal count
-     * @param $winner - if player is winner
-     */
-    private function calculatePlayerPoint($tournamentId, $participantId, $point, $winner) {
-        $participant = ApiQuery::getParticipants($tournamentId, $participantId)->first();
-        $total = $point;
-        $winner && ($total += 10);
-
-        if (is_null($participant[POINT])) {
-            $participant[POINT] = $total;
-        } else {
-            $participant[POINT] += $total;
-        }
-
-        ApiQuery::updateParticipantPoint($tournamentId, $participantId, $participant[POINT]);
     }
 }

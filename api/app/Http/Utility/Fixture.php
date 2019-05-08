@@ -8,6 +8,7 @@
 
 namespace App\Http\Utility;
 
+use App\Http\Queries\MySQL\ApiQuery;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use App\Repository\Transformers\ParticipantTransformer;
@@ -166,6 +167,54 @@ class Fixture {
         return $draw;
     }
 
+    /**
+     * @description set knock out tournament`s ranking.
+     * @param $data - the data of fixture
+     * @return mixed - ranking result
+     */
+    public static function setKnockOutRanking($data) {
+        $fixture = new Fixture($data);
+        $ranking = array();
+        $participantCount = ApiQuery::getParticipants($fixture::getTournamentId())->count();
+        $rankingDescIndex = 0;
+        foreach ($fixture::getDraws() as $draw) {
+            $players = array();
+            foreach ($draw[MATCHES] as $match) {
+                if (count($draw[MATCHES]) > 2) {
+                    $loser = self::getPlayerMatchGoal($match, false);
+                    $loser && array_push($players, $loser);
+                } else if (count($draw[MATCHES]) == 1) {  /** if 3th place and final */
+                    $winner = self::getPlayerMatchGoal($match, true);
+                    $loser = self::getPlayerMatchGoal($match, false);
+                    $winner && array_push($players, $winner);
+                    $loser && array_push($players, $loser);
+                }
+            }
+
+            /** sort participants by goal or point */
+            usort($players, function ($a, $b) { return $a[GOAL] - $b[GOAL]; });
+            for ($i = 0; $i < count($players); $i++) {
+                $players[$i][TOURNAMENT_RANKING] = $participantCount - $rankingDescIndex;
+                array_push($ranking, $players[$i]);
+                $rankingDescIndex++;
+            }
+        }
+        return $ranking;
+    }
+
+    public static function calculateKnockOutEarnings($standing, $participantCount) {
+        $earning = 0;
+        $result = (MAX_EARNINGS - (self::MAX_PARTICIPANT - $participantCount));
+        if (intval($standing) == 1) {
+            $earning = $result;
+        } else if (intval($standing) == 2) {
+            $earning = $result / 2;
+        } else if (intval($standing) == 3) {
+            $earning = $result / 5;
+        }
+        return $earning;
+    }
+
     public static function set() {
         //Storage::disk('local')->put('fixtures/' . $fixture[TOURNAMENT_ID] . '.json', json_encode($fixture));
         //return $fixture;
@@ -207,8 +256,22 @@ class Fixture {
             $homeIndex++;
             $awayIndex++;
         }
-
         return $matchObjectsArray;
+    }
+
+    private static function getPlayerMatchGoal($match, $winner) {
+        $participantId = $winner ? $match[WINNER][PARTICIPANT_ID] : $match[LOSER][PARTICIPANT_ID];
+        $point = $winner ? max($match[HOME][POINT], $match[AWAY][POINT]) : min($match[HOME][POINT], $match[AWAY][POINT]);
+        $data = array(
+            PARTICIPANT_ID => $participantId,
+            GOAL => $point
+        );
+
+        if (!is_null($data[PARTICIPANT_ID]) && !is_null($data[GOAL])) {
+            return $data;
+        } else {
+            return null;
+        }
     }
 
     private static function setDefaultDraw($count, $title, $date, $tour) {

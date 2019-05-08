@@ -159,6 +159,19 @@ class ApiQuery {
             ->update([POINT => $point]);
     }
 
+    /**
+     * @description query to update participant earnings and ranking
+     * @param $participant
+     */
+    public static function updateParticipantRankingAndEarnings($participant) {
+        Participant::where(TOURNAMENT_ID, EQUAL_SIGN, $participant[TOURNAMENT_ID])
+            ->where(PARTICIPANT_ID, EQUAL_SIGN, $participant[PARTICIPANT_ID])
+            ->update([
+                EARNINGS => $participant[EARNINGS],
+                TOURNAMENT_RANKING => $participant[TOURNAMENT_RANKING]
+            ]);
+    }
+
     /** -------------------- TOURNAMENT QUERIES -------------------- **/
 
     /**
