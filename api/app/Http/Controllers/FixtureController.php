@@ -10,6 +10,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Queries\MySQL\ApiQuery;
 use App\Http\Utility\CustomDate;
+use App\Http\Utility\Finance;
 use App\Http\Utility\Fixture;
 use App\Http\Utility\Match;
 use App\Http\Utility\Participant;
@@ -115,13 +116,13 @@ class FixtureController extends ApiController {
             Participant::calculatePlayerPoint($request[TOURNAMENT_ID], $winner[PARTICIPANT_ID], $maxPoint, true);
             Participant::calculatePlayerPoint($request[TOURNAMENT_ID], $loser[PARTICIPANT_ID], $minPoint, false);
 
-            // TODO: send notification to players..
-
             if ($isFinal) {
                 $rankings = Fixture::setKnockOutRanking($jsonData);
-                Participant::setKnockOutFixtureRankingAndEarnings($request[TOURNAMENT_ID], $rankings);
-                // TODO: give money to users..
-                // TODO: update tournament status..
+                Participant::setKnockOutFixtureRanking($request[TOURNAMENT_ID], $rankings);
+                Finance::setKnockOutFixtureParticipantsEarnings($request[TOURNAMENT_ID], $rankings);
+                Finance::setKnockOutFixtureHolderEarnings($request[TOURNAMENT_ID], $fixture::getHolderId(), count($rankings));
+                $tournament = ApiQuery::getTournament($request[TOURNAMENT_ID]);
+                ApiQuery::updateTournamentStatus($tournament, TOURNAMENT_STATUS_CLOSE);
             }
 
             /** set updated draws */

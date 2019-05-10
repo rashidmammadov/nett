@@ -202,17 +202,32 @@ class Fixture {
         return $ranking;
     }
 
-    public static function calculateKnockOutEarnings($standing, $participantCount) {
+    public static function calculateKnockOutParticipantEarnings($standing, $participantCount) {
         $earning = 0;
+        $ticket = 0;
         $result = (MAX_EARNINGS - (self::MAX_PARTICIPANT - $participantCount));
         if (intval($standing) == 1) {
-            $earning = $result;
+            $earning = number_format($result, 2, '.', '');;
         } else if (intval($standing) == 2) {
-            $earning = $result / 2;
+            $earning = number_format($result / 2, 2, '.', '');;
         } else if (intval($standing) == 3) {
-            $earning = $result / 5;
+            $ticket = 1;
         }
-        return $earning;
+
+        return array(
+            EARNINGS => $earning,
+            TICKET => $ticket
+        );
+    }
+
+    public static function calculateKnockOutHolderEarning($participantCount) {
+        $earning = $participantCount * MIN_AMOUNT;
+        for ($i = 1; $i <= 3; $i++) {
+            $result = self::calculateKnockOutParticipantEarnings($i, $participantCount);
+            $earning -= $result[EARNINGS];
+        }
+        $earning = $earning - (MIN_AMOUNT + ($earning * COMMISSION_PERCENTAGE) / 100);
+        return number_format($earning, 2, '.', '');
     }
 
     public static function set() {

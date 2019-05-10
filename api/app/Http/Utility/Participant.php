@@ -89,7 +89,9 @@ class Participant {
         $query = ApiQuery::getParticipants($tournamentId, $participantId)->first();
         $participant = new Participant($query);
         $total = $point;
-        $winner && ($total += 10);
+        if ($winner == true) {
+            $total += 10;
+        };
 
         $oldPoint = $participant::getPoint();
         $newPoint = null;
@@ -107,15 +109,13 @@ class Participant {
      * @param $tournamentId - tournament id
      * @param $rankings - the list of fixture rankings
      */
-    public static function setKnockOutFixtureRankingAndEarnings($tournamentId, $rankings) {
+    public static function setKnockOutFixtureRanking($tournamentId, $rankings) {
         foreach ($rankings as $ranking) {
             $participant = new Participant();
             $participant::setTournamentId($tournamentId);
             $participant::setParticipantId($ranking[PARTICIPANT_ID]);
             $participant::setTournamentRanking($ranking[TOURNAMENT_RANKING]);
-            $earning = Fixture::calculateKnockOutEarnings($ranking[TOURNAMENT_RANKING], count($rankings));
-            $participant::setEarnings($earning);
-            ApiQuery::updateParticipantRankingAndEarnings($participant::getParticipant());
+            ApiQuery::updateParticipantRanking($participant::getTournamentId(), $participant::getParticipantId(), $participant::getTournamentRanking());
         }
     }
 

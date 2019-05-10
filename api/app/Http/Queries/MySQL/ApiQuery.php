@@ -2,6 +2,7 @@
 
 namespace App\Http\Queries\MySQL;
 
+use App\Finance;
 use App\Fixture;
 use App\Game;
 use App\Participant;
@@ -10,6 +11,16 @@ use App\User;
 use Illuminate\Support\Facades\Log;
 
 class ApiQuery {
+
+    /** -------------------- FINANCE QUERIES -------------------- **/
+
+    /**
+     * @description query to create new finance data
+     * @param $finance
+     */
+    public static function setFinance($finance) {
+        Finance::create($finance);
+    }
 
     /** -------------------- FIXTURE QUERIES -------------------- **/
 
@@ -160,16 +171,15 @@ class ApiQuery {
     }
 
     /**
-     * @description query to update participant earnings and ranking
-     * @param $participant
+     * @description query to update participant ranking
+     * @param integer $tournamentId - the played tournament`s id
+     * @param integer $participantId - the participant id
+     * @param integer $ranking - the participant`s ranking
      */
-    public static function updateParticipantRankingAndEarnings($participant) {
-        Participant::where(TOURNAMENT_ID, EQUAL_SIGN, $participant[TOURNAMENT_ID])
-            ->where(PARTICIPANT_ID, EQUAL_SIGN, $participant[PARTICIPANT_ID])
-            ->update([
-                EARNINGS => $participant[EARNINGS],
-                TOURNAMENT_RANKING => $participant[TOURNAMENT_RANKING]
-            ]);
+    public static function updateParticipantRanking($tournamentId, $participantId, $ranking) {
+        Participant::where(TOURNAMENT_ID, EQUAL_SIGN, $tournamentId)
+            ->where(PARTICIPANT_ID, EQUAL_SIGN, $participantId)
+            ->update([TOURNAMENT_RANKING => $ranking]);
     }
 
     /** -------------------- TOURNAMENT QUERIES -------------------- **/
@@ -395,5 +405,15 @@ class ApiQuery {
         ($user[STATE] == USER_STATE_DISABLE) && ($user[STATE] = USER_STATE_ACTIVE);
         $user->save();
         return $user;
+    }
+
+    /**
+     * @description query to update user` budget.
+     * @param integer $userId - the given user`s id
+     * @param double $budget - updated budget amount
+     */
+    public static function updateUserBudget($userId, $budget) {
+        User::where(IDENTIFIER, EQUAL_SIGN, $userId)
+            ->update([BUDGET => $budget]);
     }
 }
