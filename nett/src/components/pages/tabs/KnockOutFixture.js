@@ -1,9 +1,14 @@
 import React, {Component} from 'react';
-import {ScrollView, View, TouchableOpacity} from 'react-native';
+import {ScrollView, View, TouchableOpacity, AsyncStorage} from 'react-native';
 import {List, ListItem, Badge, Text, Left, Body, Right} from 'native-base';
 import {style} from '../../../assets/style/Custom.js';
-import {UNDEFINED_USERNAME, VERSUS} from '../../../services/Constants';
+import {UNDEFINED_USERNAME, USER_STORAGE, VERSUS} from '../../../services/Constants';
 import {Actions} from "react-native-router-flux";
+
+let user = {};
+let holderId = null;
+let tournamentId = null;
+let tournamentType = null;
 
 export default class KnockOutFixture extends Component {
 
@@ -13,25 +18,26 @@ export default class KnockOutFixture extends Component {
             visible: false,
             fixture: this.props.fixture
         };
+
+        holderId = this.state.fixture.holderId;
+        tournamentId = this.state.fixture.tournamentId;
+        tournamentType = this.state.fixture.tournamentType;
+    }
+
+    async componentDidMount() {
+        AsyncStorage.getItem(USER_STORAGE).then((value) => {
+            user = JSON.parse(value);
+        });
     }
 
     render() {
         let setMatchScore = (result) => {
-            let data = Object.assign({}, this.state.fixture);
-            data.draws.forEach(function (draw) {
-                draw.matches.forEach(function (match) {
-                    if (match.tourId === result.tourId && match.matchId === result.matchId) {
-                        match.home.point = result.home.point;
-                        match.away.away = result.away.point;
-                    }
-                });
-            });
-            this.setState({data});
+            this.setState({fixture: result});
         };
 
         let matches = (data) => {
             let view = data.map(function (match, i) {
-                if (match.home || match.away) {
+                if (match.home && match.away) {
                     return <ListItem key={i} style={style.knockOutContainer}>
                         <Body style={style.knockOutInnerContainer}>
                         <Left style={style.flex}>
@@ -40,7 +46,14 @@ export default class KnockOutFixture extends Component {
                             </Text>
                         </Left>
                         <TouchableOpacity onPress={() => {
-                            Actions.SetScorePage({match: match, setMatchScore: setMatchScore})
+                                if (match.available && (user.id === holderId)) {
+                                Actions.SetScorePage({
+                                    tournamentId: tournamentId,
+                                    tournamentType: tournamentType,
+                                    match: match,
+                                    setMatchScore: setMatchScore
+                                });
+                            }
                         }}>
                             <Badge style={style.knockOutBadge}>
                                 <Text

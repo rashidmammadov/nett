@@ -5,6 +5,11 @@ import {Actions} from "react-native-router-flux";
 import Icon from 'react-native-vector-icons/Feather';
 import {style} from "../../assets/style/Custom";
 import LoadingDialog from "../LoadingDialog";
+import Dialog, {DialogContent} from "react-native-popup-dialog";
+import {setMatchScore} from '../../services/FixtureService';
+import {SUCCESS} from "../../services/Constants";
+import {googleTrack} from "../../services/GoogleAnalytics";
+import {errorToast, successToast, warningToast} from "../../services/ToastService";
 
 export default class SetScorePage extends Component {
 
@@ -12,9 +17,12 @@ export default class SetScorePage extends Component {
         super(props);
         this.state = {
             loading: false,
+            approveDialog: false,
+            tournamentId: this.props.tournamentId,
+            tournamentType: this.props.tournamentType,
             match: this.props.match,
-            homePoint: this.props.match.home.point || '0',
-            awayPoint: this.props.match.away.point || '0'
+            homePoint: this.props.match.home.point ? this.props.match.home.point.toString() : '0',
+            awayPoint: this.props.match.away.point ? this.props.match.away.point.toString() : '0'
         };
 
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -42,10 +50,39 @@ export default class SetScorePage extends Component {
     }
 
     setScore() {
-        let match = Object.assign({}, this.props.match);
-        match.home.point = this.state.homePoint;
-        match.away.point = this.state.awayPoint;
-        this.props.setMatchScore(match);
+        let data = {
+            tournamentId: this.state.tournamentId,
+            tournamentType: this.state.tournamentType,
+            tourId: this.state.match.tourId,
+            matchId: this.state.match.matchId,
+            homePoint: Number(this.state.homePoint),
+            awayPoint: Number(this.state.awayPoint)
+        };
+        this.sendRequestToUpdateScore(data);
+    }
+
+    sendRequestToUpdateScore(data) {
+        let result = {};
+        googleTrack('Set Score Page', 'send request to update score', data);
+        this.setState({approveDialog: false, loading: true});
+        setMatchScore(data)
+            .then((res) => {
+                this.setState({loading: false});
+                if (res.status === SUCCESS) {
+                    result = res.data;
+                    this.props.setMatchScore(result);
+                    successToast(res.message);
+                    googleTrack('Set Score Page', 'response of set score', res.message);
+                } else {
+                    warningToast(res.message);
+                    googleTrack('Set Score Page', 'warning of set score', res.message);
+                }
+            })
+            .catch((error) => {
+                this.setState({loading: false});
+                errorToast(error.message);
+                googleTrack('Set Score Page', 'error of set score', error.message);
+            });
     }
 
     render() {
@@ -78,7 +115,7 @@ export default class SetScorePage extends Component {
                                        style={[style.primaryTextColor, style.fontFamily, style.largeFont]}/>
                             </View>
                         </Left>
-                        <Badge style={style.knockOutBadge}>
+                        <Badge style={[style.imageBGColor]}>
                             <Text style={[style.fontFamily, style.secondaryTextColor, style.boldFont, style.smallFont]}>
                                 {this.state.match.date}
                             </Text>
@@ -98,9 +135,32 @@ export default class SetScorePage extends Component {
                         </Body>
                     </ListItem>
 
-                    <Button small rounded style={style.customBGColor} onPress={() => this.setScore()}>
-                        <Text uppercase={false} style={{color: '#f0f0f0', fontFamily: 'GoogleSans-Regular'}}>Hesabımdan</Text>
-                    </Button>
+                    <View style={[style.margin16, style.alignColumn]}>
+                        <Button block rounded style={style.customBGColor} onPress={() => this.setState({approveDialog: true})}>
+                            <Text style={[style.primaryTextColor, style.fontFamily]}>Devam</Text>
+                        </Button>
+                        <Text note style={[style.fontFamily, style.marginTop16]}>* Kullanıcı adı altındaki rakamlara tıklayarak skoru girebilirsin.</Text>
+                        <Text note style={[style.fontFamily]}>* Maç sonucu berabere bitemez. (Uzatmalar, Penaltılar vs. ile kazanan belirlenmelidir)</Text>
+                        <Text note style={[style.fontFamily]}>* Maç sonucu sadece bir kere girilebilir.</Text>
+                        <Text note style={[style.fontFamily]}>* Maça gelmeyen veya kural dışı haraket yapan taraf için teknik yenilgi girebilirsin. (örnek: 3-0, 0-3)</Text>
+                        <Text note style={[style.fontFamily]}>* Kazanan taraf bir sonraki turdaki rakipiyle otomatik olarak eşleşecektir.</Text>
+                        <Text note style={[style.fontFamily]}>* Sıralama ve Ödüller final maçından sonra katılımcı sayısına bağlı olarak otomatik hesaplanacaktır.</Text>
+                        <Dialog visible={this.state.approveDialog} onTouchOutside={() => {this.setState({approveDialog: false});}}>
+                            <DialogContent style={{margin: 16}}>
+                                <Text style={[style.secondaryTextColor, style.fontFamily, style.bold]}>
+                                    Güvenlik açısından bu skoru onayladıktan sonra skorda değişilik yapamazsın.
+                                </Text>
+                                <View style={[style.alignRow, style.marginTop16, style.spaceBetween]}>
+                                    <Button small rounded bordered onPress={() => this.setState({approveDialog: false})}>
+                                        <Text uppercase={false} style={[style.customColor, style.fontFamily]}>İptal Et</Text>
+                                    </Button>
+                                    <Button small rounded style={style.customBGColor} onPress={() => this.setScore()}>
+                                        <Text uppercase={false} style={[style.primaryTextColor, style.fontFamily]}>Onayla</Text>
+                                    </Button>
+                                </View>
+                            </DialogContent>
+                        </Dialog>
+                    </View>
                 </List>
             </ScrollView>
         );

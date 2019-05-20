@@ -9,7 +9,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Queries\MySQL\ApiQuery;
-use App\Http\Utility\CustomDate;
 use App\Http\Utility\Finance;
 use App\Http\Utility\Fixture;
 use App\Http\Utility\Match;
