@@ -44,6 +44,38 @@ class Schedule extends Command {
         Log::info('STATUS CHANGED TOURNAMENTS COUNT: ' . $resultCount);
     }
 
+    public function payWaitingPaymentsFromTournament() {
+        Log::info('EARNINGS PAYER STARTED');
+        $earnings = ApiQuery::getFinance(FINANCE_STATUS_WAITING);
+        Log::info('TOTAL WAITING EARNINGS COUNT: ' . count($earnings));
+        $totalBudget = 0;
+        $totalTicket = 0;
+        foreach ($earnings as $earning) {
+            if ($earning[TOURNAMENT_ID]) {
+                ApiQuery::updateFinanceStatus($earning[FINANCE_ID], FINANCE_STATUS_APPROVED);
+                if (strtolower($earning[TYPE]) === strtolower(PLAYER)) {
+                    ApiQuery::updateParticipantEarnings($earning[TOURNAMENT_ID], $earning[USER_ID], $earning[AMOUNT]);
+                }
+                $user = ApiQuery::getUserById($earning[USER_ID]);
+                $budget = 0;
+                $ticket = 0;
+                if ($earning[AMOUNT] > 0) {
+                    $budget = $user[BUDGET] + $earning[AMOUNT];
+                    $totalBudget += $earning[AMOUNT];
+                    ApiQuery::updateUserBudget($earning[USER_ID], $budget);
+                } else if ($earning[TICKET] > 0) {
+                    $ticket = $user[TICKET] + $earning[TICKET];
+                    $totalTicket += $earning[TICKET];
+                    ApiQuery::updateUserTicket($earning[USER_ID], $ticket);
+                }
+                Log::info('USER`S EARNINGS - ID: ' . $earning[USER_ID] . ' ' . $earning[AMOUNT] . ' ' . TURKISH_LIRA . ' ' . $earning[TICKET] . ' ' . TICKET);
+                Log::info('USER`S NEW BALANCE - ID: ' . $earning[USER_ID] . ' ' . $budget . ' ' . TURKISH_LIRA . ' ' . $ticket . ' ' . TICKET);
+                PushNotification::payedTournamentEarnings($earning[TOURNAMENT_ID], $earning[USER_ID], $earning[AMOUNT], $earning[TICKET]);
+            }
+        }
+        Log::info('TOTAL PAYED EARNINGS: ' . $totalBudget . ' ' . TURKISH_LIRA . ' ' . $totalTicket . ' ' . TICKET);
+    }
+
     private function getFixture($tournamentId) {
         $fixture = ApiQuery::getFixture($tournamentId);
         return json_decode($fixture[FIXTURE], true);

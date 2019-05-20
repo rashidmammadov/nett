@@ -13,6 +13,7 @@ use App\Http\Queries\MySQL\ApiQuery;
 
 class Finance {
 
+    private static $financeId;
     private static $userId;
     private static $type;
     private static $channel;
@@ -33,6 +34,7 @@ class Finance {
 
     public static function getFinance() {
         return array(
+            FINANCE_ID => self::getFinanceId(),
             USER_ID => self::getUserId(),
             TYPE => self::getType(),
             CHANNEL => self::getChannel(),
@@ -42,6 +44,10 @@ class Finance {
             STATUS => self::getStatus()
         );
     }
+
+    public static function getFinanceId() { return self::$financeId; }
+
+    public static function setFinanceId($financeId): void { self::$financeId = $financeId; }
 
     public static function getUserId() { return self::$userId; }
 

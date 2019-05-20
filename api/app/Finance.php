@@ -13,11 +13,10 @@ use Illuminate\Database\Eloquent\Model;
 class Finance extends Model {
 
     protected $table = DB_FINANCE_TABLE;
-    protected $primaryKey = null;
-    public $incrementing = false;
+    protected $primaryKey = FINANCE_ID;
 
     protected $fillable = [
-        USER_ID, TYPE, CHANNEL, TOURNAMENT_ID, AMOUNT, TICKET, STATUS
+        FINANCE_ID, USER_ID, TYPE, CHANNEL, TOURNAMENT_ID, AMOUNT, TICKET, STATUS
     ];
 
     public function user() {

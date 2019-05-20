@@ -15,11 +15,31 @@ class ApiQuery {
     /** -------------------- FINANCE QUERIES -------------------- **/
 
     /**
+     * @description query to get finance data
+     * @param integer $status - the status of finance
+     * @return mixed
+     */
+    public static function getFinance($status) {
+        $queryResult = Finance::where(STATUS, EQUAL_SIGN, $status)->get();
+        return $queryResult;
+    }
+
+    /**
      * @description query to create new finance data
      * @param $finance
      */
     public static function setFinance($finance) {
         Finance::create($finance);
+    }
+
+    /**
+     * @description query to update finance status
+     * @param $financeId - the id of finance
+     * @param $status - the status is changed
+     */
+    public static function updateFinanceStatus($financeId, $status) {
+        Finance::where(FINANCE_ID, EQUAL_SIGN, $financeId)
+            ->update([STATUS => $status]);
     }
 
     /** -------------------- FIXTURE QUERIES -------------------- **/
@@ -180,6 +200,18 @@ class ApiQuery {
         Participant::where(TOURNAMENT_ID, EQUAL_SIGN, $tournamentId)
             ->where(PARTICIPANT_ID, EQUAL_SIGN, $participantId)
             ->update([TOURNAMENT_RANKING => $ranking]);
+    }
+
+    /**
+     * @description query to update participant earnings
+     * @param integer $tournamentId
+     * @param integer $participantId
+     * @param double $earnings
+     */
+    public static function updateParticipantEarnings($tournamentId, $participantId, $earnings) {
+        Participant::where(TOURNAMENT_ID, EQUAL_SIGN, $tournamentId)
+            ->where(PARTICIPANT_ID, EQUAL_SIGN, $participantId)
+            ->update([EARNINGS => $earnings]);
     }
 
     /** -------------------- TOURNAMENT QUERIES -------------------- **/
@@ -415,5 +447,15 @@ class ApiQuery {
     public static function updateUserBudget($userId, $budget) {
         User::where(IDENTIFIER, EQUAL_SIGN, $userId)
             ->update([BUDGET => $budget]);
+    }
+
+    /**
+     * @description query to update user` ticket.
+     * @param integer $userId - the given user`s id
+     * @param double $ticket - updated ticket count
+     */
+    public static function updateUserTicket($userId, $ticket) {
+        User::where(IDENTIFIER, EQUAL_SIGN, $userId)
+            ->update([TICKET => $ticket]);
     }
 }

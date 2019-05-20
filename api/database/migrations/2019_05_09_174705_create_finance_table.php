@@ -12,6 +12,7 @@ class CreateFinanceTable extends Migration {
      */
     public function up() {
         Schema::create(DB_FINANCE_TABLE, function (Blueprint $table) {
+            $table->increments(FINANCE_ID);
             $table->integer(USER_ID)->references(IDENTIFIER)->on(DB_USERS_TABLE);
             $table->char(TYPE, 10);
             $table->char(CHANNEL, 20);
