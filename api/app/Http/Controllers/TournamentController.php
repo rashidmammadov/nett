@@ -101,8 +101,7 @@ class TournamentController extends ApiController {
      * @param integer $tournamentId
      * @return mixed: tournament info
      */
-    public function getDetail($tournamentId)
-    {
+    public function getDetail($tournamentId) {
         try {
             $user = JWTAuth::parseToken()->authenticate();
             $tournament = ApiQuery::getTournamentWithDetail($tournamentId);
@@ -166,8 +165,10 @@ class TournamentController extends ApiController {
     private function getMyTournaments($request, $user) {
         $result = array();
         $tournaments = array();
-        if ($user[TYPE] === PLAYER) {
+        if (strtolower($user[TYPE]) == strtolower(PLAYER)) {
             $tournaments = ApiQuery::searchParticipantTournaments($request, $user);
+        } else if (strtolower($user[TYPE]) == strtolower(HOLDER)) {
+            $tournaments = ApiQuery::searchHolderTournaments($request, $user);
         }
         foreach ($tournaments as $tournament) {
             if ($tournament[TOURNAMENT_ID]) {

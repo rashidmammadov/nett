@@ -161,6 +161,7 @@ class ApiQuery {
                     $query->where(PARTICIPANT_ID, EQUAL_SIGN, $participantId);
                 }
             })
+            ->orderBy(TOURNAMENT_RANKING)
             ->get();
 
         return $queryResult;
@@ -315,6 +316,27 @@ class ApiQuery {
             ->where(DB_USERS_TABLE.'.'.CITY, LIKE_SIGN, $user[CITY])
             ->get();
 
+        return $queryResult;
+    }
+
+    /**
+     * @description query to get holder`s tournament general detail
+     * @param $parameters
+     * @param $user
+     * @return mixed
+     */
+    public static function searchHolderTournaments($parameters, $user) {
+        $queryResult = array();
+        $holderTournaments = Tournament::where(HOLDER_ID, EQUAL_SIGN, $user[IDENTIFIER])->get();
+
+        foreach ($holderTournaments as $holderTournament) {
+            $result = Tournament::where(TOURNAMENT_ID, EQUAL_SIGN, $holderTournament[TOURNAMENT_ID])
+                ->where(STATUS, EQUAL_SIGN, $parameters[STATUS])
+                ->join(DB_USERS_TABLE, (DB_USERS_TABLE.'.'.IDENTIFIER), EQUAL_SIGN, DB_TOURNAMENT_TABLE.'.'.HOLDER_ID)
+                ->join(DB_GAME_TABLE, (DB_GAME_TABLE.'.'.GAME_ID), EQUAL_SIGN, DB_TOURNAMENT_TABLE.'.'.GAME_ID)
+                ->first();
+            array_push($queryResult, $result);
+        }
         return $queryResult;
     }
 

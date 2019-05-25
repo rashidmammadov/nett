@@ -34,6 +34,9 @@ export const style = StyleSheet.create({
     customBGColor: {
         backgroundColor: '#7F00FF'
     },
+    disabledBGColor: {
+        backgroundColor: '#707070'
+    },
     imageBGColor: {
         backgroundColor: '#d3d3d3'
     },

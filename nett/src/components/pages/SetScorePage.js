@@ -21,6 +21,7 @@ export default class SetScorePage extends Component {
             tournamentId: this.props.tournamentId,
             tournamentType: this.props.tournamentType,
             match: this.props.match,
+            deactiveButton: !this.props.match.available,
             homePoint: this.props.match.home.point ? this.props.match.home.point.toString() : '0',
             awayPoint: this.props.match.away.point ? this.props.match.away.point.toString() : '0'
         };
@@ -72,6 +73,7 @@ export default class SetScorePage extends Component {
                     result = res.data;
                     this.props.setMatchScore(result);
                     successToast(res.message);
+                    this.setState({deactiveButton: true});
                     googleTrack('Set Score Page', 'response of set score', res.message);
                 } else {
                     warningToast(res.message);
@@ -79,7 +81,7 @@ export default class SetScorePage extends Component {
                 }
             })
             .catch((error) => {
-                this.setState({loading: false});
+                this.   setState({loading: false});
                 errorToast(error.message);
                 googleTrack('Set Score Page', 'error of set score', error.message);
             });
@@ -136,7 +138,9 @@ export default class SetScorePage extends Component {
                     </ListItem>
 
                     <View style={[style.margin16, style.alignColumn]}>
-                        <Button block rounded style={style.customBGColor} onPress={() => this.setState({approveDialog: true})}>
+                        <Button block rounded disabled={this.state.deactiveButton}
+                                style={this.state.deactiveButton ? style.disabledBGColor : style.customBGColor}
+                                onPress={() => this.setState({approveDialog: true})}>
                             <Text style={[style.primaryTextColor, style.fontFamily]}>Devam</Text>
                         </Button>
                         <Text note style={[style.fontFamily, style.marginTop16]}>* Kullanıcı adı altındaki rakamlara tıklayarak skoru girebilirsin.</Text>

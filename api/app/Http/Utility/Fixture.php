@@ -83,9 +83,9 @@ class Fixture {
             array_push($draws, $draw);
             $matchCount = $matchCount / 2;
             if ($matchCount == 1) {
-                $thirdPlace = self::setDefaultDraw(1, '3th', $startDate, $counter);
+                $thirdPlace = self::setDefaultDraw(1, '3th', $startDate, ($counter + 1));
                 array_push($draws, $thirdPlace);
-                $final = self::setDefaultDraw(1, 'final', $startDate, $counter);
+                $final = self::setDefaultDraw(1, 'final', $startDate, ($counter + 2));
                 array_push($draws, $final);
             }
             $counter++;

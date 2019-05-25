@@ -55,7 +55,7 @@ export default class KnockOutFixture extends Component {
                                 });
                             }
                         }}>
-                            <Badge style={style.knockOutBadge}>
+                            <Badge style={[style.knockOutBadge, !match.available && style.disabledBGColor]}>
                                 <Text
                                     style={[style.fontFamily, style.secondaryTextColor, style.boldFont, style.smallFont]}>
                                     {match.home && match.home.point !== null && match.away && match.away.point !== null ?

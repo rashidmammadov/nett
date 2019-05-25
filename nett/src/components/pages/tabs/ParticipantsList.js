@@ -22,7 +22,7 @@ export default class ParticipantsList extends Component {
                 </Body>
                 <Right>
                     <Text note
-                          style={style.fontFamily}>{participant.tournamentRanking ? '#'.tournamentRanking : '-'}</Text>
+                          style={style.fontFamily}>{participant.tournamentRanking ? '#' + participant.tournamentRanking : '-'}</Text>
                     <Text note
                           style={style.fontFamily}>{participant.referenceCode ? participant.referenceCode : ''}</Text>
                 </Right>

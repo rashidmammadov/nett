@@ -46,7 +46,7 @@ class FixtureController extends ApiController {
             } else {
                 $tournament = ApiQuery::getTournament($request[TOURNAMENT_ID]);
                 if ($user[TYPE] == HOLDER && $tournament[HOLDER_ID] == $user[IDENTIFIER]) {
-                    if ($tournament[STATUS] === TOURNAMENT_STATUS_ACTIVE) {
+                    if (intval($tournament[STATUS]) == TOURNAMENT_STATUS_ACTIVE) {
                         if ($request[TOURNAMENT_TYPE] == KNOCK_OUT) {
                             if ($request[HOME_POINT] != $request[AWAY_POINT]) {
                                 $data = $this->setKnockOutFixtureResult($request);
@@ -91,7 +91,7 @@ class FixtureController extends ApiController {
             $isFinal = false;
             $updatedMatch = Match::setMatchWinner($match, $request[HOME_POINT], $request[AWAY_POINT]);
             $draws[$tourId][MATCHES][$matchId] = $updatedMatch;
-            if ($tourId == count($draws) - 1 || $draws[$tourId][DRAW_TITLE] == 'final') {
+            if (intval($tourId) == count($draws) - 1 || $draws[intval($tourId)][DRAW_TITLE] == 'final') {
                 $isFinal = true;
             }
 
