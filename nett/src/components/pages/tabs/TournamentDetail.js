@@ -72,7 +72,7 @@ export default class TournamentDetail extends Component {
                         </Body>
                         <Right style={style.flex}>
                             <Text style={[style.fontFamily, style.primaryTextColor]}>
-                                {this.props.detail.participantCount}
+                                {this.props.detail.currentParticipants} / {this.props.detail.participantCount}
                             </Text>
                         </Right>
                     </ListItem>
