@@ -65,7 +65,7 @@ class UserController extends ApiController {
                 }
 
                 $remember_token = $user->remember_token;
-                if ($remember_token == NULL){
+                if ($remember_token == NULL) {
                     return $this->login($request, false);
                 }
 
@@ -129,8 +129,7 @@ class UserController extends ApiController {
      * @param Request $request
      * @return mixed
      */
-    public function activate(Request $request)
-    {
+    public function activate(Request $request) {
         try {
             $user = JWTAuth::parseToken()->authenticate();
             $rules = array(
@@ -198,8 +197,7 @@ class UserController extends ApiController {
      * @description: set random avatar for user.
      * @return mixed
      */
-    private function addRandomAvatar()
-    {
+    private function addRandomAvatar() {
         $imageUrl = env('HOST_NAME') . env('AVATARS_PATH') . rand(MIN_AVATAR_COUNT, MAX_AVATAR_COUNT) . '.png';
         return $imageUrl;
     }

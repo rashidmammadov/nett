@@ -12,8 +12,7 @@ namespace App\Repository\Transformers;
 class ParticipantTransformer extends Transformer
 {
 
-    public function transform($participant)
-    {
+    public function transform($participant) {
         return [
             PARTICIPANT_ID => $participant[PARTICIPANT_ID],
             USERNAME => $participant[USERNAME],
@@ -24,8 +23,7 @@ class ParticipantTransformer extends Transformer
         ];
     }
 
-    public function transformForHolder($participant)
-    {
+    public function transformForHolder($participant) {
         return [
             PARTICIPANT_ID => $participant[PARTICIPANT_ID],
             USERNAME => $participant[USERNAME],
@@ -39,8 +37,7 @@ class ParticipantTransformer extends Transformer
         ];
     }
 
-    public function transformForFixture($participant)
-    {
+    public function transformForFixture($participant) {
         return [
             PARTICIPANT_ID => $participant[PARTICIPANT_ID],
             USERNAME => $participant[USERNAME],
