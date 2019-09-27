@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from "../../services/user/user.service";
+import { UtilityService } from "../../services/utility/utility.service";
+import { IHttpResponse } from "../../interfaces/i-http-response";
 
 @Component({
   selector: 'app-login',
@@ -6,10 +9,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+  email: string;
+  password: string | number;
 
-  constructor() { }
+  constructor(private userService: UserService) { }
 
-  ngOnInit() {
-  }
+  public login = async () => {
+    const result = await this.userService.login(this.email, this.password);
+    UtilityService.handleResponseFromService(result, (response: IHttpResponse) => {
+      console.log(response.data);
+    });
+  };
+
+  ngOnInit() {}
 
 }

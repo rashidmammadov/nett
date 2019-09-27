@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from "rxjs";
 import { catchError } from "rxjs/operators";
-import { IHttpResponse } from "../interfaces/i-http-response";
-import { ErrorResponse } from "../models/error-response";
+import { IHttpResponse } from "../../interfaces/i-http-response";
+import { ErrorResponse } from "../../models/error-response";
 
 @Injectable({
   providedIn: 'root'
 })
-export class UtilityServiceService {
+export class UtilityService {
 
   public static handleResponseFromService(result: IHttpResponse | ErrorResponse, successCallback: (result) => void): void {
     if ((result as IHttpResponse).status === 'success') {

@@ -3,17 +3,21 @@
     <mat-card-header fxLayoutAlign="center center">
       <mat-card-title>Giriş</mat-card-title>
     </mat-card-header>
-    <mat-card-content fxLayout="column">
-      <mat-form-field fxFlex="100%" appearance="outline">
-        <mat-label>Email</mat-label>
-        <input matInput placeholder="Email" [type]="'email'">
-        <!--          <mat-hint>Hint</mat-hint>-->
-      </mat-form-field>
-      <mat-form-field fxFlex="100%" appearance="outline">
-        <mat-label>Şifre</mat-label>
-        <input matInput placeholder="Şifre" [type]="'password'">
-<!--          <mat-hint>Hint</mat-hint>-->
-      </mat-form-field>
+    <mat-card-content>
+      <form ngNoForm fxLayout="column">
+        <mat-form-field fxFlex="100%" appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput placeholder="Email" [type]="'email'" [(ngModel)]="email">
+          <!--          <mat-hint>Hint</mat-hint>-->
+        </mat-form-field>
+        <mat-form-field fxFlex="100%" appearance="outline">
+          <mat-label>Şifre</mat-label>
+          <input matInput placeholder="Şifre" [type]="'password'" [(ngModel)]="password">
+  <!--          <mat-hint>Hint</mat-hint>-->
+        </mat-form-field>
+
+        <button mat-flat-button color="primary" type="sumbit" mat-button (click)="login()" [disabled]="!email || !password">Giriş Yap</button>
+      </form>
     </mat-card-content>
   </mat-card>
 </div>
