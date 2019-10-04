@@ -1,5 +1,5 @@
 <div>
-  <mat-card class="example-card" fxFlex="30%" fxFlex.lt-md="100%" fxFlexOffset="35%" fxFlexOffset.lt-md="0">
+  <mat-card fxFlex="30%" fxFlex.lt-md="100%" fxFlexOffset="35%" fxFlexOffset.lt-md="0">
     <mat-card-header fxLayoutAlign="center center">
       <mat-card-title>Giriş</mat-card-title>
     </mat-card-header>
@@ -15,13 +15,18 @@
             Doğru email girdiğinizden emin olun.
           </mat-error>
         </mat-form-field>
+
         <mat-form-field fxFlex="100%" appearance="outline">
           <mat-label>Şifre</mat-label>
           <input matInput placeholder="Şifre" [type]="'password'" formControlName="password">
           <mat-error *ngIf="loginForm.controls.password.hasError('required')">
-            Şifre galanı boş bırakılamaz.
+            Şifre alanı boş bırakılamaz.
+          </mat-error>
+          <mat-error *ngIf="loginForm.controls.password.hasError('pattern')">
+            Şifre en az 6 en fazla 20 karakter uzunluğunda olup en az bir büyük, bir küçük karakter ve bir rakam içermelidir.
           </mat-error>
         </mat-form-field>
+
         <button mat-flat-button color="primary" type="sumbit" mat-button (click)="login()" [disabled]="!loginForm.valid">Giriş Yap</button>
       </form>
     </mat-card-content>

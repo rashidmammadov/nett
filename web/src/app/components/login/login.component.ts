@@ -7,6 +7,7 @@ import { IHttpResponse } from '../../interfaces/i-http-response';
 import { Cookie } from '../../services/cookie/cookies.service';
 import { UserType } from '../../interfaces/user-type';
 import { set } from '../../store/actions/user.action';
+import { REGEX } from '../../constants/regex.constant';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,7 @@ export class LoginComponent implements OnInit {
 
     loginForm = new FormGroup({
         email: new FormControl('', [Validators.required, Validators.email]),
-        password: new FormControl('', [Validators.required])
+        password: new FormControl('', [Validators.required, Validators.pattern(REGEX.PASSWORD)])
     });
 
     constructor(private userService: UserService, private user: Store<{user: UserType}>) { }

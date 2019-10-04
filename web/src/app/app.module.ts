@@ -15,11 +15,13 @@ import { CookieService } from 'ngx-cookie-service';
 import { Cookie } from './services/cookie/cookies.service';
 
 import { userReducer } from './store/reducers/user.reducer';
+import { RegisterComponent } from './components/register/register.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
