@@ -4,19 +4,25 @@
       <mat-card-title>Giriş</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <form ngNoForm fxLayout="column">
+      <form ngNoForm fxLayout="column" [formGroup]="loginForm">
         <mat-form-field fxFlex="100%" appearance="outline">
           <mat-label>Email</mat-label>
-          <input matInput placeholder="Email" [type]="'email'" [(ngModel)]="email">
-          <!--          <mat-hint>Hint</mat-hint>-->
+          <input matInput placeholder="Email" [type]="'email'" formControlName="email">
+          <mat-error *ngIf="loginForm.controls.email.hasError('required')">
+            Email alanı boş bırakılamaz.
+          </mat-error>
+          <mat-error *ngIf="loginForm.controls.email.hasError('email')">
+            Doğru email girdiğinizden emin olun.
+          </mat-error>
         </mat-form-field>
         <mat-form-field fxFlex="100%" appearance="outline">
           <mat-label>Şifre</mat-label>
-          <input matInput placeholder="Şifre" [type]="'password'" [(ngModel)]="password">
-  <!--          <mat-hint>Hint</mat-hint>-->
+          <input matInput placeholder="Şifre" [type]="'password'" formControlName="password">
+          <mat-error *ngIf="loginForm.controls.password.hasError('required')">
+            Şifre galanı boş bırakılamaz.
+          </mat-error>
         </mat-form-field>
-
-        <button mat-flat-button color="primary" type="sumbit" mat-button (click)="login()" [disabled]="!email || !password">Giriş Yap</button>
+        <button mat-flat-button color="primary" type="sumbit" mat-button (click)="login()" [disabled]="!loginForm.valid">Giriş Yap</button>
       </form>
     </mat-card-content>
   </mat-card>

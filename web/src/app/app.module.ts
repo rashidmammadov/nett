@@ -1,15 +1,20 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {Injector, NgModule} from '@angular/core';
 
 import { AppRoutingModule } from './modules/app-routing.module';
 import { AppComponent } from './components/app/app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularMaterialModule } from "./modules/angular-material.module";
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { FormsModule } from "@angular/forms";
-import { HttpClientModule } from "@angular/common/http";
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { StoreModule } from '@ngrx/store';
 
 import { LoginComponent } from './components/login/login.component';
+import { CookieService } from 'ngx-cookie-service';
+import { Cookie } from './services/cookie/cookies.service';
+
+import { userReducer } from './store/reducers/user.reducer';
 
 @NgModule({
   declarations: [
@@ -24,8 +29,14 @@ import { LoginComponent } from './components/login/login.component';
     FlexLayoutModule,
     FormsModule,
     HttpClientModule,
+    ReactiveFormsModule,
+    StoreModule.forRoot({user: userReducer})
   ],
-  providers: [],
+  providers: [CookieService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(private injector: Injector) {
+    Cookie.injector = injector;
+  }
+}
