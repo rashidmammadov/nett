@@ -60,8 +60,8 @@
 
         <mat-form-field fxFlex="100%" appearance="outline">
           <mat-label>İl</mat-label>
-          <mat-select [(value)]="registerForm.controls.city.value">
-            <mat-option *ngFor="let city of []" [value]="city">
+          <mat-select [(value)]="registerForm.controls.city.value" (valueChange)="setDistricts(registerForm.controls.city.value)">
+            <mat-option *ngFor="let city of cities" [value]="city">
               {{city}}
             </mat-option>
           </mat-select>
@@ -70,13 +70,13 @@
         <mat-form-field fxFlex="100%" appearance="outline">
           <mat-label>İlçe</mat-label>
           <mat-select [(value)]="registerForm.controls.district.value">
-            <mat-option *ngFor="let district of []" [value]="district">
+            <mat-option *ngFor="let district of districts" [value]="district">
               {{district}}
             </mat-option>
           </mat-select>
         </mat-form-field>
 
-        <button mat-flat-button color="primary" type="sumbit" mat-button [disabled]="!registerForm.valid">Kayıt Ol</button>
+        <button mat-flat-button color="primary" type="sumbit" mat-button (click)="register()" [disabled]="!registerForm.valid">Kayıt Ol</button>
       </form>
     </mat-card-content>
   </mat-card>

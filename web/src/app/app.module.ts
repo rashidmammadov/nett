@@ -11,11 +11,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
 
 import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
+
 import { CookieService } from 'ngx-cookie-service';
 import { Cookie } from './services/cookie/cookies.service';
 
 import { userReducer } from './store/reducers/user.reducer';
-import { RegisterComponent } from './components/register/register.component';
+import { progressReducer } from './store/reducers/progress.reducer';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,7 @@ import { RegisterComponent } from './components/register/register.component';
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
-    StoreModule.forRoot({user: userReducer})
+    StoreModule.forRoot({progress: progressReducer, user: userReducer})
   ],
   providers: [CookieService],
   bootstrap: [AppComponent]

@@ -22,9 +22,6 @@
           <mat-error *ngIf="loginForm.controls.password.hasError('required')">
             Şifre alanı boş bırakılamaz.
           </mat-error>
-          <mat-error *ngIf="loginForm.controls.password.hasError('pattern')">
-            Şifre en az 6 en fazla 20 karakter uzunluğunda olup en az bir büyük, bir küçük karakter ve bir rakam içermelidir.
-          </mat-error>
         </mat-form-field>
 
         <button mat-flat-button color="primary" type="sumbit" mat-button (click)="login()" [disabled]="!loginForm.valid">Giriş Yap</button>

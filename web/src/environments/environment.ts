@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiPrefix: 'http://nett.ozelden.com/api/v1/'
+  apiPrefix: 'http://localhost:8000/api/v1/'
 };
 
 /*
