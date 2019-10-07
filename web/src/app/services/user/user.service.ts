@@ -10,21 +10,25 @@ import { ENDPOINTS } from "../../constants/endpoints.constant";
 })
 export class UserService {
 
-  constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) { }
 
-  login(email: string, password: string | number): Promise<ErrorResponse | IHttpResponse> {
-      let body = new HttpParams();
-      body = body.set('email', email);
-      body = body.set('password', password.toString());
-      return UtilityService.pipeHttpResponse(this.http.post<IHttpResponse>(ENDPOINTS.LOGIN(), body));
-  }
+    login(email: string, password: string | number): Promise<ErrorResponse | IHttpResponse> {
+        let body = new HttpParams();
+        body = body.set('email', email);
+        body = body.set('password', password.toString());
+        return UtilityService.pipeHttpResponse(this.http.post<IHttpResponse>(ENDPOINTS.LOGIN(), body));
+    }
 
-  register(params): Promise<ErrorResponse | IHttpResponse> {
-      let body = new HttpParams();
-      Object.keys(params).forEach((key: string) => {
-          body = body.set(key, params[key])
-      });
-      return UtilityService.pipeHttpResponse(this.http.post<IHttpResponse>(ENDPOINTS.REGISTER(), body))
-  }
+    refreshUser(): Promise<ErrorResponse | IHttpResponse> {
+      return UtilityService.pipeHttpResponse(this.http.get<IHttpResponse>(ENDPOINTS.REFRESH_USER()))
+    }
+
+    register(params): Promise<ErrorResponse | IHttpResponse> {
+        let body = new HttpParams();
+        Object.keys(params).forEach((key: string) => {
+            body = body.set(key, params[key])
+        });
+        return UtilityService.pipeHttpResponse(this.http.post<IHttpResponse>(ENDPOINTS.REGISTER(), body))
+    }
 
 }

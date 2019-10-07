@@ -38,7 +38,7 @@ export class RegisterComponent implements OnInit {
                 private user: Store<{user: UserType}>, private userService: UserService, private router: Router) { }
 
     ngOnInit() {
-      setTimeout(() => this.getRegions());
+        setTimeout(() => this.getRegions());
     }
 
     public register = async () => {
@@ -46,10 +46,10 @@ export class RegisterComponent implements OnInit {
             this.progress.dispatch(loading());
             const result = await this.userService.register(this.setRegisterFormData());
             UtilityService.handleResponseFromService(result, (response: IHttpResponse) => {
-              this._user = response.data;
-              Cookie.set('_nrt', this._user.remember_token);
-              this.user.dispatch(set({user: this._user}));
-              this.router.navigateByUrl('activate');
+                this._user = response.data;
+                Cookie.set('_nrt', this._user.remember_token);
+                this.user.dispatch(set({user: this._user}));
+                this.router.navigateByUrl('activate');
             });
             this.progress.dispatch(loaded());
         }
