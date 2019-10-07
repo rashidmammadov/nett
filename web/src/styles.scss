@@ -3,7 +3,7 @@
 
 html, body { height: calc(100% - 16px); background: #303030; color: #ffffff; }
 body { height: 100%; margin: 0; font-family: GoogleSans, serif !important; }
-.container { margin: 16px; }
+.container { margin: 16px; height: calc(100% - 16px); }
 
 
 .mat-form-field-appearance-outline .mat-form-field-prefix, .mat-form-field-appearance-outline .mat-form-field-suffix { top: 0 !important; }

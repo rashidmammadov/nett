@@ -1,6 +1,4 @@
 .pages-tab {
-    position: fixed;
-    bottom: 16px;
     .tab { cursor: pointer; outline: none; transition: ease .2s; }
     .active-tab {
         background-color: #f9f9f9;
@@ -9,4 +7,4 @@
 }
 
 
-.mat-icon { width: 32px; height: 32px; }
+.mat-icon { width: 24px; height: 24px; }
