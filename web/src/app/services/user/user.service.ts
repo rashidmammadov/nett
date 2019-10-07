@@ -12,6 +12,14 @@ export class UserService {
 
     constructor(private http: HttpClient) { }
 
+    activate(params): Promise<ErrorResponse | IHttpResponse> {
+        let body = new HttpParams();
+        Object.keys(params).forEach((key: string) => {
+          body = body.set(key, params[key])
+        });
+        return UtilityService.pipeHttpResponse(this.http.put<IHttpResponse>(ENDPOINTS.ACTIVATE(), body))
+    }
+
     login(email: string, password: string | number): Promise<ErrorResponse | IHttpResponse> {
         let body = new HttpParams();
         body = body.set('email', email);
@@ -20,7 +28,7 @@ export class UserService {
     }
 
     refreshUser(): Promise<ErrorResponse | IHttpResponse> {
-      return UtilityService.pipeHttpResponse(this.http.get<IHttpResponse>(ENDPOINTS.REFRESH_USER()))
+        return UtilityService.pipeHttpResponse(this.http.get<IHttpResponse>(ENDPOINTS.REFRESH_USER()))
     }
 
     register(params): Promise<ErrorResponse | IHttpResponse> {

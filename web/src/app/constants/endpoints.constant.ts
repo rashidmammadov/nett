@@ -4,6 +4,8 @@ const PREFIX = environment.apiPrefix;
 
 export const ENDPOINTS = {
 
+  ACTIVATE: () => `${PREFIX}activate`,
+
   LOGIN: () => `${PREFIX}login`,
 
   REFRESH_USER: () => `${PREFIX}refreshUser`,

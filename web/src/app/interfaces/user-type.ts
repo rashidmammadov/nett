@@ -6,6 +6,7 @@ export interface UserType {
   id: number;
   name?: string;
   picture?: string;
+  phone?: string;
   remember_token?: string;
   sex?: string;
   state: string | number;

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { UserService } from '../services/user/user.service';
 import { Cookie } from '../services/cookie/cookies.service';
@@ -26,9 +26,12 @@ export class AuthGuard implements CanActivate {
             const result = await this.userService.refreshUser();
             UtilityService.handleResponseFromService(result, (response: IHttpResponse) => {
                 let user: UserType = response.data;
-                Cookie.set('_nrt', user.remember_token);
+                if (accessToken !== user.remember_token) {
+                    Cookie.delete('_nrt');
+                    Cookie.set('_nrt', user.remember_token);
+                }
                 this.user.dispatch(set({user: user}));
-                if (accessToken && Number(user.state) === 1 && activateState) {
+                if (accessToken && Number(user.state) === 1 && !securedState) {
                     this.router.navigateByUrl('app/home');
                     return false;
                 } else if (accessToken && Number(user.state) === 0 && !activateState) {
@@ -36,7 +39,7 @@ export class AuthGuard implements CanActivate {
                     return false;
                 }
             });
-        } else if (!accessToken && securedState) {
+        } else if (!accessToken && (securedState || activateState)) {
             this.router.navigateByUrl('login');
             return false;
         }
