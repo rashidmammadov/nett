@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs/internal/Observable';
+import { DomSanitizer } from '@angular/platform-browser';
+import { MatIconRegistry } from '@angular/material';
+import { select, Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +10,20 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'web';
+
+    progress: Observable<boolean>;
+
+    constructor(private domSanitizer: DomSanitizer, public matIconRegistry: MatIconRegistry,
+                private store: Store<{progress: boolean}>) {
+        this.progress = store.pipe(select('progress'));
+        this.setSvgIcons();
+    }
+
+    private setSvgIcons() {
+        const svgArray: string[] = ['credit-card', 'grid', 'home', 'plus-square', 'search', 'user'];
+        let path: string = 'assets/icons/';
+        svgArray.forEach((svg: string) => {
+            this.matIconRegistry.addSvgIcon(svg, this.domSanitizer.bypassSecurityTrustResourceUrl(path + svg + '.svg'));
+        });
+    }
 }

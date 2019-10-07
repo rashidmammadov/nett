@@ -22,6 +22,8 @@ import { userReducer } from './store/reducers/user.reducer';
 import { progressReducer } from './store/reducers/progress.reducer';
 
 import { TokenInterceptor } from "./interceptors/token.interceptor";
+import { ApplicationComponent } from './components/application/application.component';
+import { SearchComponent } from './components/search/search.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,9 @@ import { TokenInterceptor } from "./interceptors/token.interceptor";
     LoginComponent,
     RegisterComponent,
     ActivateComponent,
-    HomeComponent
+    HomeComponent,
+    ApplicationComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,

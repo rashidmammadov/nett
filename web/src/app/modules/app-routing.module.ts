@@ -5,6 +5,8 @@ import { HomeComponent } from '../components/home/home.component';
 import { LoginComponent } from '../components/login/login.component';
 import { RegisterComponent } from '../components/register/register.component';
 import { AuthGuard } from '../guards/auth.guard';
+import {ApplicationComponent} from "../components/application/application.component";
+import {SearchComponent} from "../components/search/search.component";
 
 const routes: Routes = [
   {
@@ -31,10 +33,20 @@ const routes: Routes = [
   {
     path: 'app',
     canActivate: [AuthGuard],
+    component: ApplicationComponent,
     children: [
       {
         path: 'home',
         component: HomeComponent
+      },
+      {
+        path: 'search',
+        component: SearchComponent
+      },
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'home'
       }
     ]
   }
