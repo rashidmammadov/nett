@@ -6,6 +6,8 @@ export const ENDPOINTS = {
 
   ACTIVATE: () => `${PREFIX}activate`,
 
+  GAMES: (id:number = null) => !!id ? `${PREFIX}games/${id}` : `${PREFIX}games`,
+
   LOGIN: () => `${PREFIX}login`,
 
   REFRESH_USER: () => `${PREFIX}refreshUser`,

@@ -24,6 +24,7 @@ import { progressReducer } from './store/reducers/progress.reducer';
 import { TokenInterceptor } from "./interceptors/token.interceptor";
 import { ApplicationComponent } from './components/application/application.component';
 import { SearchComponent } from './components/search/search.component';
+import { SetTournamentComponent } from './components/set-tournament/set-tournament.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { SearchComponent } from './components/search/search.component';
     ActivateComponent,
     HomeComponent,
     ApplicationComponent,
-    SearchComponent
+    SearchComponent,
+    SetTournamentComponent
   ],
   imports: [
     BrowserModule,

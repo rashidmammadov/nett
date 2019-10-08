@@ -27,7 +27,7 @@ export class RegisterComponent implements OnInit {
     registerForm = new FormGroup({
         username: new FormControl('', [Validators.required, Validators.pattern(REGEX.USERNAME)]),
         email: new FormControl('', [Validators.required, Validators.email]),
-        type: new FormControl('gamer', [Validators.required]),
+        type: new FormControl('player', [Validators.required]),
         password: new FormControl('', [Validators.required, Validators.pattern(REGEX.PASSWORD)]),
         passwordConfirmation: new FormControl('', [Validators.required, Validators.pattern(REGEX.PASSWORD)]),
         city: new FormControl('', [Validators.required]),
@@ -75,13 +75,13 @@ export class RegisterComponent implements OnInit {
     private setRegisterFormData() {
         let form = this.registerForm.controls;
         return {
-          'username': form.username.value,
-          'email': form.email.value,
-          'type': form.type.value,
-          'password': form.password.value,
-          'passwordConfirmation': form.passwordConfirmation.value,
-          'city': form.city.value,
-          'district': form.district.value
+            'username': form.username.value,
+            'email': form.email.value,
+            'type': form.type.value,
+            'password': form.password.value,
+            'passwordConfirmation': form.passwordConfirmation.value,
+            'city': form.city.value,
+            'district': form.district.value
         }
     }
 

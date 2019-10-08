@@ -15,7 +15,7 @@ export class UserService {
     activate(params): Promise<ErrorResponse | IHttpResponse> {
         let body = new HttpParams();
         Object.keys(params).forEach((key: string) => {
-          body = body.set(key, params[key])
+            body = body.set(key, params[key])
         });
         return UtilityService.pipeHttpResponse(this.http.put<IHttpResponse>(ENDPOINTS.ACTIVATE(), body))
     }
