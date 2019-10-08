@@ -1,6 +1,35 @@
-<div fxLayout="row" fxFlex="80%" fxFlex.lt-md="100%" fxFlexOffset="10%" fxFlexOffset.lt-md="0">
-<!--    <div fxFlex="60%">-->
+<div fxLayout="row" fxLayout.lt-md="column" fxFlex="60%" fxFlex.lt-md="100%" fxFlexOffset="20%" fxFlexOffset.lt-md="0" fxLayoutGap="8px">
+    <mat-card fxFlex="60%" fxFlex.lt-md="100%">
+        <mat-card-content>
+            <form ngNoForm fxLayout="column" [formGroup]="tournamentForm">
+                <mat-form-field fxFlex="100%" appearance="outline">
+                    <mat-label>Turnuva Oyunu</mat-label>
+                    <mat-select [(value)]="tournamentForm.controls.gameId.value" (valueChange)="changeTournamentGame()">
+                        <mat-option *ngFor="let game of games" [value]="game.gameId">
+                            {{game.gameName}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
 
-<!--    </div>-->
-    <app-tournament-card [data]="tournamentData" fxFlex="100%"></app-tournament-card>
+                <mat-form-field fxFlex="100%" appearance="outline">
+                    <mat-label>Turnuva Türü</mat-label>
+                    <mat-select [(value)]="tournamentForm.controls.tournamentType.value">
+                        <mat-option *ngFor="let type of types" [value]="type">
+                            {{type}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field fxFlex="100%" appearance="outline">
+                    <mat-label>Katılımcı Sayısı</mat-label>
+                    <mat-select [(value)]="tournamentForm.controls.participantCount.value" (valueChange)="changeParticipantCount()">
+                        <mat-option *ngFor="let c of list" [value]="c">
+                            {{c}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </form>
+        </mat-card-content>
+    </mat-card>
+    <app-tournament-card [data]="tournamentData" fxFlex="40%" fxFlex.lt-md="100%"></app-tournament-card>
 </div>

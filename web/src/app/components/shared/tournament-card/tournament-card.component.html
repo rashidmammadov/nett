@@ -1,27 +1,27 @@
 <mat-card fxFlex="100%">
-    <mat-card-header>
+    <mat-card-header *ngIf="data.holder">
         <img mat-card-avatar src="{{data.holder.picture}}" alt="{{data.holder.name + ' ' + data.holder.surname}}">
         <mat-card-title>{{data.holder.username}}</mat-card-title>
         <mat-card-subtitle>{{data.holder.city}}/{{data.holder.district}}</mat-card-subtitle>
     </mat-card-header>
-    <img mat-card-image src="{{data.game.gameImage}}" alt="{{data.game.gameName}}">
+    <img *ngIf="data.game" mat-card-image src="{{data.game.gameImage}}" alt="{{data.game.gameName}}">
     <mat-card-content>
         <div fxLayout="row" fxLayoutAlign="space-between center" fxFlex="100%">
-            <div fxLayout="row" fxLayoutAlign="start center" fxFlex="100%">
+            <div *ngIf="data.game" class="info" fxLayout="row" fxLayoutAlign="start center" fxFlex="100%">
                 <mat-icon svgIcon="hash"></mat-icon><p>{{data.game.gameName}}</p>
             </div>
             <div fxLayout="row" fxFlex="100%" fxLayoutAlign="space-between center" >
-                <div fxLayout="column" fxLayoutAlign="center center">
+                <div class="info" fxLayout="column" fxLayoutAlign="center center">
                     <mat-hint>Tarih</mat-hint> <p>10/10</p>
                 </div>
-                <div fxLayout="column" fxLayoutAlign="center center">
+                <div class="info" fxLayout="column" fxLayoutAlign="center center">
                     <mat-hint>Saat</mat-hint> <p>15:30</p>
                 </div>
-                <div fxLayout="column" fxLayoutAlign="center center">
+                <div class="info" fxLayout="column" fxLayoutAlign="center center">
                     <mat-hint>Ücret</mat-hint> <p>15 TL</p>
                 </div>
-                <div fxLayout="column" fxLayoutAlign="center center">
-                    <mat-hint>Katılımcı</mat-hint> <p>24</p>
+                <div class="info" fxLayout="column" fxLayoutAlign="center center">
+                    <mat-hint>Katılımcı</mat-hint> <p>{{data.participantCount}}</p>
                 </div>
             </div>
         </div>
