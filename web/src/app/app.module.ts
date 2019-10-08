@@ -25,6 +25,7 @@ import { TokenInterceptor } from "./interceptors/token.interceptor";
 import { ApplicationComponent } from './components/application/application.component';
 import { SearchComponent } from './components/search/search.component';
 import { SetTournamentComponent } from './components/set-tournament/set-tournament.component';
+import { TournamentCardComponent } from './components/shared/tournament-card/tournament-card.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { SetTournamentComponent } from './components/set-tournament/set-tourname
     HomeComponent,
     ApplicationComponent,
     SearchComponent,
-    SetTournamentComponent
+    SetTournamentComponent,
+    TournamentCardComponent
   ],
   imports: [
     BrowserModule,
