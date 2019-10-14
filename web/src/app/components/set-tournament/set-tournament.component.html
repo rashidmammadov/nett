@@ -31,7 +31,7 @@
 
                 <mat-form-field fxFlex="100%" appearance="outline">
                     <mat-label>Turnuva Tarihi</mat-label>
-                    <input matInput [owlDateTime]="dt" [owlDateTimeTrigger]="dt">
+                    <input matInput [owlDateTime]="dt" [owlDateTimeTrigger]="dt" [min]="minDate" [max]="maxDate" formControlName="startDate">
                 </mat-form-field>
                 <owl-date-time #dt></owl-date-time>
 

@@ -22,14 +22,15 @@ export class SetTournamentComponent implements OnInit {
     public types: string[] = [];
     public tournamentData: TournamentType = <TournamentType>Object();
     date = new Date();
-    defaultDate = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 7);
+    minDate = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 7, 12, 0, 0);
+    maxDate = new Date(this.date.getFullYear(), this.date.getMonth() + 4, this.date.getDate(), 12, 0, 0);
 
     tournamentForm = new FormGroup({
         gameId: new FormControl(1, [Validators.required]),
         tournamentType: new FormControl('knock_out', [Validators.required]),
         days: new FormControl(1, [Validators.required]),
         participantCount: new FormControl(16, [Validators.min(16), Validators.max(32)]),
-        startDate: new FormControl(this.defaultDate.getTime(), [Validators.required])
+        startDate: new FormControl(this.minDate, [Validators.required])
     });
 
     constructor(private activatedRoute: ActivatedRoute, private user: Store<{user: UserType}>,
@@ -41,12 +42,15 @@ export class SetTournamentComponent implements OnInit {
         this.games = (await this.activatedRoute.data.pipe(first()).toPromise()).games.data as GameType[];
         this.games.length && (this.tournamentData.game = this.games[0]);
         this.tournamentData.holder = await this.user.select('user').pipe(first()).toPromise();
+        this.changeTournamentGame();
+        this.changeParticipantCount();
     }
 
     public changeTournamentGame() {
         const selectedGameId = this.tournamentForm.controls.gameId.value;
         const game = this.games.find((game: GameType) => Number(game.gameId) === Number(selectedGameId));
         this.types = game.playingType;
+        this.tournamentForm.controls.tournamentType.setValue(this.types[0]);
         this.tournamentData.game = game;
     }
 
