@@ -10,6 +10,7 @@ import { TournamentService } from '../../services/tournament/tournament.service'
 import { UtilityService } from '../../services/utility/utility.service';
 import { IHttpResponse } from '../../interfaces/i-http-response';
 import { loaded, loading } from '../../store/actions/progress.action';
+import {TYPES} from "../../constants/types.constant";
 
 @Component({
   selector: 'app-set-tournament',
@@ -22,6 +23,8 @@ export class SetTournamentComponent implements OnInit {
     public types: string[] = [];
     public tournamentData: TournamentType = <TournamentType>Object();
     public income: number = 0.00;
+    public tournamentTypesMap = TYPES.TOURNAMENT_TYPE;
+
     date = new Date();
     minDate = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 7, 12, 0, 0);
     maxDate = new Date(this.date.getFullYear(), this.date.getMonth() + 4, this.date.getDate(), 12, 0, 0);
@@ -43,8 +46,19 @@ export class SetTournamentComponent implements OnInit {
         this.games = (await this.activatedRoute.data.pipe(first()).toPromise()).games.data as GameType[];
         this.games.length && (this.tournamentData.game = this.games[0]);
         this.tournamentData.holder = await this.user.select('user').pipe(first()).toPromise();
+        this.changeTournamentDate();
         this.changeTournamentGame();
         this.changeParticipantCount();
+    }
+
+    public changeTournamentDate() {
+        let selectedDate: Date = this.tournamentForm.controls.startDate.value;
+        let convert = (value) => value < 10 ? '0' + value : value;
+
+        if (selectedDate) {
+            this.tournamentData.date = convert(selectedDate.getDate()) + '/' + convert(selectedDate.getMonth());
+            this.tournamentData.time = convert(selectedDate.getHours()) + ':' + convert(selectedDate.getMinutes());
+        }
     }
 
     public changeTournamentGame() {

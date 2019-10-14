@@ -15,7 +15,7 @@
                     <mat-label>Turnuva Türü</mat-label>
                     <mat-select [(value)]="tournamentForm.controls.tournamentType.value">
                         <mat-option *ngFor="let type of types" [value]="type">
-                            {{type}}
+                            {{tournamentTypesMap[type]}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -31,7 +31,8 @@
 
                 <mat-form-field fxFlex="100%" appearance="outline">
                     <mat-label>Turnuva Tarihi</mat-label>
-                    <input matInput [owlDateTime]="dt" [owlDateTimeTrigger]="dt" [min]="minDate" [max]="maxDate" formControlName="startDate">
+                    <input matInput [owlDateTime]="dt" [owlDateTimeTrigger]="dt" [min]="minDate" [max]="maxDate"
+                           (dateTimeChange)="changeTournamentDate()" formControlName="startDate">
                 </mat-form-field>
                 <owl-date-time #dt></owl-date-time>
 
