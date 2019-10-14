@@ -4,16 +4,28 @@ const PREFIX = environment.apiPrefix;
 
 export const ENDPOINTS = {
 
-  ACTIVATE: () => `${PREFIX}activate`,
+    ACTIVATE: () => `${PREFIX}activate`,
 
-  GAMES: (id:number = null) => !!id ? `${PREFIX}games/${id}` : `${PREFIX}games`,
+    GAMES: (id:number = null) => !!id ? `${PREFIX}games/${id}` : `${PREFIX}games`,
 
-  LOGIN: () => `${PREFIX}login`,
+    LOGIN: () => `${PREFIX}login`,
 
-  REFRESH_USER: () => `${PREFIX}refreshUser`,
+    REFRESH_USER: () => `${PREFIX}refreshUser`,
 
-  REGISTER: () => `${PREFIX}register`,
+    REGISTER: () => `${PREFIX}register`,
 
-  REGIONS: () => 'http://api.ozelden.com/api/v1/data?regions=true',
+    REGIONS: () => 'http://api.ozelden.com/api/v1/data?regions=true',
+
+    MY_TOURNAMENTS: (status?: number | string) => {
+        let queryParams: string = '';
+        status && (queryParams = `?status=${status}`);
+        return `${PREFIX}myTournaments${queryParams}`;
+    },
+
+    TOURNAMENTS: (tournamentId?: number | string, status?: number | string) => {
+        let queryParams: string = '';
+        status && (queryParams = `?status=${status}`);
+        return PREFIX + (!!tournamentId ? `tournaments/${tournamentId}` : 'tournaments') + queryParams;
+    }
 
 };

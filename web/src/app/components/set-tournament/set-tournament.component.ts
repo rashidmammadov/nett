@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { first } from 'rxjs/operators';
 import { GameType } from '../../interfaces/game-type';
 import { TournamentType } from '../../interfaces/tournament-type';
 import { UserType } from '../../interfaces/user-type';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {first, map} from "rxjs/operators";
+import { TournamentService } from '../../services/tournament/tournament.service';
+import { UtilityService } from '../../services/utility/utility.service';
+import { IHttpResponse } from '../../interfaces/i-http-response';
+import { loaded, loading } from '../../store/actions/progress.action';
 
 @Component({
   selector: 'app-set-tournament',
@@ -22,13 +26,14 @@ export class SetTournamentComponent implements OnInit {
 
     tournamentForm = new FormGroup({
         gameId: new FormControl(1, [Validators.required]),
-        tournamentType: new FormControl('', [Validators.required]),
+        tournamentType: new FormControl('knock_out', [Validators.required]),
         days: new FormControl(1, [Validators.required]),
         participantCount: new FormControl(16, [Validators.min(16), Validators.max(32)]),
         startDate: new FormControl(this.defaultDate.getTime(), [Validators.required])
     });
 
-    constructor(private activatedRoute: ActivatedRoute, private user: Store<{user: UserType}>) {
+    constructor(private activatedRoute: ActivatedRoute, private user: Store<{user: UserType}>,
+                private tournamentService: TournamentService, private progress: Store<{progress: boolean}>) {
         for (let i = 16; i <= 32; i++) this.list.push(i);
     }
 
@@ -40,7 +45,7 @@ export class SetTournamentComponent implements OnInit {
 
     public changeTournamentGame() {
         const selectedGameId = this.tournamentForm.controls.gameId.value;
-        const game = this.games.find((game: GameType) => game.gameId === selectedGameId);
+        const game = this.games.find((game: GameType) => Number(game.gameId) === Number(selectedGameId));
         this.types = game.playingType;
         this.tournamentData.game = game;
     }
@@ -49,4 +54,26 @@ export class SetTournamentComponent implements OnInit {
         this.tournamentData.participantCount = this.tournamentForm.controls.participantCount.value;
     }
 
+    public submit = async () => {
+        if (this.tournamentForm.valid) {
+            this.progress.dispatch(loading());
+            const result = await this.tournamentService.add(this.setTournamentFormData());
+            UtilityService.handleResponseFromService(result, (response: IHttpResponse) => {
+                // TODO;
+                console.log(response.message)
+            });
+            this.progress.dispatch(loaded());
+        }
+    };
+
+    private setTournamentFormData() {
+        let form = this.tournamentForm.controls;
+        return {
+            'gameId': form.gameId.value,
+            'tournamentType': form.tournamentType.value,
+            'days': form.days.value,
+            'participantCount': form.participantCount.value,
+            'startDate': new Date(form.startDate.value).getTime()
+        }
+    }
 }
