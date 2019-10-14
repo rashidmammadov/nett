@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
@@ -34,7 +34,7 @@ export class SetTournamentComponent implements OnInit {
         startDate: new FormControl(this.minDate, [Validators.required])
     });
 
-    constructor(private activatedRoute: ActivatedRoute, private user: Store<{user: UserType}>,
+    constructor(private activatedRoute: ActivatedRoute, private user: Store<{user: UserType}>, private router: Router,
                 private tournamentService: TournamentService, private progress: Store<{progress: boolean}>) {
         for (let i = 16; i <= 32; i++) this.list.push(i);
     }
@@ -66,8 +66,7 @@ export class SetTournamentComponent implements OnInit {
             this.progress.dispatch(loading());
             const result = await this.tournamentService.add(this.setTournamentFormData());
             UtilityService.handleResponseFromService(result, (response: IHttpResponse) => {
-                // TODO;
-                console.log(response.message)
+                this.router.navigateByUrl('app/home');
             });
             this.progress.dispatch(loaded());
         }
