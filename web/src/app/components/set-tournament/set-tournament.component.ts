@@ -21,6 +21,7 @@ export class SetTournamentComponent implements OnInit {
     public games: GameType[] = [];
     public types: string[] = [];
     public tournamentData: TournamentType = <TournamentType>Object();
+    public income: number = 0.00;
     date = new Date();
     minDate = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 7, 12, 0, 0);
     maxDate = new Date(this.date.getFullYear(), this.date.getMonth() + 4, this.date.getDate(), 12, 0, 0);
@@ -55,7 +56,9 @@ export class SetTournamentComponent implements OnInit {
     }
 
     public changeParticipantCount() {
-        this.tournamentData.participantCount = this.tournamentForm.controls.participantCount.value;
+        const participantCount = this.tournamentForm.controls.participantCount.value;
+        this.tournamentData.participantCount = participantCount;
+        this.income = Number((Number(participantCount) * (5 + Number(participantCount) / 11)).toFixed(2));
     }
 
     public submit = async () => {

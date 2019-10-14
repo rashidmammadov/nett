@@ -39,5 +39,12 @@
             </form>
         </mat-card-content>
     </mat-card>
-    <app-tournament-card [data]="tournamentData" fxFlex="40%" fxFlex.lt-md="100%"></app-tournament-card>
+    <div fxLayout="column" fxFlex="40%" fxFlex.lt-md="100%" fxLayoutGap="8px">
+        <mat-card>
+          <mat-card-content>
+            Tahminin Kazanç: <b style="color: green">{{income}} ₺</b>
+          </mat-card-content>
+        </mat-card>
+        <app-tournament-card [data]="tournamentData" fxFlex="40%" fxFlex.lt-md="100%"></app-tournament-card>
+    </div>
 </div>
