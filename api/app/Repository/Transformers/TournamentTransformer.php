@@ -29,9 +29,9 @@ class TournamentTransformer extends Transformer {
                 CURRENCY => TURKISH_LIRA,
             ),
             GAME => array(
-                IDENTIFIER => $tournament[GAME_ID],
-                NAME => $tournament[GAME_NAME],
-                IMAGE => $tournament[GAME_IMAGE]
+                GAME_ID => $tournament[GAME_ID],
+                GAME_NAME => $tournament[GAME_NAME],
+                GAME_IMAGE => $tournament[GAME_IMAGE]
             ),
             HOLDER => array(
                 IDENTIFIER => $tournament[IDENTIFIER],

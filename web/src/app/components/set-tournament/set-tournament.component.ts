@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
@@ -10,7 +10,7 @@ import { TournamentService } from '../../services/tournament/tournament.service'
 import { UtilityService } from '../../services/utility/utility.service';
 import { IHttpResponse } from '../../interfaces/i-http-response';
 import { loaded, loading } from '../../store/actions/progress.action';
-import {TYPES} from "../../constants/types.constant";
+import { TYPES } from '../../constants/types.constant';
 
 @Component({
   selector: 'app-set-tournament',
