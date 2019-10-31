@@ -1,5 +1,7 @@
 <div fxLayout="column" fxFlex="100%">
-    <router-outlet></router-outlet>
+    <div class="max-height overflow">
+        <router-outlet></router-outlet>
+    </div>
     <div class="pages-tab" fxLayout="row" fxLayoutAlign="center center">
         <mat-card class="tab" routerLink="home" routerLinkActive="active-tab">
             <mat-icon svgIcon="home"></mat-icon>

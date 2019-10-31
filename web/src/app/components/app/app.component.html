@@ -1,3 +1,7 @@
-<div class="container">
-  <router-outlet></router-outlet>
+<div *ngIf="progress | async" fxLayout="column" fxLayoutAlign="center center">
+<!--  <mat-spinner class="progress-circular"></mat-spinner>-->
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>
+<div class="max-height" [class.blur-filter]="progress | async">
+    <router-outlet></router-outlet>
 </div>

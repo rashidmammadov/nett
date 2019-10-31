@@ -2,9 +2,27 @@
 @import '~ng-pick-datetime/assets/style/picker.min.css';
 @font-face { font-family: GoogleSans; src: url(./GoogleSans-Regular.ttf);}
 
+$mainColor: #7B1FA2;
+
 html, body { height: calc(100% - 16px); background: #303030; color: #ffffff; }
 body { height: 100%; margin: 0; font-family: GoogleSans, serif !important; }
-.container { margin: 16px; height: calc(100% - 16px); }
 
+app-application { height: 100%; }
 
+.blur-filter { filter: blur(4px); }
+.container { margin: 16px 0; height: calc(100% - 16px); }
 .mat-form-field-appearance-outline .mat-form-field-prefix, .mat-form-field-appearance-outline .mat-form-field-suffix { top: 0 !important; }
+.mat-progress-bar-buffer { background-color: #f9f9f9; }
+.mat-progress-bar-fill::after { background-color: $mainColor; }
+.max-height { height: 100%; }
+.overflow { overflow: auto; }
+
+::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+  background-color: #f9f9f9;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}

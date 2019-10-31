@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/internal/Observable';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material';
 import { select, Store } from '@ngrx/store';
+import {first} from "rxjs/operators";
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,6 @@ import { select, Store } from '@ngrx/store';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-
     progress: Observable<boolean>;
 
     constructor(private domSanitizer: DomSanitizer, public matIconRegistry: MatIconRegistry,

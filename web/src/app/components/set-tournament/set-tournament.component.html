@@ -1,10 +1,11 @@
-<div fxLayout="row" fxLayout.lt-md="column" fxFlex="60%" fxFlex.lt-md="100%" fxFlexOffset="20%" fxFlexOffset.lt-md="0" fxLayoutGap="8px">
-    <mat-card fxFlex="60%" fxFlex.lt-md="100%">
+<div class="container" fxLayout="row" fxLayout.lt-md="column" fxFlex="60%" fxFlex.lt-md="100%" fxFlexOffset="20%"
+     fxFlexOffset.lt-md="0" fxLayoutGap="8px">
+    <mat-card class="mat-elevation-z4" fxFlex="60%" fxFlex.lt-md="100%">
         <mat-card-content>
             <form ngNoForm fxLayout="column" [formGroup]="tournamentForm">
                 <mat-form-field fxFlex="100%" appearance="outline">
                     <mat-label>Turnuva Oyunu</mat-label>
-                    <mat-select [(value)]="tournamentForm.controls.gameId.value" (valueChange)="changeTournamentGame()">
+                    <mat-select formControlName="gameId" (selectionChange)="changeTournamentGame()">
                         <mat-option *ngFor="let game of games" [value]="game.gameId">
                             {{game.gameName}}
                         </mat-option>
@@ -13,7 +14,7 @@
 
                 <mat-form-field fxFlex="100%" appearance="outline">
                     <mat-label>Turnuva Türü</mat-label>
-                    <mat-select [(value)]="tournamentForm.controls.tournamentType.value">
+                    <mat-select formControlName="tournamentType">
                         <mat-option *ngFor="let type of types" [value]="type">
                             {{tournamentTypesMap[type]}}
                         </mat-option>
@@ -22,7 +23,7 @@
 
                 <mat-form-field fxFlex="100%" appearance="outline">
                     <mat-label>Katılımcı Sayısı</mat-label>
-                    <mat-select [(value)]="tournamentForm.controls.participantCount.value" (valueChange)="changeParticipantCount()">
+                    <mat-select formControlName="participantCount" (selectionChange)="changeParticipantCount()">
                         <mat-option *ngFor="let c of list" [value]="c">
                             {{c}}
                         </mat-option>
@@ -41,7 +42,7 @@
         </mat-card-content>
     </mat-card>
     <div fxLayout="column" fxFlex="40%" fxFlex.lt-md="100%" fxLayoutGap="8px">
-        <mat-card>
+        <mat-card class="mat-elevation-z4">
             <mat-card-content>
                 Tahminin Kazanç: <b style="color: green">{{income}} ₺</b>
             </mat-card-content>
