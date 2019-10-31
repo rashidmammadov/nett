@@ -22,7 +22,7 @@ export class SearchComponent implements OnInit {
 
     private fetchSearchResult = async () => {
         this.progress.dispatch(loading());
-        const result = await this.tournamentService.search(1);
+        const result = await this.tournamentService.search(2);
         UtilityService.handleResponseFromService(result, (response: IHttpResponse) => {
             this.searchResult = response.data;
         });

@@ -3,7 +3,6 @@ import { Observable } from 'rxjs/internal/Observable';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material';
 import { select, Store } from '@ngrx/store';
-import {first} from "rxjs/operators";
 
 @Component({
   selector: 'app-root',
