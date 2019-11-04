@@ -21,6 +21,7 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { SearchComponent } from './components/search/search.component';
 import { SetTournamentComponent } from './components/set-tournament/set-tournament.component';
+import { LeaveDialogComponent } from './components/shared/leave-dialog/leave-dialog.component';
 import { TournamentCardComponent } from './components/shared/tournament-card/tournament-card.component';
 
 import { Cookie } from './services/cookie/cookies.service';
@@ -44,7 +45,8 @@ import { DatePickerIntl } from './models/DatePickerIntl';
         SetTournamentComponent,
         TournamentCardComponent,
         AttendDialogComponent,
-        AttendButtonComponent
+        AttendButtonComponent,
+        LeaveDialogComponent
     ],
     imports: [
         BrowserModule,
@@ -59,7 +61,7 @@ import { DatePickerIntl } from './models/DatePickerIntl';
         OwlDateTimeModule,
         OwlNativeDateTimeModule,
     ],
-    entryComponents: [AttendDialogComponent],
+    entryComponents: [AttendDialogComponent, LeaveDialogComponent],
     providers: [CookieService,
         { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
         { provide: OWL_DATE_TIME_LOCALE, useValue: 'tr'},

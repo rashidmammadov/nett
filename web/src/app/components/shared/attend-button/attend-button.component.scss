@@ -13,6 +13,18 @@
             color: #303030;
         }
 
+        &.active {
+            background-color: #7B1FA2;
+        }
+
+        &.cancelled {
+            background-color: darkred;
+        }
+
+        &.close {
+            background-color: #555555 !important;
+        }
+
         &.restricted {
             background-color: #555555 !important;
         }

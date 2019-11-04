@@ -4,6 +4,7 @@ import {ErrorResponse} from "../../models/error-response";
 import {IHttpResponse} from "../../interfaces/i-http-response";
 import {UtilityService} from "../utility/utility.service";
 import {ENDPOINTS} from "../../constants/endpoints.constant";
+import {stringify} from "querystring";
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,7 @@ export class ParticipantService {
     }
 
     leave(tournamentId: number): Promise<ErrorResponse | IHttpResponse> {
-        return UtilityService.pipeHttpResponse(this.http.delete<IHttpResponse>(ENDPOINTS.PARTICIPANTS()));
+        return UtilityService.pipeHttpResponse(this.http.delete<IHttpResponse>(ENDPOINTS.PARTICIPANTS(tournamentId)));
     }
 
 }

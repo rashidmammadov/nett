@@ -10,7 +10,7 @@ export const ENDPOINTS = {
 
     LOGIN: () => `${PREFIX}login`,
 
-    PARTICIPANTS: () => `${PREFIX}participants`,
+    PARTICIPANTS: (tournamentId?: number) => !!tournamentId ? `${PREFIX}participants?tournamentId=${tournamentId}` : `${PREFIX}participants`,
 
     REFRESH_USER: () => `${PREFIX}refreshUser`,
 
@@ -24,9 +24,9 @@ export const ENDPOINTS = {
         return `${PREFIX}myTournaments${queryParams}`;
     },
 
-    TOURNAMENTS: (tournamentId?: number | string, status?: number | string) => {
+    TOURNAMENTS: (tournamentId?: number | string, status: number | string = 0) => {
         let queryParams: string = '';
-        status && (queryParams = `?status=${status}`);
+        status >= 0 && (queryParams = `?status=${status}`);
         return PREFIX + (!!tournamentId ? `tournaments/${tournamentId}` : 'tournaments') + queryParams;
     }
 

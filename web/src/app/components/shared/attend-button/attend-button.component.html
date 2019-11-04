@@ -1,5 +1,30 @@
 <div class="attend-button-container" fxLayout="column" fxLayoutAlign="start center">
-    <button [ngClass]="{'open': !tournament.attended, 'attended': tournament.attended}"
-            mat-button mat-raised-button (click)="attendDialog()">Katıl</button>
-    <p>{{tournament.participantCount - tournament.currentParticipants}} yer kaldı</p>
+    <button
+      [ngClass]="{
+            'active': tournament.status === tournamentStatus.ACTIVE,
+            'attended': tournament.attended,
+            'cancelled' : !tournament.attended && tournament.status === tournamentStatus.CANCEL,
+            'close': tournament.status === tournamentStatus.CLOSE,
+            'open': !tournament.attended && tournament.status === tournamentStatus.OPEN,
+            'restricted': user.id === tournament.holder.id
+            }"
+            mat-button mat-raised-button (click)="attendLeaveDialog(tournament.attended)"
+
+      [disabled]="
+            user.id === tournament.holder.id ||
+            tournament.status === tournamentStatus.ACTIVE ||
+            tournament.status === tournamentStatus.CANCEL ||
+            tournament.status === tournamentStatus.CLOSE
+      ">
+      {{
+            user.id !== tournament.holder.id ? (tournament.status === tournamentStatus.ACTIVE ? 'Oynanan Turnuva' : '' ||
+            tournament.attended ? 'Katıldın' : '' ||
+            !tournament.attended && tournament.status === tournamentStatus.CANCEL  ? 'İptal Edildi' : '' ||
+            tournament.status === tournamentStatus.CLOSE ? 'Bitmiş Tunuva' : '' ||
+            !tournament.attended && tournament.status === tournamentStatus.OPEN ? 'Katıl' : '') : 'Turnuva Sahibi'
+      }}
+    </button>
+    <p *ngIf="tournament.status !== tournamentStatus.CANCEL && tournament.status !== tournamentStatus.CLOSE">
+        {{tournament.participantCount - tournament.currentParticipants || tournament.participantCount}} yer kaldı
+    </p>
 </div>

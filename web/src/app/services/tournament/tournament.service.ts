@@ -20,7 +20,7 @@ export class TournamentService {
         return UtilityService.pipeHttpResponse(this.http.post<IHttpResponse>(ENDPOINTS.TOURNAMENTS(), body));
     }
 
-    search(status?: number | string): Promise<ErrorResponse | IHttpResponse> {
+    search(status: number | string = 0): Promise<ErrorResponse | IHttpResponse> {
         return UtilityService.pipeHttpResponse(this.http.get<IHttpResponse>(ENDPOINTS.TOURNAMENTS(null, status)));
     }
 
