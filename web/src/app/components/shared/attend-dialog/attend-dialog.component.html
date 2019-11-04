@@ -2,8 +2,10 @@
     <p>Turnuvaya Katılım Ücretini Ödemeyi Nasıl Yapacaksın?</p>
 </div>
 <mat-dialog-content fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="space-between center" fxLayoutGap="8px">
-    <button mat-button mat-flat-button mat-raised-button color="primary" [disabled]="!user.budget">Hesabımdan: {{user.budget}} ₺</button>
-    <button mat-button mat-flat-button mat-raised-button color="primary" [disabled]="!user.ticket">Bilet Kullanarak: {{user.ticket}} adet</button>
+    <button mat-button mat-flat-button mat-raised-button color="primary" [disabled]="!user.budget"
+            (click)="attend('MONEY')">Hesabımdan: {{user.budget}} ₺</button>
+    <button mat-button mat-flat-button mat-raised-button color="primary" [disabled]="!user.ticket"
+            (click)="attend('TICKET')">Bilet Kullanarak: {{user.ticket}} adet</button>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
     <button mat-button mat-dialog-close class="confirm-dialog-btn reject">Vazgeç</button>

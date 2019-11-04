@@ -1,4 +1,9 @@
 export const TYPES = {
+    PAYMENT: {
+        'MONEY': 'money',
+        'TICKET': 'ticket'
+    },
+
     TOURNAMENT_TYPE: {
         'knock_out': 'Eleme',
         'group': 'Grup',

@@ -10,6 +10,8 @@ export const ENDPOINTS = {
 
     LOGIN: () => `${PREFIX}login`,
 
+    PARTICIPANTS: () => `${PREFIX}participants`,
+
     REFRESH_USER: () => `${PREFIX}refreshUser`,
 
     REGISTER: () => `${PREFIX}register`,
