@@ -1,0 +1,26 @@
+.attend-button-container {
+
+    .mat-button {
+        line-height: 28px;
+        font-size: 13px;
+
+        &.open {
+            background-color: green !important;
+        }
+
+        &.attended {
+            background-color: gold !important;
+            color: #303030;
+        }
+
+        &.restricted {
+            background-color: #555555 !important;
+        }
+    }
+
+    p {
+        margin: 4px 0 8px 0;
+        color: rgba(255,255,255,.7);
+        font-size: 12px;
+    }
+}

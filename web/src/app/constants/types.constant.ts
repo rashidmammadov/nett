@@ -6,7 +6,10 @@ export const TYPES = {
     },
 
     TOURNAMENT_STATUS: {
-
+        'ACTIVE': 1,
+        'CANCEL': 3,
+        'CLOSE': 0,
+        'OPEN': 2
     },
 
     USER_TYPE: {

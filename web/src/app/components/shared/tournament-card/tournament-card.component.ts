@@ -17,4 +17,5 @@ export class TournamentCardComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges): void {
         // console.log(changes.data.currentValue);
     }
+
 }

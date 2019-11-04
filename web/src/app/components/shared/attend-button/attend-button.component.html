@@ -1,0 +1,5 @@
+<div class="attend-button-container" fxLayout="column" fxLayoutAlign="start center">
+    <button [ngClass]="{'open': !tournament.attended, 'attended': tournament.attended}"
+            mat-button mat-raised-button (click)="attendDialog()">Katıl</button>
+    <p>{{tournament.participantCount - tournament.currentParticipants}} yer kaldı</p>
+</div>

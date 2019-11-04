@@ -5,6 +5,7 @@ import { UtilityService } from '../../services/utility/utility.service';
 import { IHttpResponse } from '../../interfaces/i-http-response';
 import { TournamentType } from '../../interfaces/tournament-type';
 import { loaded, loading } from '../../store/actions/progress.action';
+import { TYPES } from '../../constants/types.constant';
 
 @Component({
   selector: 'app-search',
@@ -22,7 +23,7 @@ export class SearchComponent implements OnInit {
 
     private fetchSearchResult = async () => {
         this.progress.dispatch(loading());
-        const result = await this.tournamentService.search(2);
+        const result = await this.tournamentService.search(TYPES.TOURNAMENT_STATUS.OPEN);
         UtilityService.handleResponseFromService(result, (response: IHttpResponse) => {
             this.searchResult = response.data;
         });

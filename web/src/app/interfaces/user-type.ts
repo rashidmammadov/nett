@@ -1,6 +1,7 @@
 export interface UserType {
     address?: string;
     birthday?: string | number;
+    budget?: number | string;
     city: string;
     district: string;
     email: string;
@@ -12,6 +13,7 @@ export interface UserType {
     sex?: string;
     state: string | number;
     surname?: string;
+    ticket?: string | number;
     type: string;
     username: string;
 }

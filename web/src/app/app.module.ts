@@ -29,6 +29,8 @@ import { SetTournamentComponent } from './components/set-tournament/set-tourname
 import { TournamentCardComponent } from './components/shared/tournament-card/tournament-card.component';
 
 import { DatePickerIntl } from './models/DatePickerIntl';
+import { AttendDialogComponent } from './components/shared/attend-dialog/attend-dialog.component';
+import { AttendButtonComponent } from './components/shared/attend-button/attend-button.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +42,9 @@ import { DatePickerIntl } from './models/DatePickerIntl';
     ApplicationComponent,
     SearchComponent,
     SetTournamentComponent,
-    TournamentCardComponent
+    TournamentCardComponent,
+    AttendDialogComponent,
+    AttendButtonComponent
   ],
   imports: [
     BrowserModule,
@@ -55,6 +59,7 @@ import { DatePickerIntl } from './models/DatePickerIntl';
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
   ],
+  entryComponents: [AttendDialogComponent],
   providers: [CookieService,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
     { provide: OWL_DATE_TIME_LOCALE, useValue: 'tr'},
