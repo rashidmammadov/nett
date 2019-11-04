@@ -5,10 +5,10 @@ import { first } from 'rxjs/operators';
 import { AttendDialogComponent } from '../attend-dialog/attend-dialog.component';
 import { TournamentType } from '../../../interfaces/tournament-type';
 import { UserType } from '../../../interfaces/user-type';
-import {ParticipantService} from "../../../services/participant/participant.service";
-import {loaded, loading} from "../../../store/actions/progress.action";
-import {UtilityService} from "../../../services/utility/utility.service";
-import {IHttpResponse} from "../../../interfaces/i-http-response";
+import { ParticipantService } from '../../../services/participant/participant.service';
+import { loaded, loading } from '../../../store/actions/progress.action';
+import { UtilityService } from '../../../services/utility/utility.service';
+import { IHttpResponse } from '../../../interfaces/i-http-response';
 
 @Component({
   selector: 'app-attend-button',
