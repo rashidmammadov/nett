@@ -1,6 +1,6 @@
 import { GameType } from './game-type';
 import { UserType } from './user-type';
-import {ParticipantType} from "./participant-type";
+import { ParticipantType } from './participant-type';
 
 export interface TournamentType {
     tournamentId?: number | string;
