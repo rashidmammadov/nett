@@ -14,6 +14,9 @@ app-application { height: 100%; }
 .mat-form-field-appearance-outline .mat-form-field-prefix, .mat-form-field-appearance-outline .mat-form-field-suffix { top: 0 !important; }
 .mat-progress-bar-buffer { background-color: #f9f9f9; }
 .mat-progress-bar-fill::after { background-color: $mainColor; }
+.mat-progress-spinner.small { height: 32px !important; width: 32px !important;
+  svg { height: 32px !important; width: 32px !important; }
+}
 .max-height { height: 100%; }
 .overflow { overflow: auto; }
 

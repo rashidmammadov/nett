@@ -1,5 +1,5 @@
 <div class="attend-button-container" fxLayout="column" fxLayoutAlign="start center">
-    <button
+    <button *ngIf="!loading"
       [ngClass]="{
             'active': tournament.status === tournamentStatus.ACTIVE,
             'attended': tournament.attended,
@@ -24,7 +24,8 @@
             !tournament.attended && tournament.status === tournamentStatus.OPEN ? 'Katıl' : '') : 'Turnuva Sahibi'
       }}
     </button>
-    <p *ngIf="tournament.status !== tournamentStatus.CANCEL && tournament.status !== tournamentStatus.CLOSE">
+    <p *ngIf="tournament.status !== tournamentStatus.CANCEL && tournament.status !== tournamentStatus.CLOSE && !loading">
         {{tournament.participantCount - tournament.currentParticipants || tournament.participantCount}} yer kaldı
     </p>
+    <mat-spinner *ngIf="loading" class="small"></mat-spinner>
 </div>

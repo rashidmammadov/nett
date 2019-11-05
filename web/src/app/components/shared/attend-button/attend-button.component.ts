@@ -23,6 +23,7 @@ export class AttendButtonComponent implements OnInit {
     @Input() tournament: TournamentType;
     user: UserType;
     tournamentStatus = TYPES.TOURNAMENT_STATUS;
+    loading: boolean = false;
 
     constructor(private participantService: ParticipantService, private progress: Store<{progress: boolean}>,
                 private dialog: MatDialog, private store: Store<{user: UserType}>) {
@@ -53,16 +54,20 @@ export class AttendButtonComponent implements OnInit {
 
     private attendTournament = async (params) => {
         this.progress.dispatch(loading());
+        this.loading = true;
         const result = await this.participantService.attend(params);
         this.setUpdatedData(result, true);
         this.progress.dispatch(loaded());
+        this.loading = false;
     };
 
     private leaveTournament = async (tournamentId: number) => {
         this.progress.dispatch(loading());
+        this.loading = true;
         const result = await this.participantService.leave(tournamentId);
         this.setUpdatedData(result, false);
         this.progress.dispatch(loaded());
+        this.loading = false;
     };
 
     private setUpdatedData(result, attended) {
