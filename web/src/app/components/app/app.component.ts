@@ -19,7 +19,7 @@ export class AppComponent {
     }
 
     private setSvgIcons() {
-        const svgArray: string[] = ['credit-card', 'grid', 'hash', 'home', 'plus-square', 'search', 'user'];
+        const svgArray: string[] = ['credit-card', 'grid', 'hash', 'home', 'plus-square', 'search', 'tag', 'user'];
         let path: string = 'assets/icons/';
         svgArray.forEach((svg: string) => {
             this.matIconRegistry.addSvgIcon(svg, this.domSanitizer.bypassSecurityTrustResourceUrl(path + svg + '.svg'));

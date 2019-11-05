@@ -10,8 +10,8 @@
     <img *ngIf="data.game" mat-card-image src="{{data.game.gameImage}}" alt="{{data.game.gameName}}">
     <mat-card-content>
         <div fxLayout="row" fxLayoutAlign="space-between center" fxFlex="100%">
-            <div *ngIf="data.game" class="info" fxLayout="row" fxLayoutAlign="start center" fxFlex="100%">
-                <mat-icon svgIcon="hash"></mat-icon><p>{{data.game.gameName}}</p>
+            <div *ngIf="data.game" class="info" fxLayout="row" fxLayoutAlign="start center" fxFlex="100%" fxLayoutGap="8px">
+                <mat-icon svgIcon="tag"></mat-icon><p>{{data.game.gameName}}</p>
             </div>
             <div fxLayout="row" fxFlex="100%" fxLayoutAlign="space-between center" >
                 <div class="info" fxLayout="column" fxLayoutAlign="center center">
