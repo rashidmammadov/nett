@@ -3,14 +3,15 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { IHttpResponse } from '../interfaces/i-http-response';
 import { ErrorResponse } from '../models/error-response';
-import { GameService } from '../services/game/game.service';
+import { TournamentService } from '../services/tournament/tournament.service';
 
 @Injectable()
-export class GameResolver implements Resolve<any> {
+export class TournamentResolver implements Resolve<any> {
 
-    constructor(private gameService: GameService) { }
+    constructor(private tournamentService: TournamentService) { }
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ErrorResponse | IHttpResponse> | Promise<any> | any {
-        return this.gameService.get();
+        const tournamentId: number = route.params.tournamentId;
+        return this.tournamentService.get(Number(tournamentId));
     }
 }

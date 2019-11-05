@@ -1,4 +1,4 @@
-<div class="attend-button-container" fxLayout="column" fxLayoutAlign="start center">
+<div *ngIf="user" class="attend-button-container" fxLayout="column" fxLayoutAlign="start center">
     <button *ngIf="!loading"
       [ngClass]="{
             'active': tournament.status === tournamentStatus.ACTIVE,
@@ -6,18 +6,19 @@
             'cancelled' : !tournament.attended && tournament.status === tournamentStatus.CANCEL,
             'close': tournament.status === tournamentStatus.CLOSE,
             'open': !tournament.attended && tournament.status === tournamentStatus.OPEN,
-            'restricted': user.id === tournament.holder.id
+            'restricted': !tournament.holder || user.id === tournament.holder.id
             }"
             mat-button mat-raised-button (click)="attendLeaveDialog(tournament.attended)"
 
       [disabled]="
-            user.id === tournament.holder.id ||
+            !tournament.holder || user.id === tournament.holder.id ||
             tournament.status === tournamentStatus.ACTIVE ||
             tournament.status === tournamentStatus.CANCEL ||
             tournament.status === tournamentStatus.CLOSE
       ">
       {{
-            user.id !== tournament.holder.id ? (tournament.status === tournamentStatus.ACTIVE ? 'Oynanan Turnuva' : '' ||
+            tournament.holder && user.id !== tournament.holder.id ?
+            (tournament.status === tournamentStatus.ACTIVE ? 'Oynanan Turnuva' : '' ||
             tournament.attended ? 'Katıldın' : '' ||
             !tournament.attended && tournament.status === tournamentStatus.CANCEL  ? 'İptal Edildi' : '' ||
             tournament.status === tournamentStatus.CLOSE ? 'Bitmiş Tunuva' : '' ||

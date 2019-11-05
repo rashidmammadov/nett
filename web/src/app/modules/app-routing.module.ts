@@ -1,14 +1,18 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+
 import { ActivateComponent } from '../components/activate/activate.component';
+import { ApplicationComponent } from '../components/application/application.component';
+import { AuthGuard } from '../guards/auth.guard';
 import { HomeComponent } from '../components/home/home.component';
 import { LoginComponent } from '../components/login/login.component';
 import { RegisterComponent } from '../components/register/register.component';
-import { AuthGuard } from '../guards/auth.guard';
-import { ApplicationComponent } from '../components/application/application.component';
 import { SearchComponent } from '../components/search/search.component';
 import { SetTournamentComponent } from '../components/set-tournament/set-tournament.component';
+import { TournamentComponent } from '../components/tournament/tournament.component';
+
 import { GameResolver } from '../resolvers/game.resolver';
+import { TournamentResolver } from '../resolvers/tournament.resolver';
 
 const routes: Routes = [
   {
@@ -51,6 +55,11 @@ const routes: Routes = [
               resolve: {games: GameResolver}
           },
           {
+              path: 'tournament/:tournamentId',
+              component: TournamentComponent,
+              resolve: {tournament: TournamentResolver}
+          },
+          {
               path: '',
               pathMatch: 'full',
               redirectTo: 'home'
@@ -60,8 +69,8 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
-  providers: [GameResolver]
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule],
+    providers: [GameResolver, TournamentResolver]
 })
 export class AppRoutingModule { }

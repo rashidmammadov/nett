@@ -32,6 +32,7 @@ import { progressReducer } from './store/reducers/progress.reducer';
 
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { DatePickerIntl } from './models/DatePickerIntl';
+import { TournamentComponent } from './components/tournament/tournament.component';
 
 @NgModule({
     declarations: [
@@ -46,7 +47,8 @@ import { DatePickerIntl } from './models/DatePickerIntl';
         TournamentCardComponent,
         AttendDialogComponent,
         AttendButtonComponent,
-        LeaveDialogComponent
+        LeaveDialogComponent,
+        TournamentComponent
     ],
     imports: [
         BrowserModule,
