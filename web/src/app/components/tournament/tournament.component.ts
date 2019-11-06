@@ -4,6 +4,7 @@ import { first } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { loaded } from '../../store/actions/progress.action';
 import { TournamentType } from '../../interfaces/tournament-type';
+import { TYPES } from '../../constants/types.constant';
 
 @Component({
   selector: 'app-tournament',
@@ -12,6 +13,8 @@ import { TournamentType } from '../../interfaces/tournament-type';
 })
 export class TournamentComponent implements OnInit {
     private _tournament: TournamentType;
+
+    tournamentType = TYPES.TOURNAMENT_TYPE;
 
     constructor(private activatedRoute: ActivatedRoute, private progress: Store<{progress: boolean}>) {
         this.getTournamentData();

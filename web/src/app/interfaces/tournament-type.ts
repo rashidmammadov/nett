@@ -18,5 +18,6 @@ export interface TournamentType {
     },
     game: GameType,
     holder: UserType,
-    participants?: ParticipantType[]
+    participants?: ParticipantType[],
+    fixture: any;
 }

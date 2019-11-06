@@ -25,7 +25,8 @@
             !tournament.attended && tournament.status === tournamentStatus.OPEN ? 'Katıl' : '') : 'Turnuva Sahibi'
       }}
     </button>
-    <p *ngIf="tournament.status !== tournamentStatus.CANCEL && tournament.status !== tournamentStatus.CLOSE && !loading">
+    <p *ngIf="!hideParticipantInfo && tournament.status !== tournamentStatus.CANCEL &&
+        tournament.status !== tournamentStatus.CLOSE && !loading">
         {{tournament.participantCount - tournament.currentParticipants || tournament.participantCount}} yer kaldı
     </p>
     <mat-spinner *ngIf="loading" class="small"></mat-spinner>

@@ -7,8 +7,8 @@
         </div>
         <app-attend-button [tournament]="data"></app-attend-button>
     </mat-card-header>
-    <img class="image" *ngIf="data.game" mat-card-image src="{{data.game.gameImage}}" alt="{{data.game.gameName}}"
-         [routerLink]="data.tournamentId ? ['/app/tournament', data.tournamentId] : null">
+<!--    <img class="image" *ngIf="data.game" mat-card-image src="{{data.game.gameImage}}" alt="{{data.game.gameName}}"-->
+<!--         [routerLink]="data.tournamentId ? ['/app/tournament', data.tournamentId] : null">-->
     <mat-card-content class="content" [routerLink]="data.tournamentId ? ['/app/tournament', data.tournamentId] : null">
         <div fxLayout="row" fxLayoutAlign="space-between center" fxFlex="100%">
             <div *ngIf="data.game" class="info" fxLayout="row" fxLayoutAlign="start center" fxFlex="100%" fxLayoutGap="8px">
@@ -22,7 +22,7 @@
                     <mat-hint>Saat</mat-hint> <p>{{data.time}}</p>
                 </div>
                 <div class="info" fxLayout="column" fxLayoutAlign="center center">
-                    <mat-hint>Ücret</mat-hint> <p>15 TL</p>
+                    <mat-hint>Ücret</mat-hint> <p>15 ₺</p>
                 </div>
                 <div class="info" fxLayout="column" fxLayoutAlign="center center">
                     <mat-hint>Katılımcı</mat-hint> <p>{{data.participantCount}}</p>

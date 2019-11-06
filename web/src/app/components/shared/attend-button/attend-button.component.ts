@@ -21,6 +21,7 @@ import {LeaveDialogComponent} from "../leave-dialog/leave-dialog.component";
 })
 export class AttendButtonComponent implements OnInit {
     @Input() tournament: TournamentType;
+    @Input() hideParticipantInfo: boolean = false;
     user: UserType;
     tournamentStatus = TYPES.TOURNAMENT_STATUS;
     loading: boolean = false;
