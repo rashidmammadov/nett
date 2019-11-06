@@ -66,8 +66,9 @@
                         <img mat-list-avatar [src]="participant.picture">
                         <p mat-line> {{participant.username}} </p>
                         <h4 mat-line>{{participant.name}} {{participant.surname}}</h4>
+<!--                        <h4 mat-line *ngIf="participant.referenceCode">{{participant.referenceCode}}</h4>-->
                         <h4 *ngIf="participant.tournamentRanking">#{{participant.tournamentRanking}}</h4>
-                        <h4 *ngIf="participant.referenceCode">{{participant.referenceCode}}</h4>
+                        <mat-divider></mat-divider>
                     </mat-list-item>
                 </mat-list>
             </mat-card-content>
@@ -76,17 +77,18 @@
 
     <div fxFlex>
         <h3>Fikstür</h3>
-        <mat-card class="mat-elevation-z4">
-            <mat-card-content>
+        <mat-card class="mat-elevation-z4 fixture-card">
+            <mat-card-content *ngIf="tournament.fixture">
                 <div *ngFor="let draw of tournament.fixture.draws">
-                  {{draw.drawTitle}}
-                  <mat-list>
-                      <mat-list-item *ngFor="let match of draw.matches">
-                          <p *ngIf="match.home" mat-line>{{match.home.username}}</p>
-                          <h2 *ngIf="match.home && match.away">{{match.home.point}}:{{match.away.point}}</h2>
-                          <p *ngIf="match.away">{{match.away.username}}</p>
-                      </mat-list-item>
-                  </mat-list>
+                  <div class="fixture-title">{{draw.drawTitle}}</div>
+                  <div *ngFor="let match of draw.matches" fxLayout="row" fxLayoutAlign="space-between center">
+                      <p fxFlex>{{match.home && match.home.username ? match.home.username : '---'}}</p>
+                      <div class="match-result">
+                          <p>{{match.home && match.home.point !== null && match.away && match.away.point !== null ?
+                              match.home.point + ' : ' + match.away.point : 'vs'}}</p>
+                      </div>
+                      <p fxFlex align="right">{{match.away && match.away.username ? match.away.username : '---'}}</p>
+                  </div>
                 </div>
             </mat-card-content>
         </mat-card>

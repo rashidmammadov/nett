@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiPrefix: 'http://localhost:8080/api/v1/'
+  apiPrefix: 'http://nett.ozelden.com/api/v1/'
 };

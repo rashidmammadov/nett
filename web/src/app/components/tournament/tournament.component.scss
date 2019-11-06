@@ -9,4 +9,23 @@
     h4 {
         color: #909090;
     }
+
+    .mat-list-avatar {
+        background-color: #d3d3d3;
+    }
+}
+
+.fixture-card {
+    .match-result {
+        background-color: #f0f0f0;
+        color: #303030;
+        padding: 4px 8px;
+        border-radius: 4px;
+
+        p {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0;
+        }
+    }
 }

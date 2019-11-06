@@ -4,6 +4,7 @@ export interface ParticipantType {
     paymentAmount?: number | string;
     paymentType?: string;
     picture?: string;
+    point?: number | string;
     referenceCode?: string;
     surname: string;
     tournamentRanking?: number | string;

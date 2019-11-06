@@ -1,6 +1,7 @@
 import { GameType } from './game-type';
 import { UserType } from './user-type';
 import { ParticipantType } from './participant-type';
+import {FixtureType} from "./fixture-type";
 
 export interface TournamentType {
     tournamentId?: number | string;
@@ -19,5 +20,5 @@ export interface TournamentType {
     game: GameType,
     holder: UserType,
     participants?: ParticipantType[],
-    fixture: any;
+    fixture?: FixtureType;
 }
