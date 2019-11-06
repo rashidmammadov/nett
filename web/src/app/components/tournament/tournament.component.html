@@ -63,9 +63,11 @@
             <mat-card-content>
                 <mat-list>
                     <mat-list-item *ngFor="let participant of tournament.participants">
-                        <img mat-card-avatar [src]="participant.picture">
-                        <h4 mat-line>{{participant.name}} {{participant.surname}}</h4>
+                        <img mat-list-avatar [src]="participant.picture">
                         <p mat-line> {{participant.username}} </p>
+                        <h4 mat-line>{{participant.name}} {{participant.surname}}</h4>
+                        <h4 *ngIf="participant.tournamentRanking">#{{participant.tournamentRanking}}</h4>
+                        <h4 *ngIf="participant.referenceCode">{{participant.referenceCode}}</h4>
                     </mat-list-item>
                 </mat-list>
             </mat-card-content>
@@ -78,6 +80,13 @@
             <mat-card-content>
                 <div *ngFor="let draw of tournament.fixture.draws">
                   {{draw.drawTitle}}
+                  <mat-list>
+                      <mat-list-item *ngFor="let match of draw.matches">
+                          <p *ngIf="match.home" mat-line>{{match.home.username}}</p>
+                          <h2 *ngIf="match.home && match.away">{{match.home.point}}:{{match.away.point}}</h2>
+                          <p *ngIf="match.away">{{match.away.username}}</p>
+                      </mat-list-item>
+                  </mat-list>
                 </div>
             </mat-card-content>
         </mat-card>
