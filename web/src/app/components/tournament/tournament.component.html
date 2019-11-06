@@ -1,7 +1,7 @@
-<div class="container tournament-info-container" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="8px">
+<div class="container tournament-info-container" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px">
     <div fxFlex>
         <h3>Genel Bilgiler</h3>
-        <mat-card class="mat-elevation-z4">
+        <mat-card class="mat-elevation-z4 overflow-card">
             <img class="image" *ngIf="tournament.game" mat-card-image src="{{tournament.game.gameImage}}"
                  alt="{{tournament.game.gameName}}">
             <mat-card-content>
@@ -59,7 +59,7 @@
 
     <div fxFlex>
         <h3>Katılımcılar</h3>
-        <mat-card class="mat-elevation-z4">
+        <mat-card class="mat-elevation-z4 participants-card overflow-card">
             <mat-card-content>
                 <mat-list>
                     <mat-list-item *ngFor="let participant of tournament.participants">
@@ -77,18 +77,24 @@
 
     <div fxFlex>
         <h3>Fikstür</h3>
-        <mat-card class="mat-elevation-z4 fixture-card">
+        <mat-card class="mat-elevation-z4 fixture-card overflow-card">
             <mat-card-content *ngIf="tournament.fixture">
                 <div *ngFor="let draw of tournament.fixture.draws">
-                  <div class="fixture-title">{{draw.drawTitle}}</div>
-                  <div *ngFor="let match of draw.matches" fxLayout="row" fxLayoutAlign="space-between center">
-                      <p fxFlex>{{match.home && match.home.username ? match.home.username : '---'}}</p>
-                      <div class="match-result">
-                          <p>{{match.home && match.home.point !== null && match.away && match.away.point !== null ?
-                              match.home.point + ' : ' + match.away.point : 'vs'}}</p>
-                      </div>
-                      <p fxFlex align="right">{{match.away && match.away.username ? match.away.username : '---'}}</p>
-                  </div>
+                    <div class="fixture-title" fxLayout="row" fxLayoutAlign="space-between center">
+                        <p>{{draw.drawTitle}} turu</p>
+                        <p>{{draw.matches[0].date}}</p>
+                    </div>
+                    <div class="fixture-tour" *ngFor="let match of draw.matches; let end = last">
+                        <div class="fixture-match" *ngIf="match.home && match.away" fxLayout="row" fxLayoutAlign="space-between center">
+                            <p fxFlex>{{match.home.username ? match.home.username : '---'}}</p>
+                            <button mat-button class="match-result">
+                                <p>{{match.home.point !== null && match.away.point !== null ?
+                                    match.home.point + ' : ' + match.away.point : 'vs'}}</p>
+                            </button>
+                            <p fxFlex align="right">{{match.away.username ? match.away.username : '---'}}</p>
+                        </div>
+                        <mat-divider *ngIf="match.home && match.away && !end"></mat-divider>
+                    </div>
                 </div>
             </mat-card-content>
         </mat-card>

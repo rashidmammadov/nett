@@ -3,7 +3,7 @@
         color: #f9f9f9;
         font-size: 18px;
         font-weight: 100;
-        margin: 8px 0;
+        margin: 8px;
     }
 
     h4 {
@@ -15,12 +15,31 @@
     }
 }
 
+.participants-card {
+
+}
+
 .fixture-card {
+    padding: 0;
+    .fixture-title {
+        background-color: #707070;
+        padding: 8px 16px;
+        color: #fff;
+
+        p {
+            margin: 4px 0;
+            font-weight: 100;
+        }
+    }
+    .fixture-match {
+        padding: 4px 16px;
+    }
     .match-result {
         background-color: #f0f0f0;
         color: #303030;
         padding: 4px 8px;
         border-radius: 4px;
+        line-height: inherit;
 
         p {
             font-size: 16px;
