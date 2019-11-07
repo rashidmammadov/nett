@@ -23,6 +23,10 @@ export class UserService {
         return UtilityService.pipeHttpResponse(this.http.post<IHttpResponse>(ENDPOINTS.LOGIN(), body));
     }
 
+    logout(): Promise<ErrorResponse | IHttpResponse> {
+        return UtilityService.pipeHttpResponse(this.http.post<IHttpResponse>(ENDPOINTS.LOGOUT(), {}));
+    }
+
     refreshUser(): Promise<ErrorResponse | IHttpResponse> {
         return UtilityService.pipeHttpResponse(this.http.get<IHttpResponse>(ENDPOINTS.REFRESH_USER()))
     }

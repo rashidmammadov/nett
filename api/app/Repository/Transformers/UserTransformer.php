@@ -23,7 +23,7 @@ class UserTransformer extends Transformer {
             BIRTHDAY => $user[BIRTHDAY],
             EMAIL => $user[EMAIL],
             SEX => $user[SEX],
-            BUDGET => $user[BUDGET],
+            BUDGET => number_format((float)$user[BUDGET], 2, '.', ''),
             TICKET => $user[TICKET],
             REMEMBER_TOKEN => $user[REMEMBER_TOKEN],
             CITY => $user[CITY],

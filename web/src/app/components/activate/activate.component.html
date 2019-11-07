@@ -1,66 +1,69 @@
-<div>
-  <mat-card fxFlex="30%" fxFlex.lt-md="100%" fxFlexOffset="35%" fxFlexOffset.lt-md="0">
-    <mat-card-header fxLayout="column" fxLayoutAlign="center center">
-      <img *ngIf="user" mat-card-image src="{{user.picture}}" alt="{{user.username}}">
-      <p *ngIf="user">{{user.username}}</p>
-    </mat-card-header>
-    <mat-card-content>
-      <form ngNoForm fxLayout="column" [formGroup]="activateForm">
-        <mat-form-field fxFlex="100%" appearance="outline">
-          <mat-label>İsim</mat-label>
-          <input matInput placeholder="İsim" formControlName="name">
-          <mat-error *ngIf="activateForm.controls.name.hasError('required')">
-            İsim alanı boş bırakılamaz.
-          </mat-error>
-        </mat-form-field>
+<div class="container">
+    <div fxFlex="30%" fxFlex.lt-md="100%" fxFlexOffset="35%" fxFlexOffset.lt-md="0">
+        <mat-card class="mat-elevation-z4">
+            <mat-card-header fxLayout="column" fxLayoutAlign="center center">
+                <img *ngIf="user" mat-card-image src="{{user.picture}}" alt="{{user.username}}">
+                <p *ngIf="user">{{user.username}}</p>
+            </mat-card-header>
+            <mat-card-content>
+                <form ngNoForm fxLayout="column" [formGroup]="activateForm">
+                    <mat-form-field fxFlex="100%" appearance="outline">
+                        <mat-label>İsim</mat-label>
+                        <input matInput placeholder="İsim" formControlName="name">
+                        <mat-error *ngIf="activateForm.controls.name.hasError('required')">
+                            İsim alanı boş bırakılamaz.
+                        </mat-error>
+                    </mat-form-field>
 
-        <mat-form-field fxFlex="100%" appearance="outline">
-          <mat-label>Soyisim</mat-label>
-          <input matInput placeholder="Soyisim" formControlName="surname">
-          <mat-error *ngIf="activateForm.controls.surname.hasError('required')">
-            Soyisim alanı boş bırakılamaz.
-          </mat-error>
-        </mat-form-field>
+                    <mat-form-field fxFlex="100%" appearance="outline">
+                        <mat-label>Soyisim</mat-label>
+                        <input matInput placeholder="Soyisim" formControlName="surname">
+                        <mat-error *ngIf="activateForm.controls.surname.hasError('required')">
+                            Soyisim alanı boş bırakılamaz.
+                        </mat-error>
+                    </mat-form-field>
 
-        <mat-form-field fxFlex="100%" appearance="outline">
-          <mat-label>Telefon</mat-label>
-          <span matPrefix>+90 &nbsp;</span>
-          <input type="tel" matInput placeholder="Telefon" maxlength="10" formControlName="phone">
-          <mat-hint>Numarayı başında 0 olmadan (5*********) giriniz</mat-hint>
-          <mat-error *ngIf="activateForm.controls.phone.hasError('required')">
-            Telefon alanı boş bırakılamaz.
-          </mat-error>
-        </mat-form-field>
+                    <mat-form-field fxFlex="100%" appearance="outline">
+                        <mat-label>Telefon</mat-label>
+                        <span matPrefix>+90 &nbsp;</span>
+                        <input type="tel" matInput placeholder="Telefon" maxlength="10" formControlName="phone">
+                        <mat-hint>Numarayı başında 0 olmadan (5*********) giriniz</mat-hint>
+                        <mat-error *ngIf="activateForm.controls.phone.hasError('required')">
+                            Telefon alanı boş bırakılamaz.
+                        </mat-error>
+                    </mat-form-field>
 
-        <div style="margin-top: 8px" fxLayout="row" fxFlex="100%" fxLayoutGap="4px">
-          <mat-form-field fxFlex="32%" appearance="outline">
-            <mat-label>Gün</mat-label>
-            <mat-select [(value)]="selectedDay" (valueChange)="setBirthday()">
-              <mat-option *ngFor="let day of days" [value]="day">
-                {{day}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field fxFlex="33%" appearance="outline">
-            <mat-label>Ay</mat-label>
-            <mat-select [(value)]="selectedMonth" (valueChange)="setBirthday()">
-              <mat-option *ngFor="let month of months" [value]="month">
-                {{month}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field fxFlex="33%" appearance="outline">
-            <mat-label>Yıl</mat-label>
-            <mat-select [(value)]="selectedYear" (valueChange)="setBirthday()">
-              <mat-option *ngFor="let year of years" [value]="year">
-                {{year}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
+                    <div style="margin-top: 8px" fxLayout="row" fxFlex="100%" fxLayoutGap="4px">
+                        <mat-form-field fxFlex="32%" appearance="outline">
+                            <mat-label>Gün</mat-label>
+                            <mat-select [(value)]="selectedDay" (valueChange)="setBirthday()">
+                                <mat-option *ngFor="let day of days" [value]="day">
+                                    {{day}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field fxFlex="33%" appearance="outline">
+                            <mat-label>Ay</mat-label>
+                            <mat-select [(value)]="selectedMonth" (valueChange)="setBirthday()">
+                                <mat-option *ngFor="let month of months" [value]="month">
+                                    {{month}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field fxFlex="33%" appearance="outline">
+                            <mat-label>Yıl</mat-label>
+                            <mat-select [(value)]="selectedYear" (valueChange)="setBirthday()">
+                                <mat-option *ngFor="let year of years" [value]="year">
+                                    {{year}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
 
-        <button mat-flat-button color="primary" type="sumbit" mat-button (click)="activate()" [disabled]="!activateForm.valid">Devam Et</button>
-      </form>
-    </mat-card-content>
-  </mat-card>
+                    <button mat-flat-button color="primary" type="sumbit" mat-button (click)="activate()"
+                            [disabled]="!activateForm.valid">Devam Et</button>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </div>
 </div>

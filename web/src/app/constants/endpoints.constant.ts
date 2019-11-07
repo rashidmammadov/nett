@@ -12,6 +12,8 @@ export const ENDPOINTS = {
 
     LOGIN: () => `${PREFIX}login`,
 
+    LOGOUT: () => `${PREFIX}logout`,
+
     PARTICIPANTS: (tournamentId?: number) => !!tournamentId ? `${PREFIX}participants?tournamentId=${tournamentId}` : `${PREFIX}participants`,
 
     REFRESH_USER: () => `${PREFIX}refreshUser`,

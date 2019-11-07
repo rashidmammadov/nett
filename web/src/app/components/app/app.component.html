@@ -3,12 +3,15 @@
 </div>
 <mat-toolbar class="mat-elevation-z4" fxLayout="row" fxLayoutAlign="space-between center">
     <button class="logo" mat-button routerLink="/app">nett</button>
-    <div fxLayout="row" *ngIf="user | async">
-        <button mat-button color="accent" matTooltip="bakiye">
-            {{(user | async).budget}} ₺ | {{(user | async).ticket}} bilet
+    <div fxLayout="row" *ngIf="user">
+        <button *ngIf="user.state" mat-button color="accent" matTooltip="bakiye">
+            {{user.budget}} ₺ | {{user.ticket}} bilet
         </button>
-        <button mat-button fxHide.lt-sm matTooltip="kullanıcı">
-            <mat-icon svgIcon="user"></mat-icon> {{(user | async).username}}
+        <button *ngIf="user.state" mat-button fxHide.lt-sm matTooltip="kullanıcı">
+            <mat-icon svgIcon="user"></mat-icon> {{user.username}}
+        </button>
+        <button mat-icon-button matTooltip="çıkış" (click)="logout()">
+            <mat-icon svgIcon="log-out"></mat-icon>
         </button>
     </div>
 </mat-toolbar>
