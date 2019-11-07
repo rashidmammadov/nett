@@ -6,6 +6,8 @@ export const ENDPOINTS = {
 
     ACTIVATE: () => `${PREFIX}activate`,
 
+    FIXTURE: () => `${PREFIX}fixture`,
+
     GAMES: (id:number = null) => !!id ? `${PREFIX}games/${id}` : `${PREFIX}games`,
 
     LOGIN: () => `${PREFIX}login`,

@@ -87,7 +87,8 @@
                     <div class="fixture-tour" *ngFor="let match of draw.matches; let end = last">
                         <div class="fixture-match" *ngIf="match.home && match.away" fxLayout="row" fxLayoutAlign="space-between center">
                             <p fxFlex>{{match.home.username ? match.home.username : '---'}}</p>
-                            <button mat-button class="match-result">
+                            <button mat-button class="match-result" [disabled]="!match.available" [ngClass]="{'disabled': !match.available}"
+                                    (click)="openSetMatchScoreDialog(match.tourId, match.matchId, match.home, match.away)">
                                 <p>{{match.home.point !== null && match.away.point !== null ?
                                     match.home.point + ' : ' + match.away.point : 'vs'}}</p>
                             </button>

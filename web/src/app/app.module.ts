@@ -20,8 +20,10 @@ import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { SearchComponent } from './components/search/search.component';
+import { SetMatchScoreDialogComponent } from './components/shared/set-match-score-dialog/set-match-score-dialog.component';
 import { SetTournamentComponent } from './components/set-tournament/set-tournament.component';
 import { LeaveDialogComponent } from './components/shared/leave-dialog/leave-dialog.component';
+import { TournamentComponent } from './components/tournament/tournament.component';
 import { TournamentCardComponent } from './components/shared/tournament-card/tournament-card.component';
 
 import { Cookie } from './services/cookie/cookies.service';
@@ -32,7 +34,6 @@ import { progressReducer } from './store/reducers/progress.reducer';
 
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { DatePickerIntl } from './models/DatePickerIntl';
-import { TournamentComponent } from './components/tournament/tournament.component';
 
 @NgModule({
     declarations: [
@@ -48,7 +49,8 @@ import { TournamentComponent } from './components/tournament/tournament.componen
         AttendDialogComponent,
         AttendButtonComponent,
         LeaveDialogComponent,
-        TournamentComponent
+        TournamentComponent,
+        SetMatchScoreDialogComponent
     ],
     imports: [
         BrowserModule,
@@ -63,7 +65,7 @@ import { TournamentComponent } from './components/tournament/tournament.componen
         OwlDateTimeModule,
         OwlNativeDateTimeModule,
     ],
-    entryComponents: [AttendDialogComponent, LeaveDialogComponent],
+    entryComponents: [AttendDialogComponent, LeaveDialogComponent, SetMatchScoreDialogComponent],
     providers: [CookieService,
         { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
         { provide: OWL_DATE_TIME_LOCALE, useValue: 'tr'},

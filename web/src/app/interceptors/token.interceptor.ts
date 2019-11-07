@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Cookie } from "../services/cookie/cookies.service";
+import { Cookie } from '../services/cookie/cookies.service';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -13,7 +13,7 @@ export class TokenInterceptor implements HttpInterceptor {
         if (accessToken) {
             request = request.clone({
                 setHeaders: {
-                  Authorization: `Bearer ${accessToken}`
+                    Authorization: `Bearer ${accessToken}`
                 }
             });
         }

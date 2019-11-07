@@ -41,6 +41,11 @@
         border-radius: 4px;
         line-height: inherit;
 
+        &.disabled {
+            background-color: #707070;
+            cursor: auto;
+        }
+
         p {
             font-size: 16px;
             font-weight: 600;

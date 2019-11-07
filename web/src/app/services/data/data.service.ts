@@ -10,10 +10,10 @@ import { ENDPOINTS } from '../../constants/endpoints.constant';
 })
 export class DataService {
 
-  constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) { }
 
-  getRegions(): Promise<ErrorResponse | IHttpResponse> {
-    return UtilityService.pipeHttpResponse(this.http.get<IHttpResponse>(ENDPOINTS.REGIONS()));
-  }
+    getRegions(): Promise<ErrorResponse | IHttpResponse> {
+        return UtilityService.pipeHttpResponse(this.http.get<IHttpResponse>(ENDPOINTS.REGIONS()));
+    }
 
 }

@@ -1,0 +1,37 @@
+<div align="center">
+    <p>Maç Skoru Girişi</p>
+</div>
+<mat-dialog-content fxLayout="column" fxLayoutAlign="space-between center" fxLayoutGap="8px">
+    <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="space-between center" fxLayoutGap="16px">
+        <div fxLayout="column" fxLayoutAlign="center center" fxFlex>
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                <img mat-card-avatar [src]="data.home.picture">
+                <p>{{data.home.username}}</p>
+            </div>
+            <mat-form-field appearance="outline">
+                <input matInput type="number" min="0" [(ngModel)]="homePoint">
+            </mat-form-field>
+        </div>
+        <div fxLayout="column" fxLayoutAlign="center center" fxFlex>
+            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                <p>{{data.away.username}}</p>
+                <img mat-card-avatar [src]="data.away.picture">
+            </div>
+            <mat-form-field appearance="outline">
+                <input matInput type="number" min="0" [(ngModel)]="awayPoint">
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="score-info" fxLayout="column">
+        <p>* Kullanıcı adı altındaki rakamlara tıklayarak skoru girebilirsin.</p>
+        <p>* Maç sonucu berabere bitemez. (Uzatmalar, Penaltılar vs. ile kazanan belirlenmelidir)</p>
+        <p>* Maç sonucu sadece bir kere girilebilir.</p>
+        <p>* Maça gelmeyen veya kural dışı haraket yapan taraf için teknik yenilgi girebilirsin. (örnek: 3-0, 0-3)</p>
+        <p>* Kazanan taraf bir sonraki turdaki rakipiyle otomatik olarak eşleşecektir.</p>
+        <p>* Sıralama ve Ödüller final maçından sonra katılımcı sayısına bağlı olarak otomatik hesaplanacaktır.</p>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Vazgeç</button>
+    <button mat-button (click)="apply()" mat-flat-button class="mat-primary" [disabled]="homePoint === awayPoint">Onayla</button>
+</mat-dialog-actions>

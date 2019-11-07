@@ -8,16 +8,12 @@ import { ENDPOINTS } from '../../constants/endpoints.constant';
 @Injectable({
   providedIn: 'root'
 })
-export class ParticipantService {
+export class FixtureService {
 
     constructor(private http: HttpClient) { }
 
-    attend(params): Promise<ErrorResponse | IHttpResponse> {
-        return UtilityService.pipeHttpResponse(this.http.post<IHttpResponse>(ENDPOINTS.PARTICIPANTS(), UtilityService.setHttpParams(params)));
-    }
-
-    leave(tournamentId: number): Promise<ErrorResponse | IHttpResponse> {
-        return UtilityService.pipeHttpResponse(this.http.delete<IHttpResponse>(ENDPOINTS.PARTICIPANTS(tournamentId)));
+    setKnockOutMatchScore(params): Promise<ErrorResponse | IHttpResponse> {
+        return UtilityService.pipeHttpResponse(this.http.put<IHttpResponse>(ENDPOINTS.FIXTURE(), UtilityService.setHttpParams(params)));
     }
 
 }
