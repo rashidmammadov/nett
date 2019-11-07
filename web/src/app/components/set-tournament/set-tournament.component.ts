@@ -11,6 +11,7 @@ import { UtilityService } from '../../services/utility/utility.service';
 import { IHttpResponse } from '../../interfaces/i-http-response';
 import { loaded, loading } from '../../store/actions/progress.action';
 import { TYPES } from '../../constants/types.constant';
+import {ToastService} from "../../services/toast/toast.service";
 
 @Component({
   selector: 'app-set-tournament',
@@ -80,6 +81,7 @@ export class SetTournamentComponent implements OnInit {
             this.progress.dispatch(loading());
             const result = await this.tournamentService.add(this.setTournamentFormData());
             UtilityService.handleResponseFromService(result, (response: IHttpResponse) => {
+                ToastService.show(response.message);
                 this.router.navigateByUrl('app/home');
             });
             this.progress.dispatch(loaded());

@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/internal/Observable';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material';
 import { select, Store } from '@ngrx/store';
+import { UserType } from '../../interfaces/user-type';
 
 @Component({
   selector: 'app-root',
@@ -10,20 +11,25 @@ import { select, Store } from '@ngrx/store';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-    progress: Observable<boolean>;
+    progress: boolean;
+    user: Observable<UserType>;
 
     constructor(private domSanitizer: DomSanitizer, public matIconRegistry: MatIconRegistry,
-                private store: Store<{progress: boolean}>) {
-        this.progress = store.pipe(select('progress'));
+                private store: Store<{progress: boolean, user: UserType}>) {
+        this.user = this.store.pipe(select('user'));
+        store.pipe(select('progress')).subscribe(data => {
+            setTimeout(() => this.progress = data, 0);
+        });
         this.setSvgIcons();
     }
 
     private setSvgIcons() {
-        const svgArray: string[] = ['clock', 'credit-card', 'dollar-sign', 'flag', 'grid', 'hash', 'home', 'info',
-          'plus-square', 'search', 'tag', 'user', 'users'];
+        const svgArray: string[] = ['briefcase', 'clock', 'credit-card', 'dollar-sign', 'flag', 'grid', 'hash', 'home',
+          'info', 'plus-square', 'search', 'tag', 'user', 'users'];
         let path: string = 'assets/icons/';
         svgArray.forEach((svg: string) => {
             this.matIconRegistry.addSvgIcon(svg, this.domSanitizer.bypassSecurityTrustResourceUrl(path + svg + '.svg'));
         });
     }
+
 }

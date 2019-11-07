@@ -1,6 +1,17 @@
-<div *ngIf="progress | async" fxLayout="column" fxLayoutAlign="center center">
+<div *ngIf="progress" fxLayout="column" fxLayoutAlign="center center">
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 </div>
-<div class="max-height" [class.blur-filter]="progress | async">
+<mat-toolbar class="mat-elevation-z4" fxLayout="row" fxLayoutAlign="space-between center">
+    <button class="logo" mat-button routerLink="/app">nett</button>
+    <div fxLayout="row" *ngIf="user | async">
+        <button mat-button color="accent" matTooltip="bakiye">
+            {{(user | async).budget}} ₺ | {{(user | async).ticket}} bilet
+        </button>
+        <button mat-button fxHide.lt-sm matTooltip="kullanıcı">
+            <mat-icon svgIcon="user"></mat-icon> {{(user | async).username}}
+        </button>
+    </div>
+</mat-toolbar>
+<div class="app-container" [class.blur-filter]="progress">
     <router-outlet></router-outlet>
 </div>
