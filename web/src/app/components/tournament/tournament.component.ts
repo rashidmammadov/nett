@@ -10,7 +10,7 @@ import { SetMatchScoreDialogComponent } from '../shared/set-match-score-dialog/s
 import { ParticipantType } from '../../interfaces/participant-type';
 import { FixtureService } from '../../services/fixture/fixture.service';
 import { UtilityService } from '../../services/utility/utility.service';
-import {ToastService} from "../../services/toast/toast.service";
+import { ToastService } from '../../services/toast/toast.service';
 
 @Component({
   selector: 'app-tournament',
