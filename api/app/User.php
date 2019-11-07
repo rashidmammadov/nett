@@ -28,6 +28,10 @@ class User extends Authenticatable {
         PASSWORD, REMEMBER_TOKEN,
     ];
 
+    public function finance() {
+        return $this->hasMany('App\Finance');
+    }
+
     public function tournament() {
         return $this->hasMany('App\Tournament');
     }

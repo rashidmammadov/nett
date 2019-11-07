@@ -2,6 +2,7 @@
 
 namespace App\Http\Queries\MySQL;
 
+use App\Finance;
 use App\Fixture;
 use App\Game;
 use App\Participant;
@@ -10,6 +11,36 @@ use App\User;
 use Illuminate\Support\Facades\Log;
 
 class ApiQuery {
+
+    /** -------------------- FINANCE QUERIES -------------------- **/
+
+    /**
+     * @description query to get finance data
+     * @param integer $status - the status of finance
+     * @return mixed
+     */
+    public static function getFinance($status) {
+        $queryResult = Finance::where(STATUS, EQUAL_SIGN, $status)->get();
+        return $queryResult;
+    }
+
+    /**
+     * @description query to create new finance data
+     * @param $finance
+     */
+    public static function setFinance($finance) {
+        Finance::create($finance);
+    }
+
+    /**
+     * @description query to update finance status
+     * @param $financeId - the id of finance
+     * @param $status - the status is changed
+     */
+    public static function updateFinanceStatus($financeId, $status) {
+        Finance::where(FINANCE_ID, EQUAL_SIGN, $financeId)
+            ->update([STATUS => $status]);
+    }
 
     /** -------------------- FIXTURE QUERIES -------------------- **/
 
@@ -30,8 +61,7 @@ class ApiQuery {
      * @param $tournamentId
      * @return mixed
      */
-    public static function getFixture($tournamentId)
-    {
+    public static function getFixture($tournamentId) {
         $queryResult = Fixture::where(TOURNAMENT_ID, EQUAL_SIGN, $tournamentId)->first();
         return $queryResult;
     }
@@ -42,8 +72,7 @@ class ApiQuery {
      * @param $fixture
      * @return mixed
      */
-    public static function updateFixture($tournamentId, $fixture)
-    {
+    public static function updateFixture($tournamentId, $fixture) {
         $queryResult = self::getFixture($tournamentId);
         $queryResult[FIXTURE] = json_encode($fixture, JSON_UNESCAPED_UNICODE);
         $queryResult->save();
@@ -132,6 +161,7 @@ class ApiQuery {
                     $query->where(PARTICIPANT_ID, EQUAL_SIGN, $participantId);
                 }
             })
+            ->orderBy(TOURNAMENT_RANKING)
             ->get();
 
         return $queryResult;
@@ -147,6 +177,42 @@ class ApiQuery {
             [TOURNAMENT_ID, EQUAL_SIGN, $tournamentId],
             [PARTICIPANT_ID, EQUAL_SIGN, $participantId]
         ])->delete();
+    }
+
+    /**
+     * @description query to update participant point
+     * @param integer $tournamentId
+     * @param integer $participantId
+     * @param integer $point
+     */
+    public static function updateParticipantPoint($tournamentId, $participantId, $point) {
+        Participant::where(TOURNAMENT_ID, EQUAL_SIGN, $tournamentId)
+            ->where(PARTICIPANT_ID, EQUAL_SIGN, $participantId)
+            ->update([POINT => $point]);
+    }
+
+    /**
+     * @description query to update participant ranking
+     * @param integer $tournamentId - the played tournament`s id
+     * @param integer $participantId - the participant id
+     * @param integer $ranking - the participant`s ranking
+     */
+    public static function updateParticipantRanking($tournamentId, $participantId, $ranking) {
+        Participant::where(TOURNAMENT_ID, EQUAL_SIGN, $tournamentId)
+            ->where(PARTICIPANT_ID, EQUAL_SIGN, $participantId)
+            ->update([TOURNAMENT_RANKING => $ranking]);
+    }
+
+    /**
+     * @description query to update participant earnings
+     * @param integer $tournamentId
+     * @param integer $participantId
+     * @param double $earnings
+     */
+    public static function updateParticipantEarnings($tournamentId, $participantId, $earnings) {
+        Participant::where(TOURNAMENT_ID, EQUAL_SIGN, $tournamentId)
+            ->where(PARTICIPANT_ID, EQUAL_SIGN, $participantId)
+            ->update([EARNINGS => $earnings]);
     }
 
     /** -------------------- TOURNAMENT QUERIES -------------------- **/
@@ -215,8 +281,7 @@ class ApiQuery {
      * @param integer $tournamentId
      * @return mixed
      */
-    public static function getTournamentWithDetail($tournamentId)
-    {
+    public static function getTournamentWithDetail($tournamentId) {
         $queryResult = Tournament::where(TOURNAMENT_ID, EQUAL_SIGN, $tournamentId)
             ->join(DB_USERS_TABLE, (DB_USERS_TABLE . '.' . IDENTIFIER), EQUAL_SIGN, DB_TOURNAMENT_TABLE . '.' . HOLDER_ID)
             ->join(DB_GAME_TABLE, (DB_GAME_TABLE . '.' . GAME_ID), EQUAL_SIGN, DB_TOURNAMENT_TABLE . '.' . GAME_ID)
@@ -251,6 +316,27 @@ class ApiQuery {
             ->where(DB_USERS_TABLE.'.'.CITY, LIKE_SIGN, $user[CITY])
             ->get();
 
+        return $queryResult;
+    }
+
+    /**
+     * @description query to get holder`s tournament general detail
+     * @param $parameters
+     * @param $user
+     * @return mixed
+     */
+    public static function searchHolderTournaments($parameters, $user) {
+        $queryResult = array();
+        $holderTournaments = Tournament::where(HOLDER_ID, EQUAL_SIGN, $user[IDENTIFIER])->get();
+
+        foreach ($holderTournaments as $holderTournament) {
+            $result = Tournament::where(TOURNAMENT_ID, EQUAL_SIGN, $holderTournament[TOURNAMENT_ID])
+                ->where(STATUS, EQUAL_SIGN, $parameters[STATUS])
+                ->join(DB_USERS_TABLE, (DB_USERS_TABLE.'.'.IDENTIFIER), EQUAL_SIGN, DB_TOURNAMENT_TABLE.'.'.HOLDER_ID)
+                ->join(DB_GAME_TABLE, (DB_GAME_TABLE.'.'.GAME_ID), EQUAL_SIGN, DB_TOURNAMENT_TABLE.'.'.GAME_ID)
+                ->first();
+            array_push($queryResult, $result);
+        }
         return $queryResult;
     }
 
@@ -364,8 +450,7 @@ class ApiQuery {
      * @param $parameters
      * @return mixed
      */
-    public static function updateUser($userId, $parameters)
-    {
+    public static function updateUser($userId, $parameters) {
         $user = self::getUserById($userId);
         !empty($parameters[NAME]) && ($user[NAME] = $parameters[NAME]);
         !empty($parameters[SURNAME]) && ($user[SURNAME] = $parameters[SURNAME]);
@@ -374,5 +459,25 @@ class ApiQuery {
         ($user[STATE] == USER_STATE_DISABLE) && ($user[STATE] = USER_STATE_ACTIVE);
         $user->save();
         return $user;
+    }
+
+    /**
+     * @description query to update user` budget.
+     * @param integer $userId - the given user`s id
+     * @param double $budget - updated budget amount
+     */
+    public static function updateUserBudget($userId, $budget) {
+        User::where(IDENTIFIER, EQUAL_SIGN, $userId)
+            ->update([BUDGET => $budget]);
+    }
+
+    /**
+     * @description query to update user` ticket.
+     * @param integer $userId - the given user`s id
+     * @param double $ticket - updated ticket count
+     */
+    public static function updateUserTicket($userId, $ticket) {
+        User::where(IDENTIFIER, EQUAL_SIGN, $userId)
+            ->update([TICKET => $ticket]);
     }
 }

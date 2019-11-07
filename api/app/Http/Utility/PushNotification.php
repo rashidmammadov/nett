@@ -11,16 +11,44 @@ namespace App\Http\Utility;
 use App\Http\Queries\MySQL\ApiQuery;
 use Illuminate\Support\Facades\Log;
 
-class PushNotification
-{
+class PushNotification {
+
+    /**
+     * @description: prepare message for started tournament.
+     * @param $tournamentId : holds the tournament`s id
+     * @param $userId : holds the user id
+     * @param $amount : holds the user`s earnings amount
+     * @param $ticket : holds the user`s earnings ticket
+     */
+    public static function payedTournamentEarnings($tournamentId, $userId, $amount, $ticket) {
+        $tournament = ApiQuery::getTournament($tournamentId);
+        $headings = array('en' => 'Tebrikler!');
+        $startDate = CustomDate::getDateFromMilliseconds($tournament[START_DATE]);
+        $data = array(TOURNAMENT_ID => $tournamentId);
+        $game = ApiQuery::getGame($tournament[GAME_ID])->first();
+
+        /** message for participants and holder **/
+        $gift = null;
+        if ($amount > 0) {
+            $gift = $amount . ' ' . TURKISH_LIRA;
+        } else if ($ticket > 0) {
+            $gift = $ticket . ' ' . TICKET_TR;
+        }
+        if ($gift) {
+            $participantContent = array('en' =>
+                $startDate . ' tarihli ' . $game[GAME_NAME] . ' turnuvasından kazandığınız ' . $gift . ' hesabınıza aktarıldı'
+            );
+            $onesignal_ids = self::getOneSignalId($userId);
+            self::send($headings, $participantContent, $onesignal_ids, $data);
+        }
+    }
 
     /**
      * @description: prepare message for started tournament.
      * @param $tournament : data of started tournament.
      * @param $participants : list of participants.
      */
-    public static function tournamentStarts($tournament, $participants)
-    {
+    public static function tournamentStarts($tournament, $participants) {
         $headings = array('en' => 'Geri Sayım Başladı');
         $startDate = CustomDate::getDateFromMilliseconds($tournament[START_DATE]);
         $data = array(TOURNAMENT_ID => $tournament[TOURNAMENT_ID]);
@@ -47,8 +75,7 @@ class PushNotification
      * @param $tournament : data of cancelled tournament.
      * @param $participants : list of participants.
      */
-    public static function tournamentCancelled($tournament, $participants)
-    {
+    public static function tournamentCancelled($tournament, $participants) {
         $headings = array('en' => 'Turnuva İptali');
         $startDate = CustomDate::getDateFromMilliseconds($tournament[START_DATE]);
         $data = array(TOURNAMENT_ID => $tournament[TOURNAMENT_ID]);
@@ -76,9 +103,9 @@ class PushNotification
      * @param $headings : message headings
      * @param $content : message content
      * @param $onesignal_ids : one signal users id
+     * @param $data
      */
-    private static function send($headings, $content, $onesignal_ids, $data)
-    {
+    private static function send($headings, $content, $onesignal_ids, $data) {
         $fields = array(
             'app_id' => env('ONESIGNAL_APP_ID'),
             'include_player_ids' => $onesignal_ids,
@@ -106,16 +133,21 @@ class PushNotification
         self::response($response);
     }
 
-    private static function response($response)
-    {
+    private static function response($response) {
         $return["allresponses"] = $response;
         $return = json_encode($return);
 
         Log::info($return);
     }
 
-    private static function getParticipantsOneSignalIds($participants)
-    {
+    private static function getOneSignalId($userId) {
+        $oneSignalId = array();
+        $user = ApiQuery::getUserById($userId);
+        array_push($oneSignalId, $user[ONESIGNAL_DEVICE_ID]);
+        return $oneSignalId;
+    }
+
+    private static function getParticipantsOneSignalIds($participants) {
         $participants_onesignal_ids = array();
         foreach ($participants as $participant) {
             array_push($participants_onesignal_ids, $participant[ONESIGNAL_DEVICE_ID]);
@@ -123,8 +155,7 @@ class PushNotification
         return $participants_onesignal_ids;
     }
 
-    private static function getHolderOneSignalId($tournament)
-    {
+    private static function getHolderOneSignalId($tournament) {
         $holder = ApiQuery::getUserById($tournament[HOLDER_ID]);
         $holder_onesignal_id = array($holder[ONESIGNAL_DEVICE_ID]);
         return $holder_onesignal_id;

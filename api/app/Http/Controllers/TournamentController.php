@@ -101,8 +101,7 @@ class TournamentController extends ApiController {
      * @param integer $tournamentId
      * @return mixed: tournament info
      */
-    public function getDetail($tournamentId)
-    {
+    public function getDetail($tournamentId) {
         try {
             $user = JWTAuth::parseToken()->authenticate();
             $tournament = ApiQuery::getTournamentWithDetail($tournamentId);
@@ -166,8 +165,10 @@ class TournamentController extends ApiController {
     private function getMyTournaments($request, $user) {
         $result = array();
         $tournaments = array();
-        if ($user[TYPE] === PLAYER) {
+        if (strtolower($user[TYPE]) == strtolower(PLAYER)) {
             $tournaments = ApiQuery::searchParticipantTournaments($request, $user);
+        } else if (strtolower($user[TYPE]) == strtolower(HOLDER)) {
+            $tournaments = ApiQuery::searchHolderTournaments($request, $user);
         }
         foreach ($tournaments as $tournament) {
             if ($tournament[TOURNAMENT_ID]) {
@@ -233,8 +234,7 @@ class TournamentController extends ApiController {
      * @param $user
      * @return mixed
      */
-    private function prepareTournamentParticipantsData($tournamentId, $user)
-    {
+    private function prepareTournamentParticipantsData($tournamentId, $user) {
         $transformedParticipants = array();
         $participants = ApiQuery::getParticipants($tournamentId);
         foreach ($participants as $participant) {
@@ -252,8 +252,7 @@ class TournamentController extends ApiController {
      * @param integer $tournamentId
      * @return mixed
      */
-    private function prepareTournamentFixtureData($tournamentId)
-    {
+    private function prepareTournamentFixtureData($tournamentId) {
         $data = ApiQuery::getFixture($tournamentId);
         return json_decode($data[FIXTURE]);
     }

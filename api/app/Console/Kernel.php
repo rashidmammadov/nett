@@ -22,9 +22,9 @@ class Kernel extends ConsoleKernel
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
-    protected function schedule(Schedule $schedule)
-    {
+    protected function schedule(Schedule $schedule) {
         $schedule->call('App\Console\Commands\Schedule@changeStartedTournamentsStatus')->hourly();
+        $schedule->call('App\Console\Commands\Schedule@payWaitingPaymentsFromTournament')->hourly();
     }
 
     /**
@@ -32,8 +32,7 @@ class Kernel extends ConsoleKernel
      *
      * @return void
      */
-    protected function commands()
-    {
+    protected function commands() {
         $this->load(__DIR__.'/Commands');
 
         require base_path('routes/console.php');
