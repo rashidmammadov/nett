@@ -4,13 +4,14 @@ import { Routes, RouterModule } from '@angular/router';
 import { ActivateComponent } from '../components/activate/activate.component';
 import { ApplicationComponent } from '../components/application/application.component';
 import { AuthGuard } from '../guards/auth.guard';
+import { BelongComponent } from '../components/belong/belong.component';
 import { HomeComponent } from '../components/home/home.component';
 import { LoginComponent } from '../components/login/login.component';
 import { RegisterComponent } from '../components/register/register.component';
 import { SearchComponent } from '../components/search/search.component';
 import { SetTournamentComponent } from '../components/set-tournament/set-tournament.component';
-import { TournamentComponent } from '../components/tournament/tournament.component';
 
+import { TournamentComponent } from '../components/tournament/tournament.component';
 import { GameResolver } from '../resolvers/game.resolver';
 import { TournamentResolver } from '../resolvers/tournament.resolver';
 
@@ -44,6 +45,10 @@ const routes: Routes = [
           {
               path: 'home',
               component: HomeComponent
+          },
+          {
+              path: 'belongs',
+              component: BelongComponent
           },
           {
               path: 'search',

@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import { NgModule } from '@angular/core';
 import {
     MatAutocompleteModule,
     MatButtonModule,
@@ -12,6 +12,7 @@ import {
     MatProgressBarModule,
     MatProgressSpinnerModule,
     MatListModule,
+    MatTabsModule,
     MatToolbarModule,
     MatTooltipModule
 } from '@angular/material';
@@ -30,6 +31,7 @@ import {
         MatProgressBarModule,
         MatProgressSpinnerModule,
         MatListModule,
+        MatTabsModule,
         MatToolbarModule,
         MatTooltipModule
     ]

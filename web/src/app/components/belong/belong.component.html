@@ -1,0 +1,13 @@
+<div class="container" fxLayout="column" fxLayoutGap="16px" fxFlex="40%" fxFlex.lt-md="60%" fxFlex.lt-sm="100%"
+     fxFlexOffset="30%" fxFlexOffset.lt-md="20%" fxFlexOffset.lt-sm="0">
+    <mat-tab-group mat-align-tabs="center" (selectedTabChange)="selectedTabChange($event)">
+        <mat-tab *ngFor="let tab of tabs" [label]="tab.label">
+            <div fxLayout="column" fxLayoutGap="16px">
+                <app-tournament-card *ngFor="let data of tab.data" [data]="data"></app-tournament-card>
+                <div *ngIf="!tab.data.length" fxLayoutAlign="center center">
+                    <p>Sonuç Bulunamadı</p>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>

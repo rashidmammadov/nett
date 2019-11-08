@@ -16,6 +16,7 @@ import { ActivateComponent } from './components/activate/activate.component';
 import { ApplicationComponent } from './components/application/application.component';
 import { AttendButtonComponent } from './components/shared/attend-button/attend-button.component';
 import { AttendDialogComponent } from './components/shared/attend-dialog/attend-dialog.component';
+import { BelongComponent } from './components/belong/belong.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
@@ -24,33 +25,34 @@ import { SetMatchScoreDialogComponent } from './components/shared/set-match-scor
 import { SetTournamentComponent } from './components/set-tournament/set-tournament.component';
 import { LeaveDialogComponent } from './components/shared/leave-dialog/leave-dialog.component';
 import { TournamentComponent } from './components/tournament/tournament.component';
+
 import { TournamentCardComponent } from './components/shared/tournament-card/tournament-card.component';
-
 import { Cookie } from './services/cookie/cookies.service';
+
 import { ToastService } from './services/toast/toast.service';
-
 import { userReducer } from './store/reducers/user.reducer';
-import { progressReducer } from './store/reducers/progress.reducer';
 
+import { progressReducer } from './store/reducers/progress.reducer';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { DatePickerIntl } from './models/DatePickerIntl';
 
 @NgModule({
     declarations: [
-        AppComponent,
-        LoginComponent,
-        RegisterComponent,
         ActivateComponent,
-        HomeComponent,
+        AppComponent,
         ApplicationComponent,
-        SearchComponent,
-        SetTournamentComponent,
-        TournamentCardComponent,
-        AttendDialogComponent,
         AttendButtonComponent,
+        AttendDialogComponent,
+        BelongComponent,
+        HomeComponent,
+        RegisterComponent,
+        SearchComponent,
+        SetMatchScoreDialogComponent,
+        SetTournamentComponent,
         LeaveDialogComponent,
+        LoginComponent,
         TournamentComponent,
-        SetMatchScoreDialogComponent
+        TournamentCardComponent
     ],
     imports: [
         BrowserModule,
