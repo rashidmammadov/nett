@@ -23,7 +23,8 @@ export const ENDPOINTS = {
     REGIONS: () => 'http://api.ozelden.com/api/v1/data?regions=true',
 
     MY_TOURNAMENTS: (status: number | string = 0) => {
-        let queryParams = `?status=${status}`;
+        let queryParams: string = '';
+        status >= 0 && (queryParams = `?status=${status}`);
         return `${PREFIX}myTournaments${queryParams}`;
     },
 
