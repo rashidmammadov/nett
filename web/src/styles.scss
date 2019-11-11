@@ -33,3 +33,15 @@ app-application { height: 100%; }
     .container {  margin: 16px 0; }
     .overflow-card { max-height: 100%; overflow-y: hidden; }
 }
+
+.timeline {
+    .bar {
+        fill: #f0f0f0;
+        rx: 2px;
+    }
+    .line {
+        fill: none;
+        stroke: $mainColor;
+        stroke-width: 4px;
+    }
+}
