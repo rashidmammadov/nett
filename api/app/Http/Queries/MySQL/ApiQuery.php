@@ -480,4 +480,20 @@ class ApiQuery {
         User::where(IDENTIFIER, EQUAL_SIGN, $userId)
             ->update([TICKET => $ticket]);
     }
+
+    /** -------------------- REPORT QUERIES -------------------- **/
+
+    /**
+     * @description query to get participant`s timeline report result.
+     * @param integer $userId - the given user`s id
+     * @return mixed
+     */
+    public static function getTimelineReport($userId) {
+        $result = Participant::where(DB_PARTICIPANT_TABLE.'.'.PARTICIPANT_ID, EQUAL_SIGN, $userId)
+            ->join(DB_TOURNAMENT_TABLE, (DB_TOURNAMENT_TABLE.'.'.TOURNAMENT_ID), EQUAL_SIGN, DB_PARTICIPANT_TABLE.'.'.TOURNAMENT_ID)
+            ->where(DB_TOURNAMENT_TABLE.'.'.STATUS, EQUAL_SIGN, TOURNAMENT_STATUS_CLOSE)
+            ->join(DB_GAME_TABLE, (DB_GAME_TABLE.'.'.GAME_ID), EQUAL_SIGN, DB_TOURNAMENT_TABLE.'.'.GAME_ID)
+            ->get();
+        return $result;
+    }
 }

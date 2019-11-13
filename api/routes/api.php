@@ -53,4 +53,6 @@ Route::group(['middleware' => 'cors', 'prefix' => '/v1'], function () {
     Route::get('/tournaments', 'TournamentController@get');
     Route::get('/tournaments/{tournamentId}', 'TournamentController@getDetail');
     Route::get('/myTournaments', 'TournamentController@getMine');
+
+    Route::get('/reports', 'ReportController@get');
 });

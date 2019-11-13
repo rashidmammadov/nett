@@ -22,6 +22,8 @@ export const ENDPOINTS = {
 
     REGIONS: () => 'http://api.ozelden.com/api/v1/data?regions=true',
 
+    REPORTS: (reportType: string) => `${PREFIX}reports?reportType=${reportType}`,
+
     MY_TOURNAMENTS: (status: number | string = 0) => {
         let queryParams: string = '';
         status >= 0 && (queryParams = `?status=${status}`);

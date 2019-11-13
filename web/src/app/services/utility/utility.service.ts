@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
+import { HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { IHttpResponse } from '../../interfaces/i-http-response';
 import { ErrorResponse } from '../../models/error-response';
 import { ToastService } from '../toast/toast.service';
-import { HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +31,14 @@ export class UtilityService {
             body = body.set(key, params[key])
         });
         return body;
+    }
+
+    public static millisecondsToDate(milliseconds): Date {
+        if (typeof milliseconds === 'string' || typeof milliseconds === 'number') {
+            return new Date(Number(milliseconds));
+        } else {
+            return milliseconds;
+        }
     }
 
 }

@@ -1,7 +1,8 @@
 <div class="container">
-    <div fxFlex="50">
+    <div fxFlex="50" fxFlex.lt-md="100">
         <mat-card>
-            <app-timeline-report></app-timeline-report>
+            <app-timeline-report *ngIf="timelineReportData.length" [data]="timelineReportData"></app-timeline-report>
+            <p *ngIf="!timelineReportData.length" align="center">Gösterilecek Veri Bulunamadı</p>
         </mat-card>
     </div>
 </div>

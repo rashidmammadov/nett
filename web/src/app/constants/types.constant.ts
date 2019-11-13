@@ -4,6 +4,10 @@ export const TYPES = {
         'TICKET': 'ticket'
     },
 
+    REPORT: {
+        'TIMELINE': 'timeline'
+    },
+
     TOURNAMENT_TYPE: {
         'knock_out': 'Eleme',
         'group': 'Grup',

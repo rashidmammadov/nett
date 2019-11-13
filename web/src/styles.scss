@@ -35,13 +35,48 @@ app-application { height: 100%; }
 }
 
 .timeline {
+    .y-axis {
+        .tick {
+            line {
+                stroke: #d3d3d3;
+                stroke-dasharray: 8, 4;
+                stroke-width: 0.2;
+            }
+        }
+    }
     .bar {
-        fill: #f0f0f0;
+        fill: $mainColor;
         rx: 2px;
     }
     .line {
         fill: none;
-        stroke: $mainColor;
-        stroke-width: 4px;
+        stroke: #f0f0f0;
+        stroke-width: 2px;
+    }
+    .circle {
+        fill: #f0f0f0;
+    }
+}
+
+.directive-tooltip {
+    position: absolute;
+    text-align: left;
+    width: auto;
+    height: auto;
+    padding: 8px 8px 4px 8px;
+    font-size: 11px;
+    background: #fff;
+    border: 1px solid #555555;
+    border-radius: 4px;
+    pointer-events: none;
+    color: #555555;
+    -webkit-box-shadow: 0 2px 8px 0 #303030;
+    -moz-box-shadow: 0 2px 8px 0 #303030;
+    box-shadow: 0 2px 8px 0 #303030;
+
+    img {
+        max-width: 180px;
+        height: auto;
+        border-radius: 4px;
     }
 }
