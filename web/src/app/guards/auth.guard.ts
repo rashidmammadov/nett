@@ -40,6 +40,7 @@ export class AuthGuard implements CanActivate {
                 }
             });
         } else if (!accessToken && (securedState || activateState)) {
+            Cookie.delete('_nrt');
             this.router.navigateByUrl('login');
             return false;
         }

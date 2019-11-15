@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { UserType } from '../../interfaces/user-type';
-import {loaded, loading} from "../../store/actions/progress.action";
-import {UserService} from "../../services/user/user.service";
-import {UtilityService} from "../../services/utility/utility.service";
-import {IHttpResponse} from "../../interfaces/i-http-response";
-import {set} from "../../store/actions/user.action";
-import {Router} from "@angular/router";
+import { loaded, loading } from '../../store/actions/progress.action';
+import { UserService } from '../../services/user/user.service';
+import { UtilityService } from '../../services/utility/utility.service';
+import { IHttpResponse } from '../../interfaces/i-http-response';
+import { set } from '../../store/actions/user.action';
 
 @Component({
   selector: 'app-activate',
@@ -15,14 +15,14 @@ import {Router} from "@angular/router";
   styleUrls: ['./activate.component.scss']
 })
 export class ActivateComponent implements OnInit {
-    private _user: UserType;
-    private currentDate = new Date();
+    public currentDate = new Date();
     public days: number[] = [];
     public months: number[] = [];
     public years: number[] = [];
     public selectedDay: number = 1;
     public selectedMonth: number = 1;
     public selectedYear: number = this.currentDate.getFullYear() - 18;
+    private _user: UserType;
 
     activateForm = new FormGroup({
         name: new FormControl('', [Validators.required]),

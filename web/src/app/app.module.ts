@@ -36,6 +36,7 @@ import { progressReducer } from './store/reducers/progress.reducer';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { DatePickerIntl } from './models/DatePickerIntl';
 import { TimelineReportComponent } from './components/shared/timeline-report/timeline-report.component';
+import { PieChartReportComponent } from './components/shared/pie-chart-report/pie-chart-report.component';
 
 @NgModule({
     declarations: [
@@ -54,7 +55,8 @@ import { TimelineReportComponent } from './components/shared/timeline-report/tim
         LoginComponent,
         TournamentComponent,
         TournamentCardComponent,
-        TimelineReportComponent
+        TimelineReportComponent,
+        PieChartReportComponent
     ],
     imports: [
         BrowserModule,

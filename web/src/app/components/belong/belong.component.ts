@@ -54,7 +54,7 @@ export class BelongComponent implements OnInit {
             data: [],
             status: TYPES.TOURNAMENT_STATUS.OPEN
         }, {
-            label: 'Biten Turnuvalar',
+            label: 'Sonuçlanan Turnuvalar',
             loaded: false,
             data: [],
             status: TYPES.TOURNAMENT_STATUS.CLOSE

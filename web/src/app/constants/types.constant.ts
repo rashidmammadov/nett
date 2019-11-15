@@ -1,10 +1,16 @@
 export const TYPES = {
+    FINANCE_TYPE: {
+        'DEPOSIT': 'Yatırılan',
+        'TOURNAMENT': 'Ödüller'
+    },
+
     PAYMENT: {
         'MONEY': 'money',
         'TICKET': 'ticket'
     },
 
     REPORT: {
+        'FINANCE': 'finance',
         'TIMELINE': 'timeline'
     },
 

@@ -37,24 +37,27 @@ app-application { height: 100%; }
 .timeline {
     .y-axis {
         .tick {
-            line {
-                stroke: #d3d3d3;
-                stroke-dasharray: 8, 4;
-                stroke-width: 0.2;
-            }
+            line { stroke: #d3d3d3; stroke-dasharray: 8, 4; stroke-width: 0.2; }
         }
     }
-    .bar {
-        fill: $mainColor;
-        rx: 2px;
+    .bar { fill: $mainColor; rx: 2px; }
+    .line { fill: none; stroke: #f0f0f0; stroke-width: 2px;}
+    .circle { fill: #f0f0f0; }
+}
+
+.pie-chart {
+    .slices {
+        path.focus { transition: ease .3s; transform: scale(1.05); }
     }
-    .line {
-        fill: none;
-        stroke: #f0f0f0;
-        stroke-width: 2px;
+    .labels {
+        text { font-size: 10px; fill: #f0f0f0; }
     }
-    .circle {
-        fill: #f0f0f0;
+    .lines {
+        polyline { fill: none; stroke: #f0f0f0; stroke-width: 1px; }
+    }
+    .legend {
+        text { fill: #f0f0f0; text-anchor: middle; }
+        text.value { font-size: 24px; font-weight: bold; }
     }
 }
 

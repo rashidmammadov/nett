@@ -484,6 +484,20 @@ class ApiQuery {
     /** -------------------- REPORT QUERIES -------------------- **/
 
     /**
+     * @description query to get participant`s finance report result.
+     * @param integer $userId - the given user`s id
+     * @return mixed
+     */
+    public static function getFinanceReport($userId) {
+        $result = Finance::where(DB_FINANCE_TABLE.'.'.USER_ID, EQUAL_SIGN, $userId)
+            ->where(DB_FINANCE_TABLE.'.'.TYPE, EQUAL_SIGN, PLAYER)
+            ->where(DB_FINANCE_TABLE.'.'.STATUS, EQUAL_SIGN, FINANCE_STATUS_APPROVED)
+            ->get()
+            ->groupBy(CHANNEL);
+        return $result;
+    }
+
+    /**
      * @description query to get participant`s timeline report result.
      * @param integer $userId - the given user`s id
      * @return mixed

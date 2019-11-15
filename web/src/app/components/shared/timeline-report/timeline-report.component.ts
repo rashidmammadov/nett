@@ -67,11 +67,11 @@ export class TimelineReportComponent implements OnChanges {
     }
 
     private draw(data) {
-      this.drawXAxis(data);
-      this.drawYAxis(data);
-      this.drawBarChart(data);
-      this.drawLineChart(data);
-      this.drawCircles(data)
+        this.drawXAxis(data);
+        this.drawYAxis(data);
+        this.drawBarChart(data);
+        this.drawLineChart(data);
+        this.drawCircles(data)
     }
 
     drawXAxis(data) {
@@ -93,7 +93,10 @@ export class TimelineReportComponent implements OnChanges {
                 .attr('tournament-id', (d: TimelineReportType) => d.tournamentId)
                 .attr('x', (d: TimelineReportType) => xAxis(d.startDate) - DIVIDER / 2)
                 .attr('width', DIVIDER)
-                .transition().duration(300)
+                .on('mouseover', this.mouseover)
+                .on('mousemove', this.mouseover)
+                .on('mouseout', this.mouseout)
+                .transition().ease(d3.easeCubic).duration(300)
                 .attr('height', (d: TimelineReportType) => yAxis(d.participantCount));
     }
 
@@ -125,7 +128,8 @@ export class TimelineReportComponent implements OnChanges {
         d3.select('app-timeline-report .bar[tournament-id="' + d.tournamentId + '"]').attr('opacity', 1);
 
         const event = d3.event;
-        tooltip.style('left', event.offsetX + margin.left + margin.right + 'px');
+        tooltip.style('left', event.offsetX + (((width - 160) <= event.offsetX) ?
+             - (160 + margin.left + margin.right) : (margin.left + margin.right)) + 'px');
         tooltip.style('top', event.offsetY - margin.top - margin.bottom + 'px');
 
         tooltip.style('display', 'inline-block');
