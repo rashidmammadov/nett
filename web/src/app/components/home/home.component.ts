@@ -22,6 +22,7 @@ export class HomeComponent implements OnInit {
     ngOnInit() {
         this.fetchTimelineReport();
         this.fetchFinanceReport();
+        this.fetchRankingReport();
     }
 
     private fetchTimelineReport = async () => {
@@ -33,6 +34,15 @@ export class HomeComponent implements OnInit {
                 timelineData.startDate = UtilityService.millisecondsToDate(timelineData.startDate);
             });
         });
+        this.store.dispatch(loaded());
+    };
+
+    private fetchRankingReport = async () => {
+        this.store.dispatch(loading());
+        const result = await this.reportService.get(TYPES.REPORT.RANKING);
+        // UtilityService.handleResponseFromService(result, (response: IHttpResponse) => {
+        //     this.financeReportData = response.data;
+        // });
         this.store.dispatch(loaded());
     };
 

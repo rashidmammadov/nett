@@ -11,6 +11,7 @@ export const TYPES = {
 
     REPORT: {
         'FINANCE': 'finance',
+        'RANKING': 'ranking',
         'TIMELINE': 'timeline'
     },
 

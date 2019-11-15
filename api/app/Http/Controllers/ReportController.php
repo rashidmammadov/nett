@@ -27,10 +27,12 @@ class ReportController extends ApiController {
                 return $this->respondValidationError(FIELDS_VALIDATION_FAILED, $validator->errors());
             } else {
                 $data = array();
-                if ($request[REPORT_TYPE] == TIMELINE_REPORT && $user[TYPE] == PLAYER) {
-                    $data = $this->timelineReport($user[IDENTIFIER]);
-                } else if ($request[REPORT_TYPE] == FINANCE_REPORT && $user[TYPE] == PLAYER) {
+                if ($request[REPORT_TYPE] == FINANCE_REPORT && $user[TYPE] == PLAYER) {
                     $data = $this->financeReport($user[IDENTIFIER]);
+                } else if ($request[REPORT_TYPE] == RANKING_REPORT) {
+                    $data = $this->rankingReport();
+                } else if ($request[REPORT_TYPE] == TIMELINE_REPORT && $user[TYPE] == PLAYER) {
+                    $data = $this->timelineReport($user[IDENTIFIER]);
                 }
                 return $this->respondCreated(REPORT_CREATED_SUCCESSFULLY, $data);
             }
@@ -38,22 +40,6 @@ class ReportController extends ApiController {
             $this->setStatusCode($e->getStatusCode());
             return $this->respondWithError($e->getMessage());
         }
-    }
-
-    /**
-     * @description Prepare participant`s tournaments result by timeline.
-     * @param $userId
-     * @return array
-     */
-    private function timelineReport($userId) {
-        $queryResult = ApiQuery::getTimelineReport($userId);
-        $result = array();
-        foreach ($queryResult as $query) {
-            $timeline = new TimelineReport($query);
-            $timeline::setTournamentRanking($query[TOURNAMENT_RANKING]);
-            array_push($result, $timeline::get());
-        }
-        return $result;
     }
 
     /**
@@ -73,6 +59,31 @@ class ReportController extends ApiController {
             $finance::setAmount($amount);
             $finance::setCurrency(TURKISH_LIRA);
             array_push($result, $finance::get());
+        }
+        return $result;
+    }
+
+    /**
+     * @description Prepare players ranking.
+     * @return array
+     */
+    private function rankingReport() {
+        $queryResult = ApiQuery::getRankingReport();
+        return $queryResult;
+    }
+
+    /**
+     * @description Prepare participant`s tournaments result by timeline.
+     * @param $userId
+     * @return array
+     */
+    private function timelineReport($userId) {
+        $queryResult = ApiQuery::getTimelineReport($userId);
+        $result = array();
+        foreach ($queryResult as $query) {
+            $timeline = new TimelineReport($query);
+            $timeline::setTournamentRanking($query[TOURNAMENT_RANKING]);
+            array_push($result, $timeline::get());
         }
         return $result;
     }

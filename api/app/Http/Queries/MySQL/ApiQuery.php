@@ -498,6 +498,21 @@ class ApiQuery {
     }
 
     /**
+     * @description query to get player`s ranking report result.
+     * @return mixed
+     */
+    public static function getRankingReport() {
+        $result = User::where(DB_USERS_TABLE.'.'.TYPE, EQUAL_SIGN, PLAYER)
+            ->where(DB_USERS_TABLE.'.'.STATE, EQUAL_SIGN, USER_STATE_ACTIVE)
+            ->where(DB_USERS_TABLE.'.'.RANKING, NOT_EQUAL_SIGN, null)
+            ->orderBy(RANKING)
+            ->offset(0)
+            ->limit(10)
+            ->get();
+        return $result;
+    }
+
+    /**
      * @description query to get participant`s timeline report result.
      * @param integer $userId - the given user`s id
      * @return mixed

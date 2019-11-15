@@ -32,6 +32,7 @@ class CreateUsersTable extends Migration {
             $table->double(PROMOTION)->default(0);
             $table->integer(TICKET)->default(0);
             $table->integer(RANKING)->nullable();
+            $table->integer(PREVIOUS_RANKING)->nullable();
             $table->boolean(STATE)->default(0);
             $table->string(ONESIGNAL_DEVICE_ID, 50)->nullable();
             $table->timestamps();

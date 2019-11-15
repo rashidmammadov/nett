@@ -18,12 +18,15 @@ import { AttendButtonComponent } from './components/shared/attend-button/attend-
 import { AttendDialogComponent } from './components/shared/attend-dialog/attend-dialog.component';
 import { BelongComponent } from './components/belong/belong.component';
 import { HomeComponent } from './components/home/home.component';
+import { PieChartReportComponent } from './components/shared/pie-chart-report/pie-chart-report.component';
 import { LoginComponent } from './components/login/login.component';
+import { RankingReportComponent } from './components/shared/ranking-report/ranking-report.component';
 import { RegisterComponent } from './components/register/register.component';
 import { SearchComponent } from './components/search/search.component';
 import { SetMatchScoreDialogComponent } from './components/shared/set-match-score-dialog/set-match-score-dialog.component';
 import { SetTournamentComponent } from './components/set-tournament/set-tournament.component';
 import { LeaveDialogComponent } from './components/shared/leave-dialog/leave-dialog.component';
+import { TimelineReportComponent } from './components/shared/timeline-report/timeline-report.component';
 import { TournamentComponent } from './components/tournament/tournament.component';
 
 import { TournamentCardComponent } from './components/shared/tournament-card/tournament-card.component';
@@ -35,8 +38,6 @@ import { userReducer } from './store/reducers/user.reducer';
 import { progressReducer } from './store/reducers/progress.reducer';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { DatePickerIntl } from './models/DatePickerIntl';
-import { TimelineReportComponent } from './components/shared/timeline-report/timeline-report.component';
-import { PieChartReportComponent } from './components/shared/pie-chart-report/pie-chart-report.component';
 
 @NgModule({
     declarations: [
@@ -56,7 +57,8 @@ import { PieChartReportComponent } from './components/shared/pie-chart-report/pi
         TournamentComponent,
         TournamentCardComponent,
         TimelineReportComponent,
-        PieChartReportComponent
+        PieChartReportComponent,
+        RankingReportComponent
     ],
     imports: [
         BrowserModule,
