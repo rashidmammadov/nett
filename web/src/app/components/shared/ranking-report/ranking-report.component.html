@@ -6,8 +6,8 @@
             <p class="name">{{player.name}} {{player.surname}}</p>
         </div>
         <h4 class="city" fxFlex="25">{{player.city}}</h4>
-        <div class="difference new" fxLayout="row" fxFlexAlign="center center" fxFlex="10">
-            <p>yeni</p> <mat-icon svgIcon="ranking-new"></mat-icon>
+        <div class="difference {{player.class}}" fxLayout="row" fxFlexAlign="center center" fxFlex="10">
+            <mat-icon [svgIcon]="player.icon"></mat-icon> <p>{{player.difference}}</p>
         </div>
         <div fxLayout="row" fxFlexAlign="end center" fxFlex="10">
             <p class="ranking">#{{player.ranking}}</p>

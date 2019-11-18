@@ -64,14 +64,15 @@ app-application { height: 100%; }
 .ranking-container {
     .ranking-item {
         padding: 8px 4px 4px 4px;
-        .image { background-color: #d3d3d3; }
-        .name { margin: auto; color: #d3d3d3; font-size: 12px; }
-        .username { margin: auto; }
+        font-size: 12px;
+        .image { background-color: #d3d3d3; height: 32px; width: 32px; }
+        .name { margin: auto; color: #d3d3d3; }
+        .username { margin: auto; font-weight: bold; }
         .city { margin: auto; }
         .ranking { font-weight: bold; }
         .difference {
             margin: auto;
-            p { margin: 0 4px 0 0; font-size: 15px; font-weight: bold; }
+            p { margin: 2px 4px 0 8px; }
             .mat-icon { width: 16px; height: 16px; }
             &.down { color: #f44336; }
             &.stable { color: gold; }
