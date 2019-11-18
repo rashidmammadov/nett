@@ -26,8 +26,7 @@ const DIVIDER = 16;
   styleUrls: ['./pie-chart-report.component.scss']
 })
 export class PieChartReportComponent implements OnChanges {
-    // @ts-ignore
-    @ViewChild('report_container') reportContainer: ElementRef;
+    @ViewChild('report_container', {static: true}) reportContainer: ElementRef;
     @Input() data: PieChartReportType[];
 
     constructor() { }

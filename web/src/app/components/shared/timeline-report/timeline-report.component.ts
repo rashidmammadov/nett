@@ -18,8 +18,7 @@ const DIVIDER = 16;
   styleUrls: ['./timeline-report.component.scss']
 })
 export class TimelineReportComponent implements OnChanges {
-    // @ts-ignore
-    @ViewChild('report_container') reportContainer: ElementRef;
+    @ViewChild('report_container', {static: true}) reportContainer: ElementRef;
     @Input() data: TimelineReportType[];
 
     constructor() { }

@@ -1,1 +1,17 @@
-<p>ranking-report works!</p>
+<div class="ranking-container" *ngFor="let player of data">
+    <div class="ranking-item" fxLayout="row" fxFlexAlign="center center">
+        <img class="image" mat-card-avatar [src]="player.picture">
+        <div fxLayout="column" fxFlex>
+            <p class="username">{{player.username}}</p>
+            <p class="name">{{player.name}} {{player.surname}}</p>
+        </div>
+        <h4 class="city" fxFlex="25">{{player.city}}</h4>
+        <div class="difference new" fxLayout="row" fxFlexAlign="center center" fxFlex="10">
+            <p>yeni</p> <mat-icon svgIcon="ranking-new"></mat-icon>
+        </div>
+        <div fxLayout="row" fxFlexAlign="end center" fxFlex="10">
+            <p class="ranking">#{{player.ranking}}</p>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+</div>

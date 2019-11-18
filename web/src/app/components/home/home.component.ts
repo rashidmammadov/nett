@@ -14,14 +14,15 @@ import { PieChartReportType } from '../../interfaces/pie-chart-report-type';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-    timelineReportData: TimelineReportType[] = [];
     financeReportData: PieChartReportType[] = [];
+    timelineReportData: TimelineReportType[] = [];
+    rankingReportData: [] = [];
 
     constructor(private reportService: ReportService, private store: Store<{progress: boolean}>) { }
 
     ngOnInit() {
-        this.fetchTimelineReport();
         this.fetchFinanceReport();
+        this.fetchTimelineReport();
         this.fetchRankingReport();
     }
 
@@ -40,9 +41,9 @@ export class HomeComponent implements OnInit {
     private fetchRankingReport = async () => {
         this.store.dispatch(loading());
         const result = await this.reportService.get(TYPES.REPORT.RANKING);
-        // UtilityService.handleResponseFromService(result, (response: IHttpResponse) => {
-        //     this.financeReportData = response.data;
-        // });
+        UtilityService.handleResponseFromService(result, (response: IHttpResponse) => {
+            this.rankingReportData = response.data;
+        });
         this.store.dispatch(loaded());
     };
 

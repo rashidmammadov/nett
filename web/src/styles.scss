@@ -61,6 +61,26 @@ app-application { height: 100%; }
     }
 }
 
+.ranking-container {
+    .ranking-item {
+        padding: 8px 4px 4px 4px;
+        .image { background-color: #d3d3d3; }
+        .name { margin: auto; color: #d3d3d3; font-size: 12px; }
+        .username { margin: auto; }
+        .city { margin: auto; }
+        .ranking { font-weight: bold; }
+        .difference {
+            margin: auto;
+            p { margin: 0 4px 0 0; font-size: 15px; font-weight: bold; }
+            .mat-icon { width: 16px; height: 16px; }
+            &.down { color: #f44336; }
+            &.stable { color: gold; }
+            &.up { color: #69f0ae; }
+            &.new { color: $mainColor; }
+        }
+    }
+}
+
 .directive-tooltip {
     position: absolute;
     text-align: left;
