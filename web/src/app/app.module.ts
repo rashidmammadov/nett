@@ -38,6 +38,7 @@ import { userReducer } from './store/reducers/user.reducer';
 import { progressReducer } from './store/reducers/progress.reducer';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { DatePickerIntl } from './models/DatePickerIntl';
+import { NotificationReportComponent } from './components/shared/notification-report/notification-report.component';
 
 @NgModule({
     declarations: [
@@ -58,7 +59,8 @@ import { DatePickerIntl } from './models/DatePickerIntl';
         TournamentCardComponent,
         TimelineReportComponent,
         PieChartReportComponent,
-        RankingReportComponent
+        RankingReportComponent,
+        NotificationReportComponent
     ],
     imports: [
         BrowserModule,

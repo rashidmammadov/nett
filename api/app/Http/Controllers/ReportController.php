@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Queries\MySQL\ApiQuery;
 use App\Http\Utility\Finance;
 use App\Http\Utility\FinanceReport;
+use App\Http\Utility\NotificationReport;
 use App\Http\Utility\TimelineReport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -29,6 +30,8 @@ class ReportController extends ApiController {
                 $data = array();
                 if ($request[REPORT_TYPE] == FINANCE_REPORT && $user[TYPE] == PLAYER) {
                     $data = $this->financeReport($user[IDENTIFIER]);
+                } else if ($request[REPORT_TYPE] == NOTIFICATION_REPORT) {
+                    $data = $this->notificationReport($user[IDENTIFIER]);
                 } else if ($request[REPORT_TYPE] == RANKING_REPORT) {
                     $data = $this->rankingReport($user);
                 } else if ($request[REPORT_TYPE] == TIMELINE_REPORT && $user[TYPE] == PLAYER) {
@@ -64,11 +67,29 @@ class ReportController extends ApiController {
     }
 
     /**
+     * @description Prepare participant`s notifications.
+     * @param $userId
+     * @return array
+     */
+    private function notificationReport($userId) {
+        $queryResult = ApiQuery::getNotificationReport($userId);
+        $result = array();
+        foreach ($queryResult as $query) {
+            $notification = new NotificationReport($query);
+            $message = NotificationReport::prepareTournamentMessage($query[GAME_NAME], $query[START_DATE], $query[STATUS]);
+            $notification::setMessage($message);
+            array_push($result, $notification::get());
+        }
+        return $result;
+    }
+
+    /**
      * @description Prepare players ranking.
      * @param $user - Holds the current user data.
      * @return array
      */
     private function rankingReport($user) {
+        // TODO
         $queryResult = ApiQuery::getRankingReport();
         $result = array();
         foreach ($queryResult as $player) {

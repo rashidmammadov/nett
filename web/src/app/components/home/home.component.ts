@@ -15,13 +15,15 @@ import { PieChartReportType } from '../../interfaces/pie-chart-report-type';
 })
 export class HomeComponent implements OnInit {
     financeReportData: PieChartReportType[] = [];
-    timelineReportData: TimelineReportType[] = [];
+    notificationReportData: [] = [];
     rankingReportData: [] = [];
+    timelineReportData: TimelineReportType[] = [];
 
     constructor(private reportService: ReportService, private store: Store<{progress: boolean}>) { }
 
     ngOnInit() {
         this.fetchFinanceReport();
+        this.fetchNotificationReport();
         this.fetchTimelineReport();
         this.fetchRankingReport();
     }
@@ -34,6 +36,15 @@ export class HomeComponent implements OnInit {
             this.timelineReportData.forEach((timelineData: TimelineReportType) => {
                 timelineData.startDate = UtilityService.millisecondsToDate(timelineData.startDate);
             });
+        });
+        this.store.dispatch(loaded());
+    };
+
+    private fetchNotificationReport = async () => {
+        this.store.dispatch(loading());
+        const result = await this.reportService.get(TYPES.REPORT.NOTIFICATION);
+        UtilityService.handleResponseFromService(result, (response: IHttpResponse) => {
+            this.notificationReportData = response.data;
         });
         this.store.dispatch(loaded());
     };

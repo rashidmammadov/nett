@@ -498,6 +498,21 @@ class ApiQuery {
     }
 
     /**
+     * @description query to get participant`s notification report result.
+     * @param integer $userId - the given user`s id
+     * @return mixed
+     */
+    public static function getNotificationReport($userId) {
+        $result = Participant::where(DB_PARTICIPANT_TABLE.'.'.PARTICIPANT_ID, EQUAL_SIGN, $userId)
+            ->join(DB_TOURNAMENT_TABLE, DB_TOURNAMENT_TABLE.'.'.TOURNAMENT_ID, EQUAL_SIGN, DB_PARTICIPANT_TABLE.'.'.TOURNAMENT_ID)
+            ->where(DB_TOURNAMENT_TABLE.'.'.STATUS, NOT_EQUAL_SIGN, TOURNAMENT_STATUS_CANCEL)
+            ->join(DB_GAME_TABLE, DB_GAME_TABLE.'.'.GAME_ID, EQUAL_SIGN, DB_TOURNAMENT_TABLE.'.'.GAME_ID)
+            ->orderBy(START_DATE, 'desc')
+            ->get();
+        return $result;
+    }
+
+    /**
      * @description query to get player`s ranking report result.
      * @return mixed
      */

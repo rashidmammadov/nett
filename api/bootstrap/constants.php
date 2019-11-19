@@ -90,6 +90,7 @@ define('MUST_BE_ONE_WINNER', 'Bir galip belirlemeniz lazım');
 define('NAME', 'name');
 define('NEW_', 'new');
 define('NOT_EQUAL_SIGN', '!=');
+define('NOTIFICATION_REPORT', 'notification');
 define('ONESIGNAL_DEVICE_ID', 'onesignalDeviceId');
 define('TIME', 'time');
 define('TOUR_ID', 'tourId');
