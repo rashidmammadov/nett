@@ -24,6 +24,7 @@ app-application { height: 100%; }
 }
 .overflow { overflow: auto; }
 .overflow-card { max-height: calc(100% - 64px); overflow-y: auto; }
+.overflow-card-half { max-height: 50%; overflow-y: auto; }
 .link { cursor: pointer; outline: none; }
 
 ::-webkit-scrollbar-thumb { border-radius: 2px; background-color: #f0f0f0; }
@@ -77,7 +78,8 @@ app-application { height: 100%; }
             &.down { color: #f44336; }
             &.stable { color: gold; }
             &.up { color: #69f0ae; }
-            &.new { color: $mainColor; }
+            &.new { color: #C0C0C0; }
+            &.not { color: $mainColor; }
         }
     }
 }

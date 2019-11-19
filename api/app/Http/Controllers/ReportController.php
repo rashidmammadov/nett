@@ -30,7 +30,7 @@ class ReportController extends ApiController {
                 if ($request[REPORT_TYPE] == FINANCE_REPORT && $user[TYPE] == PLAYER) {
                     $data = $this->financeReport($user[IDENTIFIER]);
                 } else if ($request[REPORT_TYPE] == RANKING_REPORT) {
-                    $data = $this->rankingReport();
+                    $data = $this->rankingReport($user);
                 } else if ($request[REPORT_TYPE] == TIMELINE_REPORT && $user[TYPE] == PLAYER) {
                     $data = $this->timelineReport($user[IDENTIFIER]);
                 }
@@ -65,11 +65,17 @@ class ReportController extends ApiController {
 
     /**
      * @description Prepare players ranking.
+     * @param $user - Holds the current user data.
      * @return array
      */
-    private function rankingReport() {
+    private function rankingReport($user) {
         $queryResult = ApiQuery::getRankingReport();
-        return $queryResult;
+        $result = array();
+        foreach ($queryResult as $player) {
+            array_push($result, $player);
+        }
+        array_push($result, $user);
+        return $result;
     }
 
     /**

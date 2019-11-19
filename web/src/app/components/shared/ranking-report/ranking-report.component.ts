@@ -12,21 +12,27 @@ export class RankingReportComponent implements OnInit {
 
     ngOnInit() {
         this.data.forEach((d) => {
-            if (!d.previousRanking) {
-                d.difference = 'yeni';
-                d.icon = 'ranking-new';
-                d.class = 'new';
+            if (!d.ranking) {
+                d.difference = '-';
+                d.icon = 'ranking-not';
+                d.class = 'not';
             } else {
-                d.difference = d.previousRanking - d.ranking;
-                if (d.difference > 0) {
-                    d.icon = 'ranking-up';
-                    d.class = 'up';
-                } else if (d.difference < 0) {
-                    d.icon = 'ranking-down';
-                    d.class = 'down';
-                } else if (d.difference === 0) {
-                    d.icon = 'ranking-stable';
-                    d.class = 'stable';
+                if (!d.previousRanking) {
+                    d.difference = 'yeni';
+                    d.icon = 'ranking-new';
+                    d.class = 'new';
+                } else {
+                    d.difference = d.previousRanking - d.ranking;
+                    if (d.difference > 0) {
+                        d.icon = 'ranking-up';
+                        d.class = 'up';
+                    } else if (d.difference < 0) {
+                        d.icon = 'ranking-down';
+                        d.class = 'down';
+                    } else if (d.difference === 0) {
+                        d.icon = 'ranking-stable';
+                        d.class = 'stable';
+                    }
                 }
             }
         })

@@ -17,8 +17,8 @@
         </div>
 
         <div fxLayout="column" fxLayout.lt-md="column" fxLayoutGap="16px" fxFlex>
-            <div fxFlex="50">
-                <mat-card class="mat-elevation-z4">
+            <div>
+                <mat-card class="mat-elevation-z4 overflow-card-half">
                     <app-ranking-report *ngIf="rankingReportData.length" [data]="rankingReportData"></app-ranking-report>
                     <p *ngIf="!rankingReportData.length" align="center">Gösterilecek Veri Bulunamadı</p>
                 </mat-card>

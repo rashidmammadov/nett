@@ -5,12 +5,12 @@
             <p class="username">{{player.username}}</p>
             <p class="name">{{player.name}} {{player.surname}}</p>
         </div>
-        <h4 class="city" fxFlex="25">{{player.city}}</h4>
-        <div class="difference {{player.class}}" fxLayout="row" fxFlexAlign="center center" fxFlex="10">
+        <h4 class="city" fxFlex="25" fxFlex.lt-sm="20">{{player.city}}</h4>
+        <div class="difference {{player.class}}" fxLayout="row" fxFlexAlign="center center" fxFlex="15" fxFlex.lt-sm="20">
             <mat-icon [svgIcon]="player.icon"></mat-icon> <p>{{player.difference}}</p>
         </div>
         <div fxLayout="row" fxFlexAlign="end center" fxFlex="10">
-            <p class="ranking">#{{player.ranking}}</p>
+            <p class="ranking">{{player.ranking ? '#' + player.ranking : ' -'}}</p>
         </div>
     </div>
     <mat-divider></mat-divider>
