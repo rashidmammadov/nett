@@ -508,21 +508,24 @@ class ApiQuery {
             ->where(DB_TOURNAMENT_TABLE.'.'.STATUS, NOT_EQUAL_SIGN, TOURNAMENT_STATUS_CANCEL)
             ->join(DB_GAME_TABLE, DB_GAME_TABLE.'.'.GAME_ID, EQUAL_SIGN, DB_TOURNAMENT_TABLE.'.'.GAME_ID)
             ->orderBy(START_DATE, 'desc')
+            ->offset(0)
+            ->limit(10)
             ->get();
         return $result;
     }
 
     /**
      * @description query to get player`s ranking report result.
+     * @param $limit - The limit of query.
      * @return mixed
      */
-    public static function getRankingReport() {
+    public static function getRankingReport($limit) {
         $result = User::where(DB_USERS_TABLE.'.'.TYPE, EQUAL_SIGN, PLAYER)
             ->where(DB_USERS_TABLE.'.'.STATE, EQUAL_SIGN, USER_STATE_ACTIVE)
             ->where(DB_USERS_TABLE.'.'.RANKING, NOT_EQUAL_SIGN, null)
             ->orderBy(RANKING)
             ->offset(0)
-            ->limit(10)
+            ->limit($limit)
             ->get();
         return $result;
     }

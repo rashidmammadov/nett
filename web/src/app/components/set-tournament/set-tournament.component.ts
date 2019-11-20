@@ -11,7 +11,7 @@ import { UtilityService } from '../../services/utility/utility.service';
 import { IHttpResponse } from '../../interfaces/i-http-response';
 import { loaded, loading } from '../../store/actions/progress.action';
 import { TYPES } from '../../constants/types.constant';
-import {ToastService} from "../../services/toast/toast.service";
+import { ToastService } from '../../services/toast/toast.service';
 
 @Component({
   selector: 'app-set-tournament',
@@ -45,7 +45,7 @@ export class SetTournamentComponent implements OnInit {
 
     async ngOnInit() {
         this.games = (await this.activatedRoute.data.pipe(first()).toPromise()).games.data as GameType[];
-        this.games.length && (this.tournamentData.game = this.games[0]);
+        this.games && this.games.length && (this.tournamentData.game = this.games[0]);
         this.tournamentData.holder = await this.user.select('user').pipe(first()).toPromise();
         this.changeTournamentDate();
         this.changeTournamentGame();

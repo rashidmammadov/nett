@@ -24,7 +24,7 @@ app-application { height: 100%; }
 }
 .overflow { overflow: auto; }
 .overflow-card { max-height: calc(100% - 64px); overflow-y: auto; }
-.overflow-card-half { max-height: 50%; overflow-y: auto; }
+.overflow-card-half { height: auto; overflow-y: auto; }
 .link { cursor: pointer; outline: none; }
 
 ::-webkit-scrollbar-thumb { border-radius: 2px; background-color: #f0f0f0; }
@@ -76,11 +76,30 @@ app-application { height: 100%; }
             p { margin: 2px 4px 0 8px; }
             .mat-icon { width: 16px; height: 16px; }
             &.down { color: #f44336; }
-            &.stable { color: gold; }
-            &.up { color: #69f0ae; }
+            &.stable { color: #DAA520; }
+            &.up { color: #5FDC96; }
             &.new { color: #C0C0C0; }
-            &.not { color: $mainColor; }
+            &.not { color: #00BFFF; }
         }
+    }
+}
+
+.notification-container {
+    .notification-item {
+        cursor: pointer;
+        outline: none;
+        padding: 8px 8px 8px 4px;
+        font-size: 14px;
+        border-radius: 4px;
+        .icon {
+            padding: 8px;
+            border-radius: 8px;
+            .mat-icon { color: #424242; }
+            &.active { background-color: #f44336; }
+            &.close { background-color: #5FDC96; }
+            &.open { background-color: #00BFFF; }
+        }
+        .message { margin: auto 4px auto 8px; color: #f0f0f0; }
     }
 }
 

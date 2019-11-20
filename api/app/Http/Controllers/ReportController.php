@@ -6,6 +6,7 @@ use App\Http\Queries\MySQL\ApiQuery;
 use App\Http\Utility\Finance;
 use App\Http\Utility\FinanceReport;
 use App\Http\Utility\NotificationReport;
+use App\Http\Utility\RankingReport;
 use App\Http\Utility\TimelineReport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -41,7 +42,8 @@ class ReportController extends ApiController {
             }
         } catch (JWTException $e) {
             $this->setStatusCode($e->getStatusCode());
-            return $this->respondWithError($e->getMessage());
+            $this->setMessage(AUTHENTICATION_ERROR);
+            return $this->respondWithError($this->getMessage());
         }
     }
 
@@ -89,13 +91,22 @@ class ReportController extends ApiController {
      * @return array
      */
     private function rankingReport($user) {
-        // TODO
-        $queryResult = ApiQuery::getRankingReport();
+        $limit = 10;
+        $queryResult = ApiQuery::getRankingReport($limit);
         $result = array();
+        $userOnTopList = false;
         foreach ($queryResult as $player) {
-            array_push($result, $player);
+            $ranking = new RankingReport($player);
+            if ($player[IDENTIFIER] == $user[IDENTIFIER]) {
+                $userOnTopList = true;
+            }
+            array_push($result, $ranking::get());
         }
-        array_push($result, $user);
+        if (!$userOnTopList) {
+            $ranking = new RankingReport($user);
+            $ranking::setRanking($user[RANKING]);
+            array_push($result, $ranking::get());
+        }
         return $result;
     }
 

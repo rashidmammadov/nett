@@ -5,19 +5,19 @@ namespace App\Http\Utility;
 class NotificationReport {
 
     private static $tournamentId;
-    private static $tournamentStatus;
+    private static $status;
     private static $message;
 
     public function __construct($parameters = null) {
         !empty($parameters[TOURNAMENT_ID])      && self::setTournamentId($parameters[TOURNAMENT_ID]);
-        self::setTournamentStatus($parameters[STATUS]);
+        self::setStatus($parameters[STATUS]);
         !empty($parameters[MESSAGE])            && self::setMessage($parameters[MESSAGE]);
     }
 
     public static function get() {
         return array(
             TOURNAMENT_ID => self::getTournamentId(),
-            STATUS => self::getTournamentStatus(),
+            STATUS => self::getStatus(),
             MESSAGE => self::getMessage()
         );
     }
@@ -26,9 +26,9 @@ class NotificationReport {
 
     public static function setTournamentId($tournamentId): void { self::$tournamentId = $tournamentId; }
 
-    public static function getTournamentStatus() { return self::$tournamentStatus; }
+    public static function getStatus() { return self::$status; }
 
-    public static function setTournamentStatus($tournamentStatus = 0): void { self::$tournamentStatus = $tournamentStatus; }
+    public static function setStatus($status = 0): void { self::$status = $status; }
 
     public static function getMessage() { return self::$message; }
 
@@ -38,11 +38,11 @@ class NotificationReport {
         $date = CustomDate::getDateFromMilliseconds($startDate);
         $message = '';
         if ($status === TOURNAMENT_STATUS_OPEN) {
-            $message = $date . ' tarihli ' . $gameName . ' turnuvasına kayıtlandın.';
+            $message = '<b>' . $date . '</b> tarihli <b>' . $gameName . '</b> turnuvasına kayıtlandın.';
         } else if ($status === TOURNAMENT_STATUS_ACTIVE) {
-            $message = $date . ' tarihli ' . $gameName . ' turnuvası başladı, rakiplerini ve fikstürü takip et.';
+            $message = '<b>' . $date . '</b> tarihli <b>' . $gameName . '</b> turnuvası başladı, rakiplerini ve fikstürü takip et.';
         } else if ($status === TOURNAMENT_STATUS_CLOSE) {
-            $message = $date . ' tarihli ' . $gameName . ' turnuvası sonuçlandı.';
+            $message = '<b>' . $date . '</b> tarihli <b>' . $gameName . '</b> turnuvası sonuçlandı.';
         }
         return $message;
     }

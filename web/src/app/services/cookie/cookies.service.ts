@@ -8,7 +8,7 @@ export class Cookie {
     public static injector: Injector;
 
     public static set(key: string, value: string): void {
-        Cookie.injector.get(CookieService).set(key, value);
+        Cookie.injector.get(CookieService).set(key, value, 0, '/');
     }
 
     public static get(key: string): string {
@@ -16,7 +16,7 @@ export class Cookie {
     }
 
     public static delete(key: string): void {
-        Cookie.injector.get(CookieService).delete(key);
+        Cookie.injector.get(CookieService).delete(key, '/');
     }
 
 }

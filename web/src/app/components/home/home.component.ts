@@ -7,6 +7,8 @@ import { IHttpResponse } from '../../interfaces/i-http-response';
 import { loaded, loading } from '../../store/actions/progress.action';
 import { TimelineReportType } from '../../interfaces/timeline-report-type';
 import { PieChartReportType } from '../../interfaces/pie-chart-report-type';
+import { NotificationReportType } from '../../interfaces/notification-report-type';
+import { RankingReportType } from '../../interfaces/ranking-report-type';
 
 @Component({
   selector: 'app-home',
@@ -15,8 +17,8 @@ import { PieChartReportType } from '../../interfaces/pie-chart-report-type';
 })
 export class HomeComponent implements OnInit {
     financeReportData: PieChartReportType[] = [];
-    notificationReportData: [] = [];
-    rankingReportData: [] = [];
+    notificationReportData: NotificationReportType[] = [];
+    rankingReportData: RankingReportType[] = [];
     timelineReportData: TimelineReportType[] = [];
 
     constructor(private reportService: ReportService, private store: Store<{progress: boolean}>) { }

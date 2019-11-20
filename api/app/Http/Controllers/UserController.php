@@ -37,7 +37,8 @@ class UserController extends ApiController {
             return $this->respondCreated("Token Refreshed", $this->userTransformer->transform($user));
         } catch (JWTException $e) {
             $this->setStatusCode($e->getStatusCode());
-            return $this->respondWithError($e->getMessage());
+            $this->setMessage(AUTHENTICATION_ERROR);
+            return $this->respondWithError($this->getMessage());
         }
     }
 
@@ -76,7 +77,8 @@ class UserController extends ApiController {
                     $user->remember_token = NULL;
                     $user->save();
                     $this->setStatusCode($e->getStatusCode());
-                    return $this->respondWithError($e->getMessage());
+                    $this->setMessage(AUTHENTICATION_ERROR);
+                    return $this->respondWithError($this->getMessage());
                 }
             } else {
                 return $this->respondWithError(INVALID_EMAIL_OR_PASSWORD);
@@ -129,8 +131,7 @@ class UserController extends ApiController {
      * @param Request $request
      * @return mixed
      */
-    public function activate(Request $request)
-    {
+    public function activate(Request $request) {
         try {
             $user = JWTAuth::parseToken()->authenticate();
             $rules = array(
@@ -149,7 +150,8 @@ class UserController extends ApiController {
             }
         } catch (JWTException $e) {
             $this->setStatusCode($e->getStatusCode());
-            return $this->respondWithError($e->getMessage());
+            $this->setMessage(AUTHENTICATION_ERROR);
+            return $this->respondWithError($this->getMessage());
         }
 
     }
@@ -167,7 +169,8 @@ class UserController extends ApiController {
             return $this->respondCreated(LOGGED_OUT_SUCCESSFULLY);
         } catch(JWTException $e) {
             $this->setStatusCode($e->getStatusCode());
-            return $this->respondWithError($e->getMessage());
+            $this->setMessage(AUTHENTICATION_ERROR);
+            return $this->respondWithError($this->getMessage());
         }
     }
 
@@ -198,8 +201,7 @@ class UserController extends ApiController {
      * @description: set random avatar for user.
      * @return mixed
      */
-    private function addRandomAvatar()
-    {
+    private function addRandomAvatar() {
         $imageUrl = env('HOST_NAME') . env('AVATARS_PATH') . rand(MIN_AVATAR_COUNT, MAX_AVATAR_COUNT) . '.png';
         return $imageUrl;
     }

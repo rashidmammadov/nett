@@ -24,6 +24,11 @@ class ApiController extends Controller {
     protected $statusCode = Res::HTTP_OK;
 
     /**
+     * @var string
+     */
+    protected $message = '';
+
+    /**
      * @return mixed
      */
     public function getStatusCode() {
@@ -36,6 +41,22 @@ class ApiController extends Controller {
      */
     public function setStatusCode($statusCode) {
         $this->statusCode = $statusCode;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMessage() {
+        return $this->message;
+    }
+
+    /**
+     * @param $message
+     * @return ApiController response
+     */
+    public function setMessage($message) {
+        $this->message = $message;
         return $this;
     }
 
@@ -83,7 +104,7 @@ class ApiController extends Controller {
      * @param $message
      * @return mixed respond
      */
-    public function respondWithError($message){
+    public function respondWithError($message) {
         return $this->respond([
             STATUS => ERROR,
             STATUS_CODE => Res::HTTP_UNAUTHORIZED,

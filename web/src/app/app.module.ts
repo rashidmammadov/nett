@@ -28,11 +28,11 @@ import { SetTournamentComponent } from './components/set-tournament/set-tourname
 import { LeaveDialogComponent } from './components/shared/leave-dialog/leave-dialog.component';
 import { TimelineReportComponent } from './components/shared/timeline-report/timeline-report.component';
 import { TournamentComponent } from './components/tournament/tournament.component';
-
 import { TournamentCardComponent } from './components/shared/tournament-card/tournament-card.component';
-import { Cookie } from './services/cookie/cookies.service';
 
+import { Cookie } from './services/cookie/cookies.service';
 import { ToastService } from './services/toast/toast.service';
+import { UtilityService } from './services/utility/utility.service';
 import { userReducer } from './store/reducers/user.reducer';
 
 import { progressReducer } from './store/reducers/progress.reducer';
@@ -87,5 +87,6 @@ export class AppModule {
     constructor(private injector: Injector) {
         Cookie.injector = injector;
         ToastService.injector = injector;
+        UtilityService.injector = injector;
     }
 }

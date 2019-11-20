@@ -49,7 +49,8 @@ class GameController extends ApiController {
             }
         } catch(JWTException $e) {
             $this->setStatusCode($e->getStatusCode());
-            return $this->respondWithError($e->getMessage());
+            $this->setMessage(AUTHENTICATION_ERROR);
+            return $this->respondWithError($this->getMessage());
         }
     }
 
@@ -65,7 +66,8 @@ class GameController extends ApiController {
             return $this->respondCreated(SUCCESS, $result);
         } catch(JWTException $e) {
             $this->setStatusCode($e->getStatusCode());
-            return $this->respondWithError($e->getMessage());
+            $this->setMessage(AUTHENTICATION_ERROR);
+            return $this->respondWithError($this->getMessage());
         }
     }
 

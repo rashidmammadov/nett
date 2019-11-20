@@ -80,7 +80,7 @@ export class PieChartReportComponent implements OnChanges {
 
         key = (d) => { return d.data.label; };
 
-        color = {'tournament': 'green', "deposit": 'red'};
+        color = {'tournament': '#5FDC96', "deposit": '#f44336'};
         legendData = [{label: '', amount: '', currency: ''}];
     }
 
@@ -161,14 +161,14 @@ export class PieChartReportComponent implements OnChanges {
 
     private mouseenter(d) {
         svg.select('path[slice="' + key(d) + '"]').classed('focus', true);
-        d3.select('.legend .title').text(() => TYPES.FINANCE_TYPE[d.data.label.toUpperCase()]);
-        d3.select('.legend .value').text(() => d.data.amount + d.data.currency);
+        d3.select('.legend .title').text(TYPES.FINANCE_TYPE[d.data.label.toUpperCase()]);
+        d3.select('.legend .value').text(d.data.amount + d.data.currency);
     }
 
     private mouseout(d) {
         svg.select('path[slice="' + key(d) + '"]').classed('focus', false);
-        d3.select('.legend .title').text(() => legendData[0].label);
-        d3.select('.legend .value').text(() => legendData[0].amount + legendData[0].currency);
+        d3.select('.legend .title').text(legendData[0].label);
+        d3.select('.legend .value').text(legendData[0].amount + legendData[0].currency);
     }
 
 }

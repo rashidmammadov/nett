@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { RankingReportType } from '../../../interfaces/ranking-report-type';
 
 @Component({
   selector: 'app-ranking-report',
@@ -6,7 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./ranking-report.component.scss']
 })
 export class RankingReportComponent implements OnInit {
-    @Input() data: any[];
+    @Input() data: RankingReportType[];
 
     constructor() { }
 
