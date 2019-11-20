@@ -1,6 +1,6 @@
 <div class="container tournament-info-container" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px">
-    <div fxFlex>
-        <h3>Genel Bilgiler</h3>
+    <div fxLayout="column" fxLayoutGap="8px" fxFlex>
+        <mat-label>Genel Bilgiler</mat-label>
         <mat-card class="mat-elevation-z4 overflow-card">
             <img class="image" *ngIf="tournament.game" mat-card-image src="{{tournament.game.gameImage}}"
                  alt="{{tournament.game.gameName}}">
@@ -57,8 +57,8 @@
         </mat-card>
     </div>
 
-    <div fxFlex>
-        <h3>Katılımcılar</h3>
+    <div fxLayout="column" fxLayoutGap="8px" fxFlex>
+        <mat-label>Katılımcılar</mat-label>
         <mat-card class="mat-elevation-z4 participants-card overflow-card">
             <mat-card-content>
                 <mat-list>
@@ -75,8 +75,8 @@
         </mat-card>
     </div>
 
-    <div fxFlex>
-        <h3>Fikstür</h3>
+    <div fxLayout="column" fxLayoutGap="8px" fxFlex>
+        <mat-label>Fikstür</mat-label>
         <mat-card class="mat-elevation-z4 fixture-card overflow-card">
             <mat-card-content *ngIf="tournament.fixture">
                 <div *ngFor="let draw of tournament.fixture.draws">
