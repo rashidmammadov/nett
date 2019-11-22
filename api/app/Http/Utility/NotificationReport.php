@@ -34,15 +34,27 @@ class NotificationReport {
 
     public static function setMessage($message): void { self::$message = $message; }
 
-    public static function prepareTournamentMessage($gameName, $startDate, $status) {
+    public static function prepareTournamentMessage($gameName, $startDate, $status, $type) {
         $date = CustomDate::getDateFromMilliseconds($startDate);
-        $message = '';
-        if ($status === TOURNAMENT_STATUS_OPEN) {
-            $message = '<b>' . $date . '</b> tarihli <b>' . $gameName . '</b> turnuvasına kayıtlandın.';
-        } else if ($status === TOURNAMENT_STATUS_ACTIVE) {
-            $message = '<b>' . $date . '</b> tarihli <b>' . $gameName . '</b> turnuvası başladı, rakiplerini ve fikstürü takip et.';
-        } else if ($status === TOURNAMENT_STATUS_CLOSE) {
-            $message = '<b>' . $date . '</b> tarihli <b>' . $gameName . '</b> turnuvası sonuçlandı.';
+        $message = '<b>' . $date . '</b> tarihli <b>' . $gameName . '</b>';
+        if ($type == HOLDER) {
+            if ($status === TOURNAMENT_STATUS_OPEN) {
+                $message =  $message . ' turnuvasını başlattın.';
+            } else if ($status === TOURNAMENT_STATUS_ACTIVE) {
+                $message = $message . ' turnuvası başladı, turnuva katılımıcılarını kontrol etmeyi ve skorları zamanında girmeyi unutma.';
+            } else if ($status === TOURNAMENT_STATUS_CANCEL) {
+                $message = $message . ' turnuvası yeterli katılımcı sayısına ulaşmadığı için veya başka bir sebepten dolayı iptal edildi.';
+            } else if ($status === TOURNAMENT_STATUS_CLOSE) {
+                $message = $message . ' turnuvası sonuçlandı.';
+            }
+        } else if ($type == PLAYER) {
+            if ($status === TOURNAMENT_STATUS_OPEN) {
+                $message =  $message . ' turnuvasına kayıtlandın.';
+            } else if ($status === TOURNAMENT_STATUS_ACTIVE) {
+                $message = $message . ' turnuvası başladı, rakiplerini ve fikstürü takip et.';
+            } else if ($status === TOURNAMENT_STATUS_CLOSE) {
+                $message = $message . ' turnuvası sonuçlandı.';
+            }
         }
         return $message;
     }

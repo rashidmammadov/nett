@@ -11,6 +11,7 @@ export const TYPES = {
 
     REPORT: {
         'FINANCE': 'finance',
+        'MOST_PLAYED': 'most-played',
         'NOTIFICATION': 'notification',
         'RANKING': 'ranking',
         'TIMELINE': 'timeline'
@@ -27,6 +28,11 @@ export const TYPES = {
         'CANCEL': 3,
         'CLOSE': 0,
         'OPEN': 2
+    },
+
+    USER: {
+        'HOLDER': 'holder',
+        'PLAYER': 'player'
     },
 
     USER_TYPE: {

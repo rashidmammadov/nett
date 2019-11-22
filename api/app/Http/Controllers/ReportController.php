@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Queries\MySQL\ApiQuery;
-use App\Http\Utility\Finance;
 use App\Http\Utility\FinanceReport;
 use App\Http\Utility\NotificationReport;
 use App\Http\Utility\RankingReport;
@@ -29,10 +28,12 @@ class ReportController extends ApiController {
                 return $this->respondValidationError(FIELDS_VALIDATION_FAILED, $validator->errors());
             } else {
                 $data = array();
-                if ($request[REPORT_TYPE] == FINANCE_REPORT && $user[TYPE] == PLAYER) {
+                if ($request[REPORT_TYPE] == FINANCE_REPORT) {
                     $data = $this->financeReport($user[IDENTIFIER]);
+                } else if ($request[REPORT_TYPE] == MOST_PLAYED_REPORT) {
+                    $data = $this->mostPlayedReport();
                 } else if ($request[REPORT_TYPE] == NOTIFICATION_REPORT) {
-                    $data = $this->notificationReport($user[IDENTIFIER]);
+                    $data = $this->notificationReport($user[IDENTIFIER], $user[TYPE]);
                 } else if ($request[REPORT_TYPE] == RANKING_REPORT) {
                     $data = $this->rankingReport($user);
                 } else if ($request[REPORT_TYPE] == TIMELINE_REPORT && $user[TYPE] == PLAYER) {
@@ -69,16 +70,32 @@ class ReportController extends ApiController {
     }
 
     /**
-     * @description Prepare participant`s notifications.
-     * @param $userId
+     * @description Prepare most played games.
      * @return array
      */
-    private function notificationReport($userId) {
-        $queryResult = ApiQuery::getNotificationReport($userId);
+    private function mostPlayedReport() {
+        $queryResult = ApiQuery::getMostPlayedReport();
+        return $queryResult;
+    }
+
+    /**
+     * @description Prepare participant`s notifications.
+     * @param integer $userId
+     * @param string $type
+     * @return array
+     */
+    private function notificationReport($userId, $type) {
+        $limit = 10;
         $result = array();
+        $queryResult = array();
+        if ($type == HOLDER) {
+            $queryResult = ApiQuery::getHolderNotificationReport($userId, $limit);
+        } else if ($type == PLAYER) {
+            $queryResult = ApiQuery::getPlayerNotificationReport($userId, $limit);
+        }
         foreach ($queryResult as $query) {
             $notification = new NotificationReport($query);
-            $message = NotificationReport::prepareTournamentMessage($query[GAME_NAME], $query[START_DATE], $query[STATUS]);
+            $message = NotificationReport::prepareTournamentMessage($query[GAME_NAME], $query[START_DATE], $query[STATUS], $type);
             $notification::setMessage($message);
             array_push($result, $notification::get());
         }
@@ -100,11 +117,13 @@ class ReportController extends ApiController {
             if ($player[IDENTIFIER] == $user[IDENTIFIER]) {
                 $userOnTopList = true;
             }
+            $ranking::setPreviousRanking($player[PREVIOUS_RANKING]);
             array_push($result, $ranking::get());
         }
         if (!$userOnTopList) {
             $ranking = new RankingReport($user);
             $ranking::setRanking($user[RANKING]);
+            $ranking::setPreviousRanking($user[PREVIOUS_RANKING]);
             array_push($result, $ranking::get());
         }
         return $result;

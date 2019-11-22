@@ -78,8 +78,8 @@ app-application { height: 100%; }
             &.down { color: #f44336; }
             &.stable { color: #DAA520; }
             &.up { color: #5FDC96; }
-            &.new { color: #C0C0C0; }
-            &.not { color: #00BFFF; }
+            &.new { color: #00BFFF; }
+            &.not { color: #C0C0C0; }
         }
     }
 }
@@ -92,10 +92,12 @@ app-application { height: 100%; }
         font-size: 14px;
         border-radius: 4px;
         .icon {
+            height: 24px;
             padding: 8px;
             border-radius: 8px;
             .mat-icon { color: #424242; }
-            &.active { background-color: #f44336; }
+            &.active { background-color: #DAA520; }
+            &.cancel { background-color: #f44336; }
             &.close { background-color: #5FDC96; }
             &.open { background-color: #00BFFF; }
         }

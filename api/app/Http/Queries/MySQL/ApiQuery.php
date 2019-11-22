@@ -490,7 +490,7 @@ class ApiQuery {
      */
     public static function getFinanceReport($userId) {
         $result = Finance::where(DB_FINANCE_TABLE.'.'.USER_ID, EQUAL_SIGN, $userId)
-            ->where(DB_FINANCE_TABLE.'.'.TYPE, EQUAL_SIGN, PLAYER)
+//            ->where(DB_FINANCE_TABLE.'.'.TYPE, EQUAL_SIGN, PLAYER)
             ->where(DB_FINANCE_TABLE.'.'.STATUS, EQUAL_SIGN, FINANCE_STATUS_APPROVED)
             ->get()
             ->groupBy(CHANNEL);
@@ -498,19 +498,48 @@ class ApiQuery {
     }
 
     /**
-     * @description query to get participant`s notification report result.
+     * @description query to get holder`s notification report result.
      * @param integer $userId - the given user`s id
+     * @param integer $limit - the limit of query
      * @return mixed
      */
-    public static function getNotificationReport($userId) {
+    public static function getHolderNotificationReport($userId, $limit) {
+        $result = Tournament::where(DB_TOURNAMENT_TABLE.'.'.HOLDER_ID, EQUAL_SIGN, $userId)
+            ->join(DB_GAME_TABLE, DB_GAME_TABLE.'.'.GAME_ID, EQUAL_SIGN, DB_TOURNAMENT_TABLE.'.'.GAME_ID)
+            ->orderBy(START_DATE, 'desc')
+            ->offset(0)
+            ->limit($limit)
+            ->get();
+        return $result;
+    }
+
+    /**
+     * @description query to get participant`s notification report result.
+     * @param integer $userId - the given user`s id
+     * @param integer $limit - the limit of query
+     * @return mixed
+     */
+    public static function getPlayerNotificationReport($userId, $limit) {
         $result = Participant::where(DB_PARTICIPANT_TABLE.'.'.PARTICIPANT_ID, EQUAL_SIGN, $userId)
             ->join(DB_TOURNAMENT_TABLE, DB_TOURNAMENT_TABLE.'.'.TOURNAMENT_ID, EQUAL_SIGN, DB_PARTICIPANT_TABLE.'.'.TOURNAMENT_ID)
             ->where(DB_TOURNAMENT_TABLE.'.'.STATUS, NOT_EQUAL_SIGN, TOURNAMENT_STATUS_CANCEL)
             ->join(DB_GAME_TABLE, DB_GAME_TABLE.'.'.GAME_ID, EQUAL_SIGN, DB_TOURNAMENT_TABLE.'.'.GAME_ID)
             ->orderBy(START_DATE, 'desc')
             ->offset(0)
-            ->limit(10)
+            ->limit($limit)
             ->get();
+        return $result;
+    }
+
+    /**
+     * @description query to get most played games report result.
+     * @return mixed
+     */
+    public static function getMostPlayedReport() {
+        $result = Tournament::where(DB_TOURNAMENT_TABLE.'.'.STATUS, NOT_EQUAL_SIGN, TOURNAMENT_STATUS_CANCEL)
+            ->join(DB_GAME_TABLE, DB_GAME_TABLE.'.'.GAME_ID, EQUAL_SIGN, DB_TOURNAMENT_TABLE.'.'.GAME_ID)
+            ->get()
+            ->pluck(GAME_ID);
         return $result;
     }
 

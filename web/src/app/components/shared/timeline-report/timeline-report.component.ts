@@ -1,6 +1,7 @@
 import { Component, ElementRef, HostListener, Input, OnChanges, ViewChild } from '@angular/core';
 import * as d3 from 'd3';
 import { TimelineReportType } from '../../../interfaces/timeline-report-type';
+import { UtilityService } from '../../../services/utility/utility.service';
 
 let element;
 let margin: {top: number, right: number, bottom: number, left: number};
@@ -31,6 +32,7 @@ export class TimelineReportComponent implements OnChanges {
 
     ngOnChanges() {
         if (!this.data) { return; }
+        this.data.forEach((d: TimelineReportType) => d.startDate = UtilityService.millisecondsToDate(d.startDate));
         this.prepare();
         this.draw(this.data);
     }

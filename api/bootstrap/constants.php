@@ -88,6 +88,7 @@ define('MESSAGE', 'message');
 define('MONEY', 'money');
 define('MIN_AVATAR_COUNT', 1);
 define('MIN_AMOUNT', 15);
+define('MOST_PLAYED_REPORT', 'most-played');
 define('MUST_BE_ONE_WINNER', 'Bir galip belirlemeniz lazım');
 define('NAME', 'name');
 define('NEW_', 'new');

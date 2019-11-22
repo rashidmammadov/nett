@@ -66,7 +66,6 @@
                         <img mat-list-avatar [src]="participant.picture">
                         <p mat-line> {{participant.username}} </p>
                         <h4 mat-line>{{participant.name}} {{participant.surname}}</h4>
-<!--                        <h4 mat-line *ngIf="participant.referenceCode">{{participant.referenceCode}}</h4>-->
                         <h4 *ngIf="participant.tournamentRanking">#{{participant.tournamentRanking}}</h4>
                         <mat-divider></mat-divider>
                     </mat-list-item>

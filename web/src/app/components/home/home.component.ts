@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { first } from 'rxjs/operators';
 import { ReportService } from '../../services/report/report.service';
 import { TYPES } from '../../constants/types.constant';
 import { UtilityService } from '../../services/utility/utility.service';
@@ -9,6 +10,7 @@ import { TimelineReportType } from '../../interfaces/timeline-report-type';
 import { PieChartReportType } from '../../interfaces/pie-chart-report-type';
 import { NotificationReportType } from '../../interfaces/notification-report-type';
 import { RankingReportType } from '../../interfaces/ranking-report-type';
+import { UserType } from '../../interfaces/user-type';
 
 @Component({
   selector: 'app-home',
@@ -16,57 +18,41 @@ import { RankingReportType } from '../../interfaces/ranking-report-type';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+    user: UserType;
     financeReportData: PieChartReportType[] = [];
+    mostPlayedReportData: [] = [];
     notificationReportData: NotificationReportType[] = [];
     rankingReportData: RankingReportType[] = [];
     timelineReportData: TimelineReportType[] = [];
 
-    constructor(private reportService: ReportService, private store: Store<{progress: boolean}>) { }
-
-    ngOnInit() {
-        this.fetchFinanceReport();
-        this.fetchNotificationReport();
-        this.fetchTimelineReport();
-        this.fetchRankingReport();
+    constructor(private reportService: ReportService, private store: Store<{progress: boolean, user: UserType}>) {
+        this.getUserData().then();
     }
 
-    private fetchTimelineReport = async () => {
+    ngOnInit() {
+        if (this.user.type === TYPES.USER.HOLDER) {
+            this.fetchReport(TYPES.REPORT.FINANCE, 'financeReportData').then();
+            this.fetchReport(TYPES.REPORT.MOST_PLAYED, 'mostPlayedReportData').then();
+            this.fetchReport(TYPES.REPORT.NOTIFICATION, 'notificationReportData').then();
+        } else if (this.user.type === TYPES.USER.PLAYER) {
+            this.fetchReport(TYPES.REPORT.FINANCE, 'financeReportData').then();
+            this.fetchReport(TYPES.REPORT.NOTIFICATION, 'notificationReportData').then();
+            this.fetchReport(TYPES.REPORT.TIMELINE, 'timelineReportData').then();
+            this.fetchReport(TYPES.REPORT.RANKING, 'rankingReportData').then();
+        }
+    }
+
+    private fetchReport = async (reportType: string, property: string) => {
         this.store.dispatch(loading());
-        const result = await this.reportService.get(TYPES.REPORT.TIMELINE);
+        const result = await this.reportService.get(reportType);
         UtilityService.handleResponseFromService(result, (response: IHttpResponse) => {
-            this.timelineReportData = response.data;
-            this.timelineReportData.forEach((timelineData: TimelineReportType) => {
-                timelineData.startDate = UtilityService.millisecondsToDate(timelineData.startDate);
-            });
+            this[property] = response.data;
         });
         this.store.dispatch(loaded());
     };
 
-    private fetchNotificationReport = async () => {
-        this.store.dispatch(loading());
-        const result = await this.reportService.get(TYPES.REPORT.NOTIFICATION);
-        UtilityService.handleResponseFromService(result, (response: IHttpResponse) => {
-            this.notificationReportData = response.data;
-        });
-        this.store.dispatch(loaded());
-    };
-
-    private fetchRankingReport = async () => {
-        this.store.dispatch(loading());
-        const result = await this.reportService.get(TYPES.REPORT.RANKING);
-        UtilityService.handleResponseFromService(result, (response: IHttpResponse) => {
-            this.rankingReportData = response.data;
-        });
-        this.store.dispatch(loaded());
-    };
-
-    private fetchFinanceReport = async () => {
-        this.store.dispatch(loading());
-        const result = await this.reportService.get(TYPES.REPORT.FINANCE);
-        UtilityService.handleResponseFromService(result, (response: IHttpResponse) => {
-            this.financeReportData = response.data;
-        });
-        this.store.dispatch(loaded());
+    private getUserData = async () => {
+        this.user = await this.store.select('user').pipe(first()).toPromise();
     };
 
 }

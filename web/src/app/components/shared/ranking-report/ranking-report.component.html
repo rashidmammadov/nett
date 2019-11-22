@@ -6,7 +6,8 @@
             <p class="name">{{player.name}} {{player.surname}}</p>
         </div>
         <h4 class="city" fxFlex="25" fxFlex.lt-sm="20">{{player.city}}</h4>
-        <div class="difference {{player.class}}" fxLayout="row" fxFlexAlign="center center" fxFlex="15" fxFlex.lt-sm="20">
+        <div class="difference {{player.class}}" fxLayout="row" fxFlexAlign="center center" fxFlex="15" fxFlex.lt-sm="20"
+            [matTooltip]="'Önceki Sıralama: ' + (player.previousRanking ? player.previousRanking : '-')">
             <mat-icon [svgIcon]="player.icon"></mat-icon> <p>{{player.difference}}</p>
         </div>
         <div fxLayout="row" fxFlexAlign="end center" fxFlex="10">

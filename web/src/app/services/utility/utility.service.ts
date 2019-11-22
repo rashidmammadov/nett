@@ -7,6 +7,7 @@ import { IHttpResponse } from '../../interfaces/i-http-response';
 import { ErrorResponse } from '../../models/error-response';
 import { ToastService } from '../toast/toast.service';
 import { Cookie } from '../cookie/cookies.service';
+import { MESSAGES } from '../../constants/messages.constant';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,9 @@ export class UtilityService {
     public static injector: Injector;
 
     public static handleResponseFromService(result: IHttpResponse | ErrorResponse, successCallback: (result) => void): void {
-        if ((result as IHttpResponse).status === 'success') {
+        if (!navigator.onLine) {
+            ToastService.show(MESSAGES.ERROR.ERR_INTERNET_DISCONNECTED);
+        } else if ((result as IHttpResponse).status === 'success') {
             successCallback(result);
         } else if ((result as IHttpResponse).status === 'error') {
             ToastService.show((result as IHttpResponse).message)
