@@ -258,7 +258,6 @@ class ApiQuery {
                 return $queryResult;
             }
         }
-
         return $queryResult;
     }
 
@@ -271,7 +270,6 @@ class ApiQuery {
         $queryResult = Tournament::where([
             [TOURNAMENT_ID, EQUAL_SIGN, $tournamentId]
         ])->first();
-
         return $queryResult;
     }
 
@@ -286,7 +284,6 @@ class ApiQuery {
             ->join(DB_USERS_TABLE, (DB_USERS_TABLE . '.' . IDENTIFIER), EQUAL_SIGN, DB_TOURNAMENT_TABLE . '.' . HOLDER_ID)
             ->join(DB_GAME_TABLE, (DB_GAME_TABLE . '.' . GAME_ID), EQUAL_SIGN, DB_TOURNAMENT_TABLE . '.' . GAME_ID)
             ->first();
-
         return $queryResult;
     }
 
@@ -298,7 +295,6 @@ class ApiQuery {
         $queryResult = Tournament::where([
             [STATUS, EQUAL_SIGN, TOURNAMENT_STATUS_OPEN]
         ])->get();
-
         return $queryResult;
     }
 
@@ -312,10 +308,8 @@ class ApiQuery {
         $queryResult = Tournament::where(STATUS, EQUAL_SIGN, $parameters[STATUS])
             ->join(DB_USERS_TABLE, (DB_USERS_TABLE.'.'.IDENTIFIER), EQUAL_SIGN, DB_TOURNAMENT_TABLE.'.'.HOLDER_ID)
             ->join(DB_GAME_TABLE, (DB_GAME_TABLE.'.'.GAME_ID), EQUAL_SIGN, DB_TOURNAMENT_TABLE.'.'.GAME_ID)
-
             ->where(DB_USERS_TABLE.'.'.CITY, LIKE_SIGN, $user[CITY])
             ->get();
-
         return $queryResult;
     }
 
@@ -536,10 +530,10 @@ class ApiQuery {
      * @return mixed
      */
     public static function getMostPlayedReport() {
-        $result = Tournament::where(DB_TOURNAMENT_TABLE.'.'.STATUS, NOT_EQUAL_SIGN, TOURNAMENT_STATUS_CANCEL)
+        $result = Tournament::where(DB_TOURNAMENT_TABLE.'.'.GAME_ID, NOT_EQUAL_SIGN, null)
             ->join(DB_GAME_TABLE, DB_GAME_TABLE.'.'.GAME_ID, EQUAL_SIGN, DB_TOURNAMENT_TABLE.'.'.GAME_ID)
             ->get()
-            ->pluck(GAME_ID);
+            ->groupBy([GAME_ID, STATUS]);
         return $result;
     }
 
@@ -569,6 +563,7 @@ class ApiQuery {
             ->join(DB_TOURNAMENT_TABLE, (DB_TOURNAMENT_TABLE.'.'.TOURNAMENT_ID), EQUAL_SIGN, DB_PARTICIPANT_TABLE.'.'.TOURNAMENT_ID)
             ->where(DB_TOURNAMENT_TABLE.'.'.STATUS, EQUAL_SIGN, TOURNAMENT_STATUS_CLOSE)
             ->join(DB_GAME_TABLE, (DB_GAME_TABLE.'.'.GAME_ID), EQUAL_SIGN, DB_TOURNAMENT_TABLE.'.'.GAME_ID)
+            ->orderBy(START_DATE, 'desc')
             ->get();
         return $result;
     }

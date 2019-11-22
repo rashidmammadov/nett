@@ -70,7 +70,7 @@ app-application { height: 100%; }
         .name { margin: auto; color: #d3d3d3; }
         .username { margin: auto; font-weight: bold; }
         .city { margin: auto; }
-        .ranking { font-weight: bold; }
+        .ranking { font-weight: bold; width: 100%; text-align: right; }
         .difference {
             margin: auto;
             p { margin: 2px 4px 0 8px; }
@@ -80,6 +80,24 @@ app-application { height: 100%; }
             &.up { color: #5FDC96; }
             &.new { color: #00BFFF; }
             &.not { color: #C0C0C0; }
+        }
+    }
+}
+
+.most-played-container {
+    .most-played-item {
+        padding: 8px 4px 4px 4px;
+        font-size: 12px;
+        .image { border-radius: 4px; }
+        .game-name { margin: auto 4px auto 8px; }
+        .ranking { font-weight: bold; width: 100%; text-align: right; }
+        .count {
+            p { border-bottom: 2px solid; border-radius: 2px; width: 32px; padding: 6px 0 0 0; margin: 4px; text-align: center; }
+            .active { border-color: #DAA520; }
+            .cancel { border-color: #f44336; }
+            .close { border-color: #5FDC96; }
+            .open { border-color: #00BFFF; }
+            .total { border-color: #C0C0C0; font-weight: bold; }
         }
     }
 }

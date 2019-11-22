@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Queries\MySQL\ApiQuery;
 use App\Http\Utility\FinanceReport;
+use App\Http\Utility\MostPlayedReport;
 use App\Http\Utility\NotificationReport;
 use App\Http\Utility\RankingReport;
 use App\Http\Utility\TimelineReport;
@@ -74,8 +75,31 @@ class ReportController extends ApiController {
      * @return array
      */
     private function mostPlayedReport() {
-        $queryResult = ApiQuery::getMostPlayedReport();
-        return $queryResult;
+        $result = array();
+        $mostPlayerGames = ApiQuery::getMostPlayedReport();
+        foreach ($mostPlayerGames as $gameId => $statuses) {
+            $mostPlayed = new MostPlayedReport();
+            $totalCount = 0;
+            foreach ($statuses as $status => $data) {
+                $count = count($data);
+                $mostPlayed::setGameId($data[0][GAME_ID]);
+                $mostPlayed::setGameName($data[0][GAME_NAME]);
+                $mostPlayed::setGameImage($data[0][GAME_IMAGE]);
+                if ($status == TOURNAMENT_STATUS_ACTIVE) {
+                    $mostPlayed::setActiveStatusCount($count);
+                } else if ($status == TOURNAMENT_STATUS_CANCEL) {
+                    $mostPlayed::setCancelStatusCount($count);
+                } else if ($status == TOURNAMENT_STATUS_CLOSE) {
+                    $mostPlayed::setCloseStatusCount($count);
+                } else if ($status == TOURNAMENT_STATUS_OPEN) {
+                    $mostPlayed::setOpenStatusCount($count);
+                }
+                $totalCount += $count;
+            }
+            $mostPlayed::setTotalCount($totalCount);
+            array_push($result, $mostPlayed::get());
+        }
+        return $result;
     }
 
     /**

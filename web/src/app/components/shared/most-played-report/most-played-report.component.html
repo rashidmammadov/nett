@@ -1,0 +1,17 @@
+<div class="most-played-container" *ngFor="let mostPlayed of data; let i = index">
+    <div class="most-played-item" fxLayout="row" fxFlexAlign="center center">
+        <img class="image" mat-card-avatar [src]="mostPlayed.gameImage">
+        <p class="game-name" fxFlex>{{mostPlayed.gameName}}</p>
+        <div class="count" fxLayout="row" fxFlexAlign="end center">
+            <p fxHide.lt-sm class="total" matTooltip="Toplam Turnuvalar">{{mostPlayed.totalCount ? mostPlayed.totalCount : '-'}}</p>
+            <p class="open" matTooltip="Açık Turnuvalar">{{mostPlayed.openStatusCount ? mostPlayed.openStatusCount : '-'}}</p>
+            <p class="active" matTooltip="Oynanan Turnuvalar">{{mostPlayed.activeStatusCount ? mostPlayed.activeStatusCount : '-'}}</p>
+            <p class="close" matTooltip="Sonuçlanmış Turnuvalar">{{mostPlayed.closeStatusCount ? mostPlayed.closeStatusCount : '-'}}</p>
+            <p class="cancel" matTooltip="İptal Edilmiş Turnuvalar">{{mostPlayed.cancelStatusCount ? mostPlayed.cancelStatusCount : '-'}}</p>
+        </div>
+        <div fxLayout="row" fxFlexAlign="end center" fxFlex="10">
+            <p class="ranking">#{{i + 1}}</p>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+</div>

@@ -1,5 +1,6 @@
 <?php
 
+define('ACTIVE_STATUS_COUNT', 'activeStatusCount');
 define('ADDRESS', 'address');
 define('ADMIN', 'admin');
 define('ATTENDED', 'attended');
@@ -13,10 +14,13 @@ define('AWAY', 'away');
 define('AWAY_POINT', 'awayPoint');
 define('BIRTHDAY', 'birthday');
 define('BUDGET', 'budget');
+define('CANCEL_STATUS_COUNT', 'cancelStatusCount');
 define('CHANNEL', 'channel');
 define('CITY', 'city');
+define('CLOSE_STATUS_COUNT', 'closeStatusCount');
 define('CREATED_AT', 'createdAt');
 define('COMMISSION_PERCENTAGE', 6);
+define('COUNT', 'count');
 define('CURRENT_PARTICIPANTS', 'currentParticipants');
 define('CURRENCY', 'currency');
 define('DATA', 'data');
@@ -147,8 +151,10 @@ define('TOURNAMENT_CREATED_SUCCESSFULLY', 'Turnuva başarıyla oluşturuldu');
 define('TOURNAMENT_ID', 'tournamentId');
 define('TOURNAMENT_TYPE', 'tournamentType');
 define('TOURNAMENT_RANKING', 'tournamentRanking');
+define('TOTAL_COUNT', 'totalCount');
 define('TURKISH_LIRA', '₺');
 define('TYPE', 'type');
+define('OPEN_STATUS_COUNT', 'openStatusCount');
 define('UPDATED_AT', 'updatedAt');
 define('USER_ACTIVATED', 'Kullanıcı aktif edildi');
 define('USER_STATE_ACTIVE', 1);

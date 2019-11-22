@@ -39,6 +39,7 @@ import { progressReducer } from './store/reducers/progress.reducer';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { DatePickerIntl } from './models/DatePickerIntl';
 import { NotificationReportComponent } from './components/shared/notification-report/notification-report.component';
+import { MostPlayedReportComponent } from './components/shared/most-played-report/most-played-report.component';
 
 @NgModule({
     declarations: [
@@ -60,7 +61,8 @@ import { NotificationReportComponent } from './components/shared/notification-re
         TimelineReportComponent,
         PieChartReportComponent,
         RankingReportComponent,
-        NotificationReportComponent
+        NotificationReportComponent,
+        MostPlayedReportComponent
     ],
     imports: [
         BrowserModule,

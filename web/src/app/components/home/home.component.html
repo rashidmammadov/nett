@@ -8,11 +8,19 @@
             </mat-card>
         </div>
 
-        <div fxLayout="column" fxLayoutGap="8px" fxFlex>
+        <div *ngIf="user.type === 'player'" fxLayout="column" fxLayoutGap="8px" fxFlex>
             <mat-label>En İyiler</mat-label>
             <mat-card class="mat-elevation-z4 overflow-card-half">
                 <app-ranking-report *ngIf="rankingReportData.length" [data]="rankingReportData"></app-ranking-report>
                 <p *ngIf="!rankingReportData.length" align="center">Gösterilecek Veri Bulunamadı</p>
+            </mat-card>
+        </div>
+
+        <div *ngIf="user.type === 'holder'" fxLayout="column" fxLayoutGap="8px" fxFlex>
+            <mat-label>En Çok Oynananlar</mat-label>
+            <mat-card class="mat-elevation-z4 overflow-card-half">
+                <app-most-played-report *ngIf="mostPlayedReportData.length" [data]="mostPlayedReportData"></app-most-played-report>
+                <p *ngIf="!mostPlayedReportData.length" align="center">Gösterilecek Veri Bulunamadı</p>
             </mat-card>
         </div>
 

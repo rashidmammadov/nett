@@ -11,6 +11,7 @@ import { PieChartReportType } from '../../interfaces/pie-chart-report-type';
 import { NotificationReportType } from '../../interfaces/notification-report-type';
 import { RankingReportType } from '../../interfaces/ranking-report-type';
 import { UserType } from '../../interfaces/user-type';
+import { MostPlayedReportType } from '../../interfaces/most-played-report-type';
 
 @Component({
   selector: 'app-home',
@@ -20,7 +21,7 @@ import { UserType } from '../../interfaces/user-type';
 export class HomeComponent implements OnInit {
     user: UserType;
     financeReportData: PieChartReportType[] = [];
-    mostPlayedReportData: [] = [];
+    mostPlayedReportData: MostPlayedReportType[] = [];
     notificationReportData: NotificationReportType[] = [];
     rankingReportData: RankingReportType[] = [];
     timelineReportData: TimelineReportType[] = [];

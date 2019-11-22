@@ -14,29 +14,27 @@ export class RankingReportComponent implements OnInit {
     ngOnInit() {
         this.data.forEach((d) => {
             if (!d.ranking) {
-                d.difference = '-';
-                d.icon = 'ranking-not';
-                d.class = 'not';
+                this.prepareRankingClassAndIcon(d, '-', 'ranking-not', 'not');
+            } else if (!d.previousRanking) {
+                this.prepareRankingClassAndIcon(d, 'yeni', 'ranking-new', 'new');
             } else {
-                if (!d.previousRanking) {
-                    d.difference = 'yeni';
-                    d.icon = 'ranking-new';
-                    d.class = 'new';
-                } else {
-                    d.difference = d.previousRanking - d.ranking;
-                    if (d.difference > 0) {
-                        d.icon = 'ranking-up';
-                        d.class = 'up';
-                    } else if (d.difference < 0) {
-                        d.icon = 'ranking-down';
-                        d.class = 'down';
-                    } else if (d.difference === 0) {
-                        d.icon = 'ranking-stable';
-                        d.class = 'stable';
-                    }
+                d.difference = d.previousRanking - d.ranking;
+                if (d.difference > 0) {
+                    this.prepareRankingClassAndIcon(d, d.difference, 'ranking-up', 'up');
+                } else if (d.difference < 0) {
+                    this.prepareRankingClassAndIcon(d, d.difference, 'ranking-down', 'down');
+                } else if (d.difference === 0) {
+                    this.prepareRankingClassAndIcon(d, d.difference, 'ranking-stable', 'stable');
                 }
             }
-        })
+
+        });
+    }
+
+    private prepareRankingClassAndIcon(data: RankingReportType, difference: string | number, iconName: string, className: string) {
+        data.difference = difference;
+        data.icon = iconName;
+        data.class = className;
     }
 
 }
