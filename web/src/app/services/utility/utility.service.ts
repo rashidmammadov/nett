@@ -8,6 +8,8 @@ import { ErrorResponse } from '../../models/error-response';
 import { ToastService } from '../toast/toast.service';
 import { Cookie } from '../cookie/cookies.service';
 import { MESSAGES } from '../../constants/messages.constant';
+import { environment } from '../../../environments/environment';
+import {DomSanitizer} from "@angular/platform-browser";
 
 @Injectable({
   providedIn: 'root'
@@ -34,6 +36,15 @@ export class UtilityService {
 
     public static pipeHttpResponse(response: Observable<IHttpResponse>): Promise<ErrorResponse | IHttpResponse> {
         return response.pipe(catchError((err) => of(new ErrorResponse(err.error)))).toPromise();
+    }
+
+    public static prepareGoogleMap(address: string) {
+        let result = '';
+        if (address) {
+            result = `<iframe frameborder="0" class="google-map-frame" 
+                src="${environment.googleMapApi}q=${address}&key=${environment.googleMapId}" allowfullscreen></iframe>`;
+        }
+        return this.injector.get(DomSanitizer).bypassSecurityTrustHtml(result);
     }
 
     public static setHttpParams(params) {

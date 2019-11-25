@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
@@ -17,17 +17,15 @@ import { ToastService } from '../../services/toast/toast.service';
   templateUrl: './tournament.component.html',
   styleUrls: ['./tournament.component.scss']
 })
-export class TournamentComponent implements OnInit {
+export class TournamentComponent {
+    public googleMap: string;
     private _tournament: TournamentType;
 
     tournamentType = TYPES.TOURNAMENT_TYPE;
 
     constructor(private activatedRoute: ActivatedRoute, private progress: Store<{progress: boolean}>,
                 private dialog: MatDialog, private fixtureService: FixtureService) {
-        this.getTournamentData();
-    }
-
-    ngOnInit() {
+        this.getTournamentData().then();
     }
 
     openSetMatchScoreDialog(tourId: number, matchId: number, home: ParticipantType, away: ParticipantType) {
@@ -46,6 +44,7 @@ export class TournamentComponent implements OnInit {
         const result = await this.activatedRoute.data.pipe(first()).toPromise();
         if (result.tournament && result.tournament.data) {
             this.tournament = result.tournament.data as TournamentType;
+            this.googleMap = UtilityService.prepareGoogleMap('offside%20playstation%20k%C3%BC%C3%A7%C3%BCkpark');
         }
         this.progress.dispatch(loaded());
     };

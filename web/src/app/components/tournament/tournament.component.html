@@ -53,6 +53,15 @@
                     </div>
                     <p>{{tournament.holder.username}}</p>
                 </div>
+                <mat-divider></mat-divider>
+                <div fxLayout="row" fxLayoutAlign="space-between center">
+                    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+                        <mat-icon svgIcon="map-pin"></mat-icon> <p>Adres</p>
+                    </div>
+                    <p>{{tournament.holder.address}}</p>
+                </div>
+                <mat-divider></mat-divider>
+                <div *ngIf="googleMap" [innerHTML]="googleMap"></div>
             </mat-card-content>
         </mat-card>
     </div>

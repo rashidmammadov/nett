@@ -46,7 +46,7 @@ export class AppComponent {
 
     private setSvgIcons() {
         const svgArray: string[] = ['alert', 'briefcase', 'clock', 'credit-card', 'dollar-sign', 'flag', 'grid', 'hash',
-            'home', 'info', 'log-out', 'plus-square', 'ranking-down', 'ranking-new', 'ranking-not', 'ranking-stable',
+            'home', 'info', 'log-out', 'map-pin', 'plus-square', 'ranking-down', 'ranking-new', 'ranking-not', 'ranking-stable',
             'ranking-up', 'search', 'tag', 'tournament-active', 'tournament-cancel', 'tournament-close', 'tournament-open',
             'user', 'users'];
         let path: string = 'assets/icons/';
