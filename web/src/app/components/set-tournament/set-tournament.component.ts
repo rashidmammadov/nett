@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { first } from 'rxjs/operators';
 import { GameType } from '../../interfaces/game-type';
 import { TournamentType } from '../../interfaces/tournament-type';
@@ -12,6 +13,7 @@ import { IHttpResponse } from '../../interfaces/i-http-response';
 import { loaded, loading } from '../../store/actions/progress.action';
 import { TYPES } from '../../constants/types.constant';
 import { ToastService } from '../../services/toast/toast.service';
+import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-set-tournament',
@@ -39,7 +41,8 @@ export class SetTournamentComponent implements OnInit {
     });
 
     constructor(private activatedRoute: ActivatedRoute, private user: Store<{user: UserType}>, private router: Router,
-                private tournamentService: TournamentService, private progress: Store<{progress: boolean}>) {
+                private tournamentService: TournamentService, private progress: Store<{progress: boolean}>,
+                private dialog: MatDialog) {
         for (let i = 16; i <= 32; i++) this.list.push(i);
     }
 
@@ -76,7 +79,20 @@ export class SetTournamentComponent implements OnInit {
         this.income = Number((Number(participantCount) * (5 + Number(participantCount) / 11)).toFixed(2));
     }
 
-    public submit = async () => {
+    public submitDialog() {
+        this.dialog.open(ConfirmDialogComponent, {
+            width: window.innerWidth >= 960 ? '40%' : '90%',
+            data: {
+                title: 'Dikkat',
+                body: 'Turnuvaya oluşturduğunuz anda yayımlanacaktır. Eğer yeterli katılımcı sayısına ulaşılamazsa ' +
+                  'turnuva otomatik iptal edilecek ve o ana kadar katılan tüm kullanıcıların katılım ücretleri iade edilecektir.'
+            }
+        }).afterClosed().toPromise().then((result) => {
+            !!result && this.submit();
+        });
+    }
+
+    private submit = async () => {
         if (this.tournamentForm.valid) {
             this.progress.dispatch(loading());
             const result = await this.tournamentService.add(this.setTournamentFormData());

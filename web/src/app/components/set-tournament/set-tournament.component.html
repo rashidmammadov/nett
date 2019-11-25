@@ -37,7 +37,8 @@
                 </mat-form-field>
                 <owl-date-time #dt></owl-date-time>
 
-                <button mat-flat-button color="primary" type="sumbit" mat-button (click)="submit()" [disabled]="!tournamentForm.valid">Oluştur</button>
+                <button mat-flat-button color="primary" type="sumbit" mat-button (click)="submitDialog()"
+                        [disabled]="!tournamentForm.valid">Oluştur</button>
             </form>
         </mat-card-content>
     </mat-card>

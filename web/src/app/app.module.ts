@@ -17,9 +17,12 @@ import { ApplicationComponent } from './components/application/application.compo
 import { AttendButtonComponent } from './components/shared/attend-button/attend-button.component';
 import { AttendDialogComponent } from './components/shared/attend-dialog/attend-dialog.component';
 import { BelongComponent } from './components/belong/belong.component';
+import { ConfirmDialogComponent } from './components/shared/confirm-dialog/confirm-dialog.component';
 import { HomeComponent } from './components/home/home.component';
 import { PieChartReportComponent } from './components/shared/pie-chart-report/pie-chart-report.component';
 import { LoginComponent } from './components/login/login.component';
+import { MostPlayedReportComponent } from './components/shared/most-played-report/most-played-report.component';
+import { NotificationReportComponent } from './components/shared/notification-report/notification-report.component';
 import { RankingReportComponent } from './components/shared/ranking-report/ranking-report.component';
 import { RegisterComponent } from './components/register/register.component';
 import { SearchComponent } from './components/search/search.component';
@@ -38,8 +41,6 @@ import { userReducer } from './store/reducers/user.reducer';
 import { progressReducer } from './store/reducers/progress.reducer';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { DatePickerIntl } from './models/DatePickerIntl';
-import { NotificationReportComponent } from './components/shared/notification-report/notification-report.component';
-import { MostPlayedReportComponent } from './components/shared/most-played-report/most-played-report.component';
 
 @NgModule({
     declarations: [
@@ -62,7 +63,8 @@ import { MostPlayedReportComponent } from './components/shared/most-played-repor
         PieChartReportComponent,
         RankingReportComponent,
         NotificationReportComponent,
-        MostPlayedReportComponent
+        MostPlayedReportComponent,
+        ConfirmDialogComponent
     ],
     imports: [
         BrowserModule,
@@ -77,7 +79,7 @@ import { MostPlayedReportComponent } from './components/shared/most-played-repor
         OwlDateTimeModule,
         OwlNativeDateTimeModule,
     ],
-    entryComponents: [AttendDialogComponent, LeaveDialogComponent, SetMatchScoreDialogComponent],
+    entryComponents: [AttendDialogComponent, ConfirmDialogComponent, LeaveDialogComponent, SetMatchScoreDialogComponent],
     providers: [CookieService,
         { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
         { provide: OWL_DATE_TIME_LOCALE, useValue: 'tr'},

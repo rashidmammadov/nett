@@ -1,0 +1,11 @@
+<div align="center" fxFlexAlign="center center">
+    <mat-icon svgIcon="alert"></mat-icon> <h3>{{params.title}}</h3>
+</div>
+<mat-divider></mat-divider>
+<mat-dialog-content align="center" fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="space-between center" fxLayoutGap="8px">
+    <p>{{params.body}}</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button [mat-dialog-close]="false">Vazgeç</button>
+    <button mat-button mat-flat-button mat-raised-button color="primary" [mat-dialog-close]="true">Onayla</button>
+</mat-dialog-actions>
