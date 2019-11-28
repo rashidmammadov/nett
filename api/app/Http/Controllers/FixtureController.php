@@ -51,7 +51,6 @@ class FixtureController extends ApiController {
                             if ($request[HOME_POINT] != $request[AWAY_POINT]) {
                                 $data = $this->setKnockOutFixtureMatchResult($request[TOURNAMENT_ID], $request[TOUR_ID],
                                     $request[MATCH_ID], $request[HOME_POINT], $request[AWAY_POINT]);
-//                                $data = $this->setKnockOutFixtureResult($request);
                                 if ($data) {
                                     return $this->respondCreated(MATCH_RESULT_UPDATED_SUCCESSFULLY, $data);
                                 } else {
@@ -88,34 +87,50 @@ class FixtureController extends ApiController {
             $minPoint = min($homePoint, $awayPoint);
             Participant::calculatePlayerPoint($tournamentId, $winnerId, $maxPoint, ($tourId + 1) * 100);
             Participant::calculatePlayerPoint($tournamentId, $loserId, $minPoint, ($tourId + 1) * 1);
-
-            /** update participants` ranking */
-            if (Match::isFinal($tourName)) {
-                $rankings = array(
-                    array(PARTICIPANT_ID => $winnerId, TOURNAMENT_RANKING => 1),
-                    array(PARTICIPANT_ID => $loserId, TOURNAMENT_RANKING => 2)
-                );
-                Participant::setKnockOutFixtureRanking($tournamentId, $rankings);
-            } else if (Match::isThirdPlace($tourName)) {
-                $rankings = array(
-                    array(PARTICIPANT_ID => $winnerId, TOURNAMENT_RANKING => 3),
-                    array(PARTICIPANT_ID => $loserId, TOURNAMENT_RANKING => 4)
-                );
-                Participant::setKnockOutFixtureRanking($tournamentId, $rankings);
-            }
-            /** if all match is played */
-            if (ApiQuery::isAllMatchPlayed($tournamentId)) {
-                $tournament = ApiQuery::getTournament($tournamentId);
-                $participants = ApiQuery::getParticipants($tournamentId);
-                $rankings = Fixture::setKnockOutRanking($tournamentId, $participants);
-                Participant::setKnockOutFixtureRanking($tournamentId, $rankings);
-                Finance::setKnockOutFixtureParticipantsEarnings($tournamentId, $participants);
-                Finance::setKnockOutFixtureHolderEarnings($tournamentId, $tournament[HOLDER_ID], count($participants));
-                ApiQuery::updateTournamentStatus($tournament, TOURNAMENT_STATUS_CLOSE);
-            }
+            $this->updateParticipantsRanking($tournamentId, $tourName, $winnerId, $loserId);
+            $this->closeTournament($tournamentId);
             return Fixture::prepareTournamentFixtureData($tournamentId);
         } else {
             return false;
+        }
+    }
+
+    /**
+     * @param $tournamentId
+     * @param $tourName
+     * @param $winnerId
+     * @param $loserId
+     */
+    private function updateParticipantsRanking($tournamentId, $tourName, $winnerId, $loserId): void {
+        /** update participants` ranking */
+        if (Match::isFinal($tourName)) {
+            $rankings = array(
+                array(PARTICIPANT_ID => $winnerId, TOURNAMENT_RANKING => 1),
+                array(PARTICIPANT_ID => $loserId, TOURNAMENT_RANKING => 2)
+            );
+            Participant::setKnockOutFixtureRanking($tournamentId, $rankings);
+        } else if (Match::isThirdPlace($tourName)) {
+            $rankings = array(
+                array(PARTICIPANT_ID => $winnerId, TOURNAMENT_RANKING => 3),
+                array(PARTICIPANT_ID => $loserId, TOURNAMENT_RANKING => 4)
+            );
+            Participant::setKnockOutFixtureRanking($tournamentId, $rankings);
+        }
+    }
+
+    /**
+     * @param $tournamentId
+     */
+    private function closeTournament($tournamentId): void {
+        /** if all match is played */
+        if (ApiQuery::isAllMatchPlayed($tournamentId)) {
+            $tournament = ApiQuery::getTournament($tournamentId);
+            $rankings = Fixture::setKnockOutRanking($tournamentId);
+            Participant::setKnockOutFixtureRanking($tournamentId, $rankings);
+            $participants = ApiQuery::getParticipants($tournamentId);
+            Finance::setKnockOutFixtureParticipantsEarnings($tournamentId, $participants);
+            Finance::setKnockOutFixtureHolderEarnings($tournamentId, $tournament[HOLDER_ID], count($participants));
+            ApiQuery::updateTournamentStatus($tournament, TOURNAMENT_STATUS_CLOSE);
         }
     }
 

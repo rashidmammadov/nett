@@ -173,31 +173,19 @@ class Fixture {
     /**
      * @description set knock out tournament`s ranking.
      * @param integer $tournamentId - the id of tournament.
-     * @param array $participants - the participants of tournament.
      * @return mixed - ranking result
      */
-    public static function setKnockOutRanking($tournamentId, $participants) {
-        // TODO: not working....
-        $draws = ApiQuery::getMatches($tournamentId);
-        $standings = array();
-        foreach ($participants as $index => $participant) {
-            $standing = $index + 1;
-            $standings[$participant[PARTICIPANT_ID]] = $standing;
-        }
-        Log::info(json_encode($standings));
+    public static function setKnockOutRanking($tournamentId) {
+        $participants = ApiQuery::getParticipantsListedWithoutRanking($tournamentId);
+        Log::info(json_encode($participants));
         $rankings = array();
-        foreach ($draws as $drawMatches) {
-            foreach ($drawMatches as $match) {
-                if (!Match::isFinal($match[TOUR_NAME]) &&
-                    !Match::isThirdPlace($match[TOUR_NAME]) &&
-                    !Match::isSemiFinal($match[TOUR_NAME])) {
-                    $ranking = array(
-                        PARTICIPANT_ID => $match[LOSER_ID],
-                        TOURNAMENT_RANKING => $standings[$match[LOSER_ID]]
-                    );
-                    array_push($rankings, $ranking);
-                }
-            }
+        foreach ($participants as $index => $participant) {
+            $standing = ($index + 1) + 4;
+            $ranking = array(
+                PARTICIPANT_ID => $participant[PARTICIPANT_ID],
+                TOURNAMENT_RANKING => $standing
+            );
+            array_push($rankings, $ranking);
         }
         Log::info(json_encode($rankings));
         return $rankings;

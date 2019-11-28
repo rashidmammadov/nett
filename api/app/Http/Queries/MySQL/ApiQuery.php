@@ -168,6 +168,21 @@ class ApiQuery {
     }
 
     /**
+     * @description query to get all participants which ranking is null
+     *      and list by point.
+     * @param integer $tournamentId
+     * @return mixed $queryResult
+     */
+    public static function getParticipantsListedWithoutRanking($tournamentId) {
+        $queryResult = Participant::where(TOURNAMENT_ID, EQUAL_SIGN, $tournamentId)
+            ->where(TOURNAMENT_RANKING, EQUAL_SIGN, null)
+            ->join(DB_USERS_TABLE, (DB_USERS_TABLE . '.' . IDENTIFIER), EQUAL_SIGN, (DB_PARTICIPANT_TABLE . '.' . PARTICIPANT_ID))
+            ->orderBy(POINT, 'desc')
+            ->get();
+        return $queryResult;
+    }
+
+    /**
      * @description query to remove participant from tournament
      * @param integer $tournamentId
      * @param integer $participantId
