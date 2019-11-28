@@ -177,7 +177,6 @@ class Fixture {
      */
     public static function setKnockOutRanking($tournamentId) {
         $participants = ApiQuery::getParticipantsListedWithoutRanking($tournamentId);
-        Log::info(json_encode($participants));
         $rankings = array();
         foreach ($participants as $index => $participant) {
             $standing = ($index + 1) + 4;
@@ -187,7 +186,6 @@ class Fixture {
             );
             array_push($rankings, $ranking);
         }
-        Log::info(json_encode($rankings));
         return $rankings;
     }
 
