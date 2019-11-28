@@ -80,19 +80,15 @@ class Participant {
 
     /**
      * @description: update participant`s point
-     * @param $tournamentId - tournament id
-     * @param $participantId - participant id
-     * @param $point - holds the user`s goal count
-     * @param $winner - if player is winner
+     * @param integer $tournamentId - tournament id
+     * @param integer $participantId - participant id
+     * @param integer $point - holds the user`s goal count
+     * @param integer $coefficient - holds the coefficient of tour.
      */
-    public static function calculatePlayerPoint($tournamentId, $participantId, $point, $winner) {
-        $query = ApiQuery::getParticipants($tournamentId, $participantId)->first();
-        $participant = new Participant($query);
-        $total = $point;
-        if ($winner == true) {
-            $total += 10;
-        };
-
+    public static function calculatePlayerPoint($tournamentId, $participantId, $point, $coefficient) {
+        $participantQuery = ApiQuery::getParticipants($tournamentId, $participantId)->first();
+        $participant = new Participant($participantQuery);
+        $total = $coefficient + $point;
         $oldPoint = $participant::getPoint();
         $newPoint = null;
         if (is_null($oldPoint)) {
@@ -101,7 +97,7 @@ class Participant {
             $newPoint = $oldPoint + $total;
         }
         $participant::setPoint($newPoint);
-        ApiQuery::updateParticipantPoint($tournamentId, $participantId, $newPoint);
+        ApiQuery::updateParticipantPoint($tournamentId, $participantId, $participant::getPoint());
     }
 
     /**
@@ -115,7 +111,8 @@ class Participant {
             $participant::setTournamentId($tournamentId);
             $participant::setParticipantId($ranking[PARTICIPANT_ID]);
             $participant::setTournamentRanking($ranking[TOURNAMENT_RANKING]);
-            ApiQuery::updateParticipantRanking($participant::getTournamentId(), $participant::getParticipantId(), $participant::getTournamentRanking());
+            ApiQuery::updateParticipantRanking($participant::getTournamentId(), $participant::getParticipantId(),
+                $participant::getTournamentRanking());
         }
     }
 

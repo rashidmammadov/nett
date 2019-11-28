@@ -34,4 +34,8 @@ class Tournament extends Model {
     public function participant() {
         return $this->hasMany('App\Participant');
     }
+
+    public function knockOutMatch() {
+        return $this->hasMany('App\Match');
+    }
 }

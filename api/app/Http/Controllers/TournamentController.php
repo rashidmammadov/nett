@@ -11,6 +11,7 @@ namespace App\Http\Controllers;
 use App\Http\Queries\MySQL\ApiQuery;
 use App\Http\Utility\CustomDate;
 use App\Http\Utility\Fixture;
+use App\Http\Utility\Match;
 use App\Repository\Transformers\ParticipantTransformer;
 use App\Repository\Transformers\TournamentTransformer;
 use Illuminate\Http\Request;
@@ -23,8 +24,7 @@ class TournamentController extends ApiController {
     private $participantTransformer;
     private $tournamentTransformer;
 
-    public function __construct(ParticipantTransformer $participantTransformer, TournamentTransformer $tournamentTransformer)
-    {
+    public function __construct(ParticipantTransformer $participantTransformer, TournamentTransformer $tournamentTransformer) {
         $this->participantTransformer = $participantTransformer;
         $this->tournamentTransformer = $tournamentTransformer;
     }
@@ -54,7 +54,6 @@ class TournamentController extends ApiController {
                         if (ApiQuery::checkTournamentsDifferenceIsOneDay($request, $user[IDENTIFIER])) {
                             $request[STATUS] = TOURNAMENT_STATUS_OPEN;
                             $tournament = $this->setTournament($user->id, $request);
-                            $this->setDefaultFixture($tournament);
                             return $this->respondCreated(TOURNAMENT_CREATED_SUCCESSFULLY, $tournament);
                         } else {
                             return $this->respondWithError(ALREADY_HAVE_TOURNAMENT_ON_THIS_DATE);
@@ -108,7 +107,7 @@ class TournamentController extends ApiController {
             $user = JWTAuth::parseToken()->authenticate();
             $tournament = ApiQuery::getTournamentWithDetail($tournamentId);
             $tournament[PARTICIPANTS] = $this->prepareTournamentParticipantsData($tournamentId, $user);
-            $tournament[FIXTURE] = $this->prepareTournamentFixtureData($tournamentId);
+            $tournament[FIXTURE] = Fixture::prepareTournamentFixtureData($tournamentId);
             $result = $this->prepareTournamentGeneralData($tournament, $user);
             return $this->respondCreated(SUCCESS, $result);
         } catch (JWTException $e) {
@@ -196,21 +195,6 @@ class TournamentController extends ApiController {
     }
 
     /**
-     * @description: prepare tournament`s fixture with given type.
-     * @param array $parameters
-     */
-    private function setDefaultFixture($parameters) {
-        $fixture = new Fixture($parameters);
-        $fixture::setCreatedAt(CustomDate::getDateFromMilliseconds());
-        $draws = array();
-        if ($parameters[TOURNAMENT_TYPE] == KNOCK_OUT) {
-            $draws = $fixture::setKnockOutDraws($parameters[START_DATE], $parameters[DAYS]);
-        }
-        $fixture::setDraws($draws);
-        ApiQuery::setFixture($parameters[TOURNAMENT_ID], $fixture::getFixture());
-    }
-
-    /**
      * @description: prepare tournament`s general data to show timeline post.
      * @param $tournament
      * @param $user
@@ -251,13 +235,4 @@ class TournamentController extends ApiController {
         return $transformedParticipants;
     }
 
-    /**
-     * @description: prepare tournament`s fixture data.
-     * @param integer $tournamentId
-     * @return mixed
-     */
-    private function prepareTournamentFixtureData($tournamentId) {
-        $data = ApiQuery::getFixture($tournamentId);
-        return json_decode($data[FIXTURE]);
-    }
 }

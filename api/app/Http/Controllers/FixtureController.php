@@ -9,12 +9,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Queries\MySQL\ApiQuery;
+use App\Http\Utility\CustomDate;
 use App\Http\Utility\Finance;
 use App\Http\Utility\Fixture;
 use App\Http\Utility\Match;
 use App\Http\Utility\Participant;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Validator;
@@ -49,7 +49,9 @@ class FixtureController extends ApiController {
                     if (intval($tournament[STATUS]) == TOURNAMENT_STATUS_ACTIVE) {
                         if ($request[TOURNAMENT_TYPE] == KNOCK_OUT) {
                             if ($request[HOME_POINT] != $request[AWAY_POINT]) {
-                                $data = $this->setKnockOutFixtureResult($request);
+                                $data = $this->setKnockOutFixtureMatchResult($request[TOURNAMENT_ID], $request[TOUR_ID],
+                                    $request[MATCH_ID], $request[HOME_POINT], $request[AWAY_POINT]);
+//                                $data = $this->setKnockOutFixtureResult($request);
                                 if ($data) {
                                     return $this->respondCreated(MATCH_RESULT_UPDATED_SUCCESSFULLY, $data);
                                 } else {
@@ -73,65 +75,48 @@ class FixtureController extends ApiController {
         }
     }
 
-    /**
-     * @description: update knock out tournament fixture`s draw
-     * @param Request $request
-     * @return mixed: updated knock out tournament info
-     */
-    private function setKnockOutFixtureResult($request) {
-        $tourId = $request[TOUR_ID];
-        $matchId = $request[MATCH_ID];
-        $queryResult = ApiQuery::getFixture($request[TOURNAMENT_ID]);
-        $jsonData = json_decode($queryResult[FIXTURE], true);
-        $fixture = new Fixture($jsonData);
-        $draws = $fixture::getDraws();
+    private function setKnockOutFixtureMatchResult($tournamentId, $tourId, $matchId, $homePoint, $awayPoint) {
+        $matchQueryResult = ApiQuery::getMatch($tournamentId, $tourId, $matchId);
+        if ($matchQueryResult[AVAILABLE]) {
+            $tourName = $matchQueryResult[TOUR_NAME];
+            list($winnerId, $loserId) = Match::setMatchWinner($matchId, $matchQueryResult[HOME_ID],
+                $matchQueryResult[AWAY_ID], $homePoint, $awayPoint);
+            Match::setNextTourMatch($tournamentId, $tourId, $tourName, $loserId, $winnerId, $matchQueryResult[DATE]);
 
-        /** find winner of given match */
-        $match = $draws[$tourId][MATCHES][$matchId];
-        if ($match[AVAILABLE]) {
-            $isFinal = false;
-            $updatedMatch = Match::setMatchWinner($match, $request[HOME_POINT], $request[AWAY_POINT]);
-            $draws[$tourId][MATCHES][$matchId] = $updatedMatch;
-            if (intval($tourId) == count($draws) - 1 || $draws[intval($tourId)][DRAW_TITLE] == 'final') {
-                $isFinal = true;
+            /** update participants` point */
+            $maxPoint = max($homePoint, $awayPoint);
+            $minPoint = min($homePoint, $awayPoint);
+            Participant::calculatePlayerPoint($tournamentId, $winnerId, $maxPoint, ($tourId + 1) * 100);
+            Participant::calculatePlayerPoint($tournamentId, $loserId, $minPoint, ($tourId + 1) * 1);
+
+            /** update participants` ranking */
+            if (Match::isFinal($tourName)) {
+                $rankings = array(
+                    array(PARTICIPANT_ID => $winnerId, TOURNAMENT_RANKING => 1),
+                    array(PARTICIPANT_ID => $loserId, TOURNAMENT_RANKING => 2)
+                );
+                Participant::setKnockOutFixtureRanking($tournamentId, $rankings);
+            } else if (Match::isThirdPlace($tourName)) {
+                $rankings = array(
+                    array(PARTICIPANT_ID => $winnerId, TOURNAMENT_RANKING => 3),
+                    array(PARTICIPANT_ID => $loserId, TOURNAMENT_RANKING => 4)
+                );
+                Participant::setKnockOutFixtureRanking($tournamentId, $rankings);
             }
-
-            $winner = $updatedMatch[WINNER];
-            $loser = $updatedMatch[LOSER];
-            if (count($draws[$tourId][MATCHES]) == 2) {
-                /** set 3th and final matches players if round is semi-final */
-                $thirdPlaceDraw = $draws[$tourId + 1];
-                $finalDraw = $draws[$tourId + 2];
-                $draws[$tourId + 1] = Fixture::setKnockOutNextDraw($thirdPlaceDraw, $loser);
-                $draws[$tourId + 2] = Fixture::setKnockOutNextDraw($finalDraw, $winner);
-            } else if (count($draws[$tourId][MATCHES]) > 2) {
-                /** append winner player to the next round */
-                $nextDraw = $draws[$tourId + 1];
-                $draws[$tourId + 1] = Fixture::setKnockOutNextDraw($nextDraw, $winner);
-            }
-
-            /** update player`s point */
-            $maxPoint = max($request[HOME_POINT], $request[AWAY_POINT]);
-            $minPoint = min($request[HOME_POINT], $request[AWAY_POINT]);
-            Participant::calculatePlayerPoint($request[TOURNAMENT_ID], $winner[PARTICIPANT_ID], $maxPoint, true);
-            Participant::calculatePlayerPoint($request[TOURNAMENT_ID], $loser[PARTICIPANT_ID], $minPoint, false);
-
-            if ($isFinal) {
-                $rankings = Fixture::setKnockOutRanking($jsonData);
-                Participant::setKnockOutFixtureRanking($request[TOURNAMENT_ID], $rankings);
-                Finance::setKnockOutFixtureParticipantsEarnings($request[TOURNAMENT_ID], $rankings);
-                Finance::setKnockOutFixtureHolderEarnings($request[TOURNAMENT_ID], $fixture::getHolderId(), count($rankings));
-                $tournament = ApiQuery::getTournament($request[TOURNAMENT_ID]);
+            /** if all match is played */
+            if (ApiQuery::isAllMatchPlayed($tournamentId)) {
+                $tournament = ApiQuery::getTournament($tournamentId);
+                $participants = ApiQuery::getParticipants($tournamentId);
+                $rankings = Fixture::setKnockOutRanking($tournamentId, $participants);
+                Participant::setKnockOutFixtureRanking($tournamentId, $rankings);
+                Finance::setKnockOutFixtureParticipantsEarnings($tournamentId, $participants);
+                Finance::setKnockOutFixtureHolderEarnings($tournamentId, $tournament[HOLDER_ID], count($participants));
                 ApiQuery::updateTournamentStatus($tournament, TOURNAMENT_STATUS_CLOSE);
             }
-
-            /** set updated draws */
-            $fixture::setDraws($draws);
-            ApiQuery::updateFixture($request[TOURNAMENT_ID], $fixture::getFixture());
-
-            return $fixture::getFixture();
+            return Fixture::prepareTournamentFixtureData($tournamentId);
         } else {
             return false;
         }
     }
+
 }

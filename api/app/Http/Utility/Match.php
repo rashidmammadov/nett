@@ -8,101 +8,167 @@
 
 namespace App\Http\Utility;
 
+use App\Http\Queries\MySQL\ApiQuery;
 
 class Match {
 
-    private static $match = array(
-        TOUR_ID => null,
-        MATCH_ID => null,
-        AVAILABLE => false,
-        HOME => null,
-        AWAY => null,
-        WINNER => null,
-        LOSER => null,
-        DATE => null,
-        UPDATED_AT => null
-    );
+    private static $matchId;
+    private static $tourId;
+    private static $home;
+    private static $away;
+    private static $winner;
+    private static $loser;
+    private static $date;
+    private static $available;
 
     public function __construct($parameters = null) {
-        $parameters[TOUR_ID] >= 0 && self::setTourId($parameters[TOUR_ID]);
-        $parameters[MATCH_ID] >= 0 && self::setMatchId($parameters[MATCH_ID]);
-        !empty($parameters[AVAILABLE])  ? self::setAvailable($parameters[AVAILABLE]) : self::setAvailable(null);
-        !empty($parameters[HOME])       ? self::setHome($parameters[HOME]) : self::setHome(null);
-        !empty($parameters[AWAY])       ? self::setAway($parameters[AWAY]) : self::setAway(null);
-        !empty($parameters[WINNER])     ? self::setWinner($parameters[WINNER]) : self::setWinner(null);
-        !empty($parameters[LOSER])      ? self::setLoser($parameters[LOSER]) : self::setLoser(null);
-        !empty($parameters[DATE])       ? self::setDate($parameters[DATE]) : self::setDate(null);
-        !empty($parameters[UPDATED_AT]) ? self::setUpdatedAt($parameters[UPDATED_AT]) : self::setUpdatedAt(null);
+        self::setMatchId($parameters[MATCH_ID]);
+        self::setTourId($parameters[TOUR_ID]);
+        self::setHome($parameters[HOME]);
+        self::setAway($parameters[AWAY]);
+        self::setWinner($parameters[WINNER]);
+        self::setLoser($parameters[LOSER]);
+        self::setDate($parameters[DATE]);
+        self::setAvailable($parameters[AVAILABLE]);
     }
 
-    public static function getMatch() { return self::$match; }
+    public static function get() {
+        return array(
+            MATCH_ID => self::getMatchId(),
+            TOUR_ID => self::getTourId(),
+            HOME => self::getHome(),
+            AWAY => self::getAway(),
+            WINNER => self::getWinner(),
+            LOSER => self::getLoser(),
+            DATE => self::getDate(),
+            AVAILABLE => self::getAvailable()
+        );
+    }
 
-    public static function getTourId() { return self::$match[TOUR_ID]; }
+    public static function getMatchId() { return self::$matchId; }
 
-    public static function setTourId($value) { self::$match[TOUR_ID] = $value; }
+    public static function setMatchId($matchId) { self::$matchId = $matchId; }
 
-    public static function getMatchId() { return self::$match[MATCH_ID]; }
+    public static function getTourId() { return self::$tourId; }
 
-    public static function setMatchId($value) { self::$match[MATCH_ID] = $value; }
+    public static function setTourId($tourId) { self::$tourId = $tourId; }
 
-    public static function getAvailable() { return self::$match[AVAILABLE]; }
+    public static function getHome() { return self::$home; }
 
-    public static function setAvailable($value) { self::$match[AVAILABLE] = $value; }
+    public static function setHome($home) { self::$home = $home; }
 
-    public static function getHome() { return self::$match[HOME]; }
+    public static function getAway() { return self::$away; }
 
-    public static function setHome($value) { self::$match[HOME] = $value; }
+    public static function setAway($away) { self::$away = $away; }
 
-    public static function getAway() { return self::$match[AWAY]; }
+    public static function getWinner() { return self::$winner; }
 
-    public static function setAway($value) { self::$match[AWAY] = $value; }
+    public static function setWinner($winner) { self::$winner = $winner; }
 
-    public static function getWinner() { return self::$match[WINNER]; }
+    public static function getLoser() { return self::$loser; }
 
-    public static function setWinner($value) { self::$match[WINNER] = $value; }
+    public static function setLoser($loser) { self::$loser = $loser; }
 
-    public static function getLoser() { return self::$match[LOSER]; }
+    public static function getDate() { return self::$date; }
 
-    public static function setLoser($value) { self::$match[LOSER] = $value; }
+    public static function setDate($date) { self::$date = $date; }
 
-    public static function getDate() { return self::$match[DATE]; }
+    public static function getAvailable() { return self::$available; }
 
-    public static function setDate($value) { self::$match[DATE] = $value; }
+    public static function setAvailable($available) { self::$available = $available; }
 
-    public static function getUpdateAt() { return self::$match[UPDATED_AT]; }
+    public static function isSemiFinal($tourName) { return $tourName == SEMI_FINAL ? true : false; }
 
-    public static function setUpdatedAt($value) { self::$match[UPDATED_AT] = $value; }
+    public static function isThirdPlace($tourName) { return $tourName == THIRD_PLACE ? true : false; }
+
+    public static function isFinal($tourName) { return $tourName == FINAL_ ? true : false; }
+
+    public static function getMatchData($tourId, $tourName, $homeId, $awayId, $available, $date) {
+        return array(
+            TOUR_ID => $tourId,
+            TOUR_NAME => $tourName,
+            HOME_ID => $homeId,
+            AWAY_ID => $awayId,
+            AVAILABLE => $available,
+            DATE => $date
+        );
+    }
+
+    public static function prepareMatchParticipantData($participantId, $username, $picture, $point) {
+        return array(
+            PARTICIPANT_ID => $participantId,
+            USERNAME => $username,
+            PICTURE => $picture,
+            POINT => $point
+        );
+    }
 
     /**
      * @description handle request to set winner of match.
-     * @param $data - holds the match data
-     * @param $homePoint - the point of home player
-     * @param $awayPoint - the point of away player
-     * @return mixed
+     * @param $matchId
+     * @param $homeId
+     * @param $awayId
+     * @param $homePoint
+     * @param $awayPoint
+     * @return array
      */
-    public static function setMatchWinner($data, $homePoint, $awayPoint) {
-        $match = new Match($data);
-        if ($homePoint >= 0 && $awayPoint >= 0 && $match::getAvailable() == true) {
-            $home = $match::getHome();
-            $away = $match::getAway();
-            if ($home && $away) {
-                if ($homePoint > $awayPoint) {
-                    $match::setWinner($home);
-                    $match::setLoser($away);
-                } else if ($homePoint < $awayPoint) {
-                    $match::setWinner($away);
-                    $match::setLoser($home);
-                }
-
-                $home[POINT] = $homePoint;
-                $away[POINT] = $awayPoint;
-                $match::setHome($home);
-                $match::setAway($away);
-                $match::setUpdatedAt(CustomDate::getDateFromMilliseconds());
-                $match::setAvailable(false);
+    public static function setMatchWinner($matchId, $homeId, $awayId, $homePoint, $awayPoint): array {
+        $winnerId = null;
+        $loserId = null;
+        if ($homePoint >= 0 && $awayPoint >= 0 && $homePoint != $awayPoint) {
+            if ($homePoint > $awayPoint) {
+                $winnerId = $homeId;
+                $loserId = $awayId;
+            } else if ($homePoint < $awayPoint) {
+                $winnerId = $awayId;
+                $loserId = $homeId;
             }
+            ApiQuery::setMatchWinner($matchId, $winnerId, $loserId, $homePoint, $awayPoint);
         }
-        return $match::getMatch();
+        return array($winnerId, $loserId);
+    }
+
+    /**
+     * @description set next tour match.
+     * @param $tournamentId
+     * @param $tourId
+     * @param $tourName
+     * @param $loserId
+     * @param $winnerId
+     * @param $date
+     */
+    public static function setNextTourMatch($tournamentId, $tourId, $tourName, $loserId, $winnerId, $date): void {
+        if (Match::isSemiFinal($tourName)) {
+            $thirdPlaceTourId = $tourId + 1;
+            $finalTourId = $tourId + 2;
+            $date = (double)$date + 3600000;
+            self::updateNextTourMatchOpponents($tournamentId, $thirdPlaceTourId, $loserId, THIRD_PLACE, $date);
+            self::updateNextTourMatchOpponents($tournamentId, $finalTourId, $winnerId, FINAL_, $date);
+        } else if (!Match::isThirdPlace($tourName) && !Match::isFinal($tourName)) {
+            $nextTourId = $tourId + 1;
+            $nameArray = explode('/', $tourName);
+            $tourName = $nameArray[1] ? ('1/' . (((int)$nameArray[1]) / 2)) : '';
+            $date = (double)$date + 3600000;
+            self::updateNextTourMatchOpponents($tournamentId, $nextTourId, $winnerId, $tourName, $date);
+        }
+    }
+
+    /**
+     * @description update match data to set opponents.
+     * @param integer $tournamentId
+     * @param integer $tourId
+     * @param integer $participantId
+     * @param string $tourName
+     * @param $date
+     */
+    private static function updateNextTourMatchOpponents($tournamentId, int $tourId, $participantId,
+                                                         string $tourName, $date = null): void {
+        $match = ApiQuery::getNextMatch($tournamentId, $tourId);
+        if ($match) {
+            ApiQuery::updateMatchAway($match[MATCH_ID], $participantId);
+        } else {
+            ApiQuery::updateMatchHome($tournamentId, $tourId, $tourName, $date, $participantId);
+        }
     }
 
 }

@@ -15,6 +15,7 @@ class Schedule extends Command {
 
     public function changeStartedTournamentsStatus() {
         $currentDate = CustomDate::getCurrentMilliseconds();
+        Log::info('**************************************************');
         Log::info('TOURNAMENT STATUS CHANGER STARTED');
         $tournaments = ApiQuery::getAllOpenTournaments();
         Log::info('TOTAL OPEN TOURNAMENTS COUNT: ' . count($tournaments));
@@ -33,10 +34,7 @@ class Schedule extends Command {
                 } else {
                     ApiQuery::updateTournamentStatus($tournament, TOURNAMENT_STATUS_ACTIVE);
                     Log::info('TOURNAMENT ' . $tournament[TOURNAMENT_ID] . ' STATUS CHANGED: FROM OPEN TO ACTIVE');
-                    $fixture = $this->getFixture($tournament[TOURNAMENT_ID]);
-                    $updatedFixture = Fixture::setKnockOutStartDraws($fixture, $participants);
-                    $this->updateFixture($tournament[TOURNAMENT_ID], $updatedFixture);
-                    Log::info('FIXTURE UPDATED AS: ' . json_encode($updatedFixture));
+                    Fixture::setKnockOutStartDraws($tournament[TOURNAMENT_ID], $tournament[START_DATE], $participants);
                     PushNotification::tournamentStarts($tournament, $participants);
                 }
             }
@@ -45,6 +43,7 @@ class Schedule extends Command {
     }
 
     public function payWaitingPaymentsFromTournament() {
+        Log::info('**************************************************');
         Log::info('EARNINGS PAYER STARTED');
         $earnings = ApiQuery::getFinance(FINANCE_STATUS_WAITING);
         Log::info('TOTAL WAITING EARNINGS COUNT: ' . count($earnings));
@@ -76,11 +75,6 @@ class Schedule extends Command {
         Log::info('TOTAL PAYED EARNINGS: ' . $totalBudget . ' ' . TURKISH_LIRA . ' ' . $totalTicket . ' ' . TICKET);
     }
 
-    private function getFixture($tournamentId) {
-        $fixture = ApiQuery::getFixture($tournamentId);
-        return json_decode($fixture[FIXTURE], true);
-    }
-
     private function getParticipants($tournamentId) {
         $participants = ApiQuery::getParticipants($tournamentId);
         return $participants;
@@ -100,7 +94,4 @@ class Schedule extends Command {
         }
     }
 
-    private function updateFixture($tournamentId, $fixture) {
-        ApiQuery::updateFixture($tournamentId, $fixture);
-    }
 }

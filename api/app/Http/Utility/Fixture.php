@@ -10,7 +10,6 @@ namespace App\Http\Utility;
 
 use App\Http\Queries\MySQL\ApiQuery;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use App\Repository\Transformers\ParticipantTransformer;
 
 class Fixture {
@@ -28,16 +27,16 @@ class Fixture {
     );
 
     public function __construct($parameters = null) {
-        !empty($parameters[TOURNAMENT_ID]) && self::setTournamentId($parameters[TOURNAMENT_ID]);
-        !empty($parameters[HOLDER_ID]) && self::setHolderId($parameters[HOLDER_ID]);
-        !empty($parameters[GAME_ID]) && self::setGameId($parameters[GAME_ID]);
-        !empty($parameters[TOURNAMENT_TYPE]) && self::setTournamentType($parameters[TOURNAMENT_TYPE]);
-        !empty($parameters[PARTICIPANT_COUNT]) && self::setParticipantCount($parameters[PARTICIPANT_COUNT]);
-        !empty($parameters[CREATED_AT]) && self::setCreatedAt($parameters[CREATED_AT]);
-        !empty($parameters[DRAWS]) && self::setDraws($parameters[DRAWS]);
+        self::setTournamentId($parameters[TOURNAMENT_ID]);
+        self::setHolderId($parameters[HOLDER_ID]);
+        self::setGameId($parameters[GAME_ID]);
+        self::setTournamentType($parameters[TOURNAMENT_TYPE]);
+        self::setParticipantCount($parameters[PARTICIPANT_COUNT]);
+        self::setCreatedAt($parameters[CREATED_AT]);
+        self::setDraws($parameters[DRAWS]);
     }
 
-    public static function getFixture() { return self::$fixture; }
+    public static function get() { return self::$fixture; }
 
     public static function getTournamentId() { return self::$fixture[TOURNAMENT_ID]; }
 
@@ -68,246 +67,164 @@ class Fixture {
     public static function setDraws($value) { self::$fixture[DRAWS] = $value; }
 
     /**
-     * @description handle request to create new knock out fixture.
-     * @param $startDate - holds the tournament`s start date
-     * @param $days - holds the tournament`s total days.
-     * @return array
+     * @description: prepare tournament`s fixture data.
+     * @param integer $tournamentId
+     * @return mixed
      */
-    public static function setKnockOutDraws($startDate, $days) {
-        $matchCount = self::MAX_PARTICIPANT / 2;
-
-        $draws = array();
-        $counter = 0;
-        while ($matchCount != 1) {
-            $draw = self::setDefaultDraw($matchCount, (1 . '/' . $matchCount), $startDate, $counter);
-            array_push($draws, $draw);
-            $matchCount = $matchCount / 2;
-            if ($matchCount == 1) {
-                $thirdPlace = self::setDefaultDraw(1, '3th', $startDate, ($counter + 1));
-                array_push($draws, $thirdPlace);
-                $final = self::setDefaultDraw(1, 'final', $startDate, ($counter + 2));
-                array_push($draws, $final);
+    public static function prepareTournamentFixtureData($tournamentId) {
+        $fixture = new Fixture();
+        $fixtureDraws = array();
+        $participants = ApiQuery::getParticipants($tournamentId);
+        $draws = ApiQuery::getMatches($tournamentId);
+        foreach ($draws as $matches) {
+            $item = null;
+            $drawMatches = array();
+            foreach ($matches as $match) {
+                $drawMatch = new Match($match);
+                foreach($participants as $participant) {
+                    if ($participant[IDENTIFIER] == $match[HOME_ID]) {
+                        $home = Match::prepareMatchParticipantData($participant[IDENTIFIER], $participant[USERNAME],
+                            $participant[PICTURE], $match[HOME_POINT]);
+                        $drawMatch::setHome($home);
+                        if ($match[HOME_ID] == $match[WINNER_ID]) {
+                            $drawMatch::setWinner($home);
+                        } else if ($match[HOME_ID] == $match[LOSER_ID]) {
+                            $drawMatch::setLoser($home);
+                        } else {
+                            $drawMatch::setWinner(null);
+                            $drawMatch::setLoser(null);
+                        }
+                    } else if ($participant[IDENTIFIER] == $match[AWAY_ID]) {
+                        $away = Match::prepareMatchParticipantData($participant[IDENTIFIER], $participant[USERNAME],
+                            $participant[PICTURE], $match[AWAY_POINT]);
+                        $drawMatch::setAway($away);
+                        if ($match[AWAY_ID] == $match[WINNER_ID]) {
+                            $drawMatch::setWinner($away);
+                        } else if ($match[AWAY_ID] == $match[LOSER_ID]) {
+                            $drawMatch::setLoser($away);
+                        } else {
+                            $drawMatch::setWinner(null);
+                            $drawMatch::setLoser(null);
+                        }
+                    }
+                }
+                array_push($drawMatches, $drawMatch::get());
             }
-            $counter++;
-            $startDate = $startDate + 3600000; // add one hour on each tour.
+            $fixtureDraw = array(
+                DRAW_TITLE => $matches[0][TOUR_NAME],
+                MATCHES => $drawMatches
+            );
+            array_push($fixtureDraws, $fixtureDraw);
         }
-
-        return $draws;
+        $fixture::setDraws($fixtureDraws);
+        return $fixture::get();
     }
 
     /**
      * @description handle request to set starting fixture draws.
-     * @param $fixtureData - holds the fixture object.
-     * @param $participants - holds the participants list of tournament.
-     * @return mixed
+     * @param integer $tournamentId - holds the tournament id which is started.
+     * @param integer $date - holds the start date of tournament.
+     * @param array $participants - holds the participants of tournament.
      */
-    public static function setKnockOutStartDraws($fixtureData, $participants) {
-        $fixture = new Fixture($fixtureData);
-        $draws = $fixture::getDraws();
-        $drawIndex = 0;
-        foreach ($draws as $draw) {
-            if (count($draw[MATCHES]) >= count($participants)) {
-                $drawIndex++;
-            }
+    public static function setKnockOutStartDraws($tournamentId, $date, $participants) {
+        $tourId = 0;
+        $maxMatchCount = self::MAX_PARTICIPANT / 2;
+        while ($maxMatchCount >= count($participants)) {
+            $maxMatchCount = $maxMatchCount / 2;
+        };
+        $nextRoundMatchCount = $maxMatchCount / 2;
+        $withoutOpponents = self::setDrawMatches($tournamentId, $tourId, $date, $maxMatchCount, $participants, false);
+        if (count($withoutOpponents) > 0) {
+            self::setDrawMatches($tournamentId, $tourId + 1, (double)$date + 3600000, $nextRoundMatchCount,
+                $withoutOpponents, true);
         }
-        $firstDrawMatches = $draws[$drawIndex][MATCHES];
-
-        /** set first draw matches **/
-        $firstMatches = self::knockOutStartMatches($firstDrawMatches, $participants);
-        $draws[$drawIndex][MATCHES] = $firstMatches;
-
-        /** set second draw matches **/
-        $secondDrawParticipants = array();
-        for ($i = 0; $i < count($firstMatches); $i++) {
-            $firstMatches[$i][WINNER] && array_push($secondDrawParticipants, $firstMatches[$i][WINNER]);
-        }
-        if (count($secondDrawParticipants) > 0) {
-            $drawIndex = $drawIndex + 1;
-            $secondDrawMatches = $draws[$drawIndex][MATCHES];
-            $secondMatches = self::knockOutStartMatches($secondDrawMatches, $secondDrawParticipants);
-            $draws[$drawIndex][MATCHES] = $secondMatches;
-        }
-
-        $fixture::setDraws($draws);
-        return $fixture::getFixture();
     }
 
     /**
-     * @description set next round player.
-     * @param $draw - holds the given round data.
-     * @param $player - holds the previous round winner.
-     * @return mixed
+     * @description set matches for draws.
+     * @param integer $tournamentId - holds the tournament id which is started.
+     * @param integer $tourId - holds the id of draw.
+     * @param integer $date - holds the start date of tournament.
+     * @param integer $matchCount - holds the match count of draw.
+     * @param array $participants - holds the participants of tournament.
+     * @param boolean $flag - the flag for continue.
+     * @return array
      */
-    public static function setKnockOutNextDraw($draw, $player) {
-        if ($draw) {
-            $matches = $draw[MATCHES];
-            $findingOpponent = false;
-            for ($i = 0; $i < count($matches); $i++) {
-                if (!$findingOpponent) {
-                    $matchObject = new Match($matches[$i]);
-                    if (!$matches[$i][HOME] && !$matches[$i][AWAY]) {
-                        $matchObject::setHome($player);
-                        $matchObject::setWinner(null);
-                        $matchObject::setAvailable(false);
-                        $matchObject::setUpdatedAt(CustomDate::getDateFromMilliseconds());
-                        $findingOpponent = true;
-                        Log::info('SET HOME PLAYER', $matchObject::getHome());
-                    } else if ($matches[$i][HOME] && !$matches[$i][AWAY]) {
-                        $matchObject::setAway($player);
-                        $matchObject::setWinner(null);
-                        $matchObject::setAvailable(true);
-                        $matchObject::setUpdatedAt(CustomDate::getDateFromMilliseconds());
-                        $findingOpponent = true;
-                        Log::info('SET AWAY PLAYER', $matchObject::getAway());
-                    }
-                    $draw[MATCHES][$i] = $matchObject::getMatch();
-                }
+    private static function setDrawMatches($tournamentId, $tourId, $date, $matchCount, $participants, $flag) {
+        $withoutOpponents = array();
+        for ($i = 0; $i < $matchCount; $i++) {
+            $homeId = $participants[$i][PARTICIPANT_ID];
+            $awayId = null;
+            if (($i + $matchCount) < count($participants)) {
+                $awayId = $participants[$i + $matchCount][PARTICIPANT_ID];
+            }
+            $match = Match::getMatchData($tourId, ('1/' . $matchCount), $homeId, $awayId, true, $date);
+            if ($homeId && $awayId) {
+                ApiQuery::setMatch($tournamentId, $match);
+            } else if ($homeId && $flag) {
+                ApiQuery::setMatch($tournamentId, $match);
+            } else if ($homeId && !$awayId && !$flag) {
+                array_push($withoutOpponents, $participants[$i]);
             }
         }
-        return $draw;
+        return $withoutOpponents;
     }
 
     /**
      * @description set knock out tournament`s ranking.
-     * @param $data - the data of fixture
+     * @param integer $tournamentId - the id of tournament.
+     * @param array $participants - the participants of tournament.
      * @return mixed - ranking result
      */
-    public static function setKnockOutRanking($data) {
-        $fixture = new Fixture($data);
-        $ranking = array();
-        $participantCount = ApiQuery::getParticipants($fixture::getTournamentId())->count();
-        $rankingDescIndex = 0;
-        foreach ($fixture::getDraws() as $draw) {
-            $players = array();
-            foreach ($draw[MATCHES] as $match) {
-                if (count($draw[MATCHES]) > 2) {
-                    $loser = self::getPlayerMatchGoal($match, false);
-                    $loser && array_push($players, $loser);
-                } else if (count($draw[MATCHES]) == 1) {  /** if 3th place and final */
-                    $winner = self::getPlayerMatchGoal($match, true);
-                    $loser = self::getPlayerMatchGoal($match, false);
-                    $winner && array_push($players, $winner);
-                    $loser && array_push($players, $loser);
+    public static function setKnockOutRanking($tournamentId, $participants) {
+        // TODO: not working....
+        $draws = ApiQuery::getMatches($tournamentId);
+        $standings = array();
+        foreach ($participants as $index => $participant) {
+            $standing = $index + 1;
+            $standings[$participant[PARTICIPANT_ID]] = $standing;
+        }
+        Log::info(json_encode($standings));
+        $rankings = array();
+        foreach ($draws as $drawMatches) {
+            foreach ($drawMatches as $match) {
+                if (!Match::isFinal($match[TOUR_NAME]) &&
+                    !Match::isThirdPlace($match[TOUR_NAME]) &&
+                    !Match::isSemiFinal($match[TOUR_NAME])) {
+                    $ranking = array(
+                        PARTICIPANT_ID => $match[LOSER_ID],
+                        TOURNAMENT_RANKING => $standings[$match[LOSER_ID]]
+                    );
+                    array_push($rankings, $ranking);
                 }
             }
-
-            /** sort participants by goal or point */
-            usort($players, function ($a, $b) { return $a[GOAL] - $b[GOAL]; });
-            for ($i = 0; $i < count($players); $i++) {
-                $players[$i][TOURNAMENT_RANKING] = $participantCount - $rankingDescIndex;
-                array_push($ranking, $players[$i]);
-                $rankingDescIndex++;
-            }
         }
-        return $ranking;
+        Log::info(json_encode($rankings));
+        return $rankings;
     }
 
-    public static function calculateKnockOutParticipantEarnings($standing, $participantCount) {
-        $earning = 0;
+    public static function calculateKnockOutParticipantEarnings($standing, $participantCount): array {
+        $amount = 0;
         $ticket = 0;
         $result = (MAX_EARNINGS - (self::MAX_PARTICIPANT - $participantCount));
         if (intval($standing) == 1) {
-            $earning = number_format($result, 2, '.', '');;
+            $amount = number_format($result, 2, '.', '');;
         } else if (intval($standing) == 2) {
-            $earning = number_format($result / 2, 2, '.', '');;
+            $amount = number_format($result / 2, 2, '.', '');;
         } else if (intval($standing) == 3) {
             $ticket = 1;
         }
-
-        return array(
-            EARNINGS => $earning,
-            TICKET => $ticket
-        );
+        return array($amount, $ticket);
     }
 
     public static function calculateKnockOutHolderEarning($participantCount) {
         $earning = $participantCount * MIN_AMOUNT;
-        for ($i = 1; $i <= 3; $i++) {
-            $result = self::calculateKnockOutParticipantEarnings($i, $participantCount);
-            $earning -= $result[EARNINGS];
+        for ($standing = 1; $standing <= 3; $standing++) {
+            list($amount, $ticket) = self::calculateKnockOutParticipantEarnings($standing, $participantCount);
+            $earning -= $amount;
         }
         $earning = $earning - (MIN_AMOUNT + ($earning * COMMISSION_PERCENTAGE) / 100);
         return number_format($earning, 2, '.', '');
     }
 
-    public static function set() {
-        //Storage::disk('local')->put('fixtures/' . $fixture[TOURNAMENT_ID] . '.json', json_encode($fixture));
-        //return $fixture;
-    }
-
-    /**
-     * @description handle request to set starting matches of fixture draws.
-     * @param $drawMatches - holds the given draw`s matches.
-     * @param $participants - holds the participants list of tournament.
-     * @return mixed
-     */
-    private static function knockOutStartMatches($drawMatches, $participants) {
-        $participantTransformer = new ParticipantTransformer();
-        $currentDate = new CustomDate();
-
-        $matchObjectsArray = array();
-        $homeIndex = 0;
-        $awayIndex = $homeIndex + count($drawMatches);
-        for ($i = 0; $i < count($drawMatches); $i++) {
-            $matchObject = new Match($drawMatches[$i]);
-
-            $homePlayer = $homeIndex < count($participants) ?
-                $participantTransformer->transformForFixture($participants[$homeIndex]) : null;
-            $awayPlayer = $awayIndex < count($participants) ?
-                $participantTransformer->transformForFixture($participants[$awayIndex]) : null;
-
-            $matchObject::setHome($homePlayer);
-            $matchObject::setAway($awayPlayer);
-            $matchObject::setAvailable(false);
-            $matchObject::setUpdatedAt($currentDate::getDateFromMilliseconds());
-            if (!is_null($homePlayer) && !is_null($awayPlayer)) {
-                $matchObject::setAvailable(true);
-                $matchObject::setWinner(null);
-            } else if (!is_null($homePlayer) && is_null($awayPlayer)) {
-                $matchObject::setWinner($homePlayer);
-            }
-
-            array_push($matchObjectsArray, $matchObject::getMatch());
-            $homeIndex++;
-            $awayIndex++;
-        }
-        return $matchObjectsArray;
-    }
-
-    private static function getPlayerMatchGoal($match, $winner) {
-        $participantId = $winner ? $match[WINNER][PARTICIPANT_ID] : $match[LOSER][PARTICIPANT_ID];
-        $point = $winner ? max($match[HOME][POINT], $match[AWAY][POINT]) : min($match[HOME][POINT], $match[AWAY][POINT]);
-        $data = array(
-            PARTICIPANT_ID => $participantId,
-            GOAL => $point
-        );
-
-        if (!is_null($data[PARTICIPANT_ID]) && !is_null($data[GOAL])) {
-            return $data;
-        } else {
-            return null;
-        }
-    }
-
-    private static function setDefaultDraw($count, $title, $date, $tour) {
-        $draw = array(
-            DRAW_TITLE => $title,
-            MATCHES => self::setDefaultMatches($count, CustomDate::getDateFromMilliseconds($date), $tour)
-        );
-        return $draw;
-    }
-
-    private static function setDefaultMatches($count, $date, $tour) {
-        $matches = array();
-        for ($i = 0; $i < $count; $i++) {
-            $match = new Match(array(
-                TOUR_ID => $tour,
-                MATCH_ID => $i,
-                UPDATED_AT => CustomDate::getDateFromMilliseconds()
-            ));
-            $match::setDate($date);
-            array_push($matches, $match::getMatch());
-        }
-        return $matches;
-    }
 }

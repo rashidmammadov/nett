@@ -5,6 +5,7 @@ namespace App\Http\Queries\MySQL;
 use App\Finance;
 use App\Fixture;
 use App\Game;
+use App\Match;
 use App\Participant;
 use App\Tournament;
 use App\User;
@@ -163,7 +164,6 @@ class ApiQuery {
             })
             ->orderBy(TOURNAMENT_RANKING)
             ->get();
-
         return $queryResult;
     }
 
@@ -213,6 +213,112 @@ class ApiQuery {
         Participant::where(TOURNAMENT_ID, EQUAL_SIGN, $tournamentId)
             ->where(PARTICIPANT_ID, EQUAL_SIGN, $participantId)
             ->update([EARNINGS => $earnings]);
+    }
+
+    /** -------------------- MATCH QUERIES -------------------- **/
+
+    /**
+     * @description query to set match.
+     * @param integer $tournamentId
+     * @param array $parameters
+     */
+    public static function setMatch($tournamentId, $parameters) {
+        Match::create([
+            TOURNAMENT_ID => $tournamentId,
+            TOUR_ID => $parameters[TOUR_ID],
+            TOUR_NAME => $parameters[TOUR_NAME],
+            HOME_ID => $parameters[HOME_ID],
+            AWAY_ID => $parameters[AWAY_ID],
+            AVAILABLE => $parameters[AVAILABLE],
+            DATE => $parameters[DATE]
+        ]);
+    }
+
+    /**
+     * @description query to get tournament matches.
+     * @param integer $tournamentId
+     * @return mixed
+     */
+    public static function getMatches($tournamentId) {
+        $queryResult =  Match::where(DB_MATCH_TABLE.'.'.TOURNAMENT_ID, EQUAL_SIGN, $tournamentId)
+            ->get()
+            ->groupBy(TOUR_ID);
+        return $queryResult;
+    }
+
+    /**
+     * @description query to set match winner and loser.
+     * @param integer $matchId
+     * @param integer $winnerId
+     * @param integer $loserId
+     * @param integer $homePoint
+     * @param integer $awayPoint
+     */
+    public static function setMatchWinner($matchId, $winnerId, $loserId, $homePoint, $awayPoint) {
+        Match::where(DB_MATCH_TABLE.'.'.MATCH_ID, EQUAL_SIGN, $matchId)
+            ->update([
+                WINNER_ID => $winnerId,
+                LOSER_ID => $loserId,
+                HOME_POINT => $homePoint,
+                AWAY_POINT => $awayPoint,
+                AVAILABLE => false
+            ]);
+    }
+
+    /**
+     * @description query to get tournament match.
+     * @param integer $tournamentId
+     * @param integer $tourId
+     * @param integer $matchId
+     * @return mixed
+     */
+    public static function getMatch($tournamentId, $tourId, $matchId) {
+        $queryResult =  Match::where(DB_MATCH_TABLE.'.'.TOURNAMENT_ID, EQUAL_SIGN, $tournamentId)
+            ->where(DB_MATCH_TABLE.'.'.TOUR_ID, EQUAL_SIGN, $tourId)
+            ->where(DB_MATCH_TABLE.'.'.MATCH_ID, EQUAL_SIGN, $matchId)
+            ->first();
+        return $queryResult;
+    }
+
+    /**
+     * @description query to get next round match.
+     * @param integer $tournamentId
+     * @param integer $tourId
+     * @return mixed
+     */
+    public static function getNextMatch($tournamentId, $tourId) {
+        $queryResult =  Match::where(DB_MATCH_TABLE.'.'.TOURNAMENT_ID, EQUAL_SIGN, $tournamentId)
+            ->where(DB_MATCH_TABLE.'.'.TOUR_ID, EQUAL_SIGN, $tourId)
+            ->where(DB_MATCH_TABLE.'.'.HOME_ID, NOT_EQUAL_SIGN, null)
+            ->where(DB_MATCH_TABLE.'.'.AWAY_ID, EQUAL_SIGN, null)
+            ->first();
+        return $queryResult;
+    }
+
+    public static function updateMatchAway($matchId, $awayId) {
+        Match::where(DB_MATCH_TABLE.'.'.MATCH_ID, EQUAL_SIGN, $matchId)
+            ->update([
+                AWAY_ID => $awayId,
+                AVAILABLE => true
+            ]);
+    }
+
+    public static function updateMatchHome($tournamentId, $tourId, $tourName, $date, $homeId) {
+        Match::create([
+            TOURNAMENT_ID => $tournamentId,
+            TOUR_ID => $tourId,
+            TOUR_NAME => $tourName,
+            HOME_ID => $homeId,
+            AVAILABLE => true,
+            DATE => $date
+        ]);
+    }
+
+    public static function isAllMatchPlayed($tournamentId) {
+        $queryResult =  Match::where(TOURNAMENT_ID, EQUAL_SIGN, $tournamentId)
+            ->where(AVAILABLE, EQUAL_SIGN, true)
+            ->doesntExist();
+        return $queryResult;
     }
 
     /** -------------------- TOURNAMENT QUERIES -------------------- **/

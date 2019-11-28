@@ -23,13 +23,13 @@ class Finance {
     private static $status;
 
     public function __construct($parameters = null) {
-        !empty($parameters[USER_ID])        && self::setUserId($parameters[USER_ID]);
-        !empty($parameters[TYPE])           && self::setType($parameters[TYPE]);
-        !empty($parameters[CHANNEL])        && self::setChannel($parameters[CHANNEL]);
-        !empty($parameters[TOURNAMENT_ID])  && self::setTournamentId($parameters[TOURNAMENT_ID]);
-        !empty($parameters[AMOUNT])         && self::setAmount($parameters[AMOUNT]);
-        !empty($parameters[TICKET])         && self::setTicket($parameters[TICKET]);
-        !empty($parameters[STATUS])         && self::setStatus($parameters[STATUS]);
+        self::setUserId($parameters[USER_ID]);
+        self::setType($parameters[TYPE]);
+        self::setChannel($parameters[CHANNEL]);
+        self::setTournamentId($parameters[TOURNAMENT_ID]);
+        self::setAmount($parameters[AMOUNT]);
+        self::setTicket($parameters[TICKET]);
+        self::setStatus($parameters[STATUS]);
     }
 
     public static function getFinance() {
@@ -80,18 +80,19 @@ class Finance {
     /**
      * @description prepare participant`s earnings data for save finance table.
      * @param integer $tournamentId - holds the tournament id
-     * @param array $rankings - holds the participant`s ranking
+     * @param array $participants - holds the participant.
      */
-    public static function setKnockOutFixtureParticipantsEarnings($tournamentId, $rankings) {
-        foreach ($rankings as $ranking) {
+    public static function setKnockOutFixtureParticipantsEarnings($tournamentId, $participants) {
+        foreach ($participants as $participant) {
             $finance = new Finance();
-            $finance::setUserId($ranking[PARTICIPANT_ID]);
+            $finance::setUserId($participant[PARTICIPANT_ID]);
             $finance::setType(PLAYER);
             $finance::setChannel(TOURNAMENT);
             $finance::setTournamentId($tournamentId);
-            $result = Fixture::calculateKnockOutParticipantEarnings($ranking[TOURNAMENT_RANKING], count($rankings));
-            $finance::setAmount($result[EARNINGS]);
-            $finance::setTicket($result[TICKET]);
+            list($amount, $ticket) = Fixture::calculateKnockOutParticipantEarnings($participant[TOURNAMENT_RANKING],
+                count($participants));
+            $finance::setAmount($amount);
+            $finance::setTicket($ticket);
             $finance::setStatus(FINANCE_STATUS_WAITING);
             if ($finance::getAmount() > 0 || $finance::getTicket() > 0) {
                 ApiQuery::setFinance($finance::getFinance());
