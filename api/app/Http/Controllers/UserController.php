@@ -145,7 +145,7 @@ class UserController extends ApiController {
             if ($validator->fails()) {
                 return $this->respondValidationError(FIELDS_VALIDATION_FAILED, $validator->errors());
             } else {
-                $data = ApiQuery::updateUser($user[IDENTIFIER], $request);
+                $data = ApiQuery::activateUser($user[IDENTIFIER], $request);
                 return $this->respondCreated(USER_ACTIVATED, $this->userTransformer->transform($data));
             }
         } catch (JWTException $e) {
@@ -167,6 +167,23 @@ class UserController extends ApiController {
             $user->save();
             $this->setStatusCode(Res::HTTP_OK);
             return $this->respondCreated(LOGGED_OUT_SUCCESSFULLY);
+        } catch(JWTException $e) {
+            $this->setStatusCode($e->getStatusCode());
+            $this->setMessage(AUTHENTICATION_ERROR);
+            return $this->respondWithError($this->getMessage());
+        }
+    }
+
+    /**
+     * @description: update settings of user.
+     * @param Request $request
+     * @return mixed
+     */
+    public function updateSettings(Request $request) {
+        try {
+            $user = JWTAuth::parseToken()->authenticate();
+            $user = ApiQuery::updateUserSettings($user[IDENTIFIER], $request);
+            return $this->respondCreated(SETTINGS_UPDATED_SUCCESSFULLY, $user);
         } catch(JWTException $e) {
             $this->setStatusCode($e->getStatusCode());
             $this->setMessage(AUTHENTICATION_ERROR);

@@ -9,8 +9,6 @@
 namespace App\Http\Utility;
 
 use App\Http\Queries\MySQL\ApiQuery;
-use Illuminate\Support\Facades\Log;
-use App\Repository\Transformers\ParticipantTransformer;
 
 class Fixture {
 

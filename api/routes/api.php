@@ -45,6 +45,7 @@ Route::group(['middleware' => 'cors', 'prefix' => '/v1'], function () {
     Route::post('/logout', 'UserController@logout');
     Route::post('/register', 'UserController@register');
     Route::put('/activate', 'UserController@activate');
+    Route::put('/updateSettings', 'UserController@updateSettings');
 
     Route::post('/participants', 'ParticipantController@attend');
     Route::delete('/participants', 'ParticipantController@leave');

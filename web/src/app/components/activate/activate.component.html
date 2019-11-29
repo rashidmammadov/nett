@@ -7,7 +7,7 @@
             </mat-card-header>
             <mat-card-content>
                 <form ngNoForm fxLayout="column" [formGroup]="activateForm">
-                    <mat-form-field fxFlex="100%" appearance="outline">
+                    <mat-form-field fxFlex appearance="outline">
                         <mat-label>İsim</mat-label>
                         <input matInput placeholder="İsim" formControlName="name">
                         <mat-error *ngIf="activateForm.controls.name.hasError('required')">
@@ -15,7 +15,7 @@
                         </mat-error>
                     </mat-form-field>
 
-                    <mat-form-field fxFlex="100%" appearance="outline">
+                    <mat-form-field fxFlex appearance="outline">
                         <mat-label>Soyisim</mat-label>
                         <input matInput placeholder="Soyisim" formControlName="surname">
                         <mat-error *ngIf="activateForm.controls.surname.hasError('required')">
@@ -23,7 +23,7 @@
                         </mat-error>
                     </mat-form-field>
 
-                    <mat-form-field fxFlex="100%" appearance="outline">
+                    <mat-form-field fxFlex appearance="outline">
                         <mat-label>Telefon</mat-label>
                         <span matPrefix>+90 &nbsp;</span>
                         <input type="tel" matInput placeholder="Telefon" maxlength="10" formControlName="phone">
@@ -33,7 +33,7 @@
                         </mat-error>
                     </mat-form-field>
 
-                    <div style="margin-top: 8px" fxLayout="row" fxFlex="100%" fxLayoutGap="4px">
+                    <div style="margin-top: 8px" fxLayout="row" fxFlex fxLayoutGap="4px">
                         <mat-form-field fxFlex="32%" appearance="outline">
                             <mat-label>Gün</mat-label>
                             <mat-select [(value)]="selectedDay" (valueChange)="setBirthday()">

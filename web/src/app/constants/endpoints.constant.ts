@@ -34,6 +34,8 @@ export const ENDPOINTS = {
         let queryParams: string = '';
         status >= 0 && (queryParams = `?status=${status}`);
         return PREFIX + (!!tournamentId ? `tournaments/${tournamentId}` : 'tournaments') + queryParams;
-    }
+    },
+
+    UPDATE_SETTINGS: () => `${PREFIX}updateSettings`,
 
 };

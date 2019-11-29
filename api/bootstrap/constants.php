@@ -139,6 +139,7 @@ define('REPORT_TYPE', 'reportType');
 define('REMEMBER_TOKEN', 'remember_token');
 define('RESULT_ALREADY_SET', 'Zaten sonuç belirlediniz');
 define('SEMI_FINAL', '1/2');
+define('SETTINGS_UPDATED_SUCCESSFULLY', 'Ayarlar başarıyla güncellendi');
 define('SEX', 'sex');
 define('START_DATE', 'startDate');
 define('START_TIME', 'startTime');

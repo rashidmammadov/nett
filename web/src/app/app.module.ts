@@ -28,6 +28,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { SearchComponent } from './components/search/search.component';
 import { SetMatchScoreDialogComponent } from './components/shared/set-match-score-dialog/set-match-score-dialog.component';
 import { SetTournamentComponent } from './components/set-tournament/set-tournament.component';
+import { SettingComponent } from './components/setting/setting.component';
 import { LeaveDialogComponent } from './components/shared/leave-dialog/leave-dialog.component';
 import { TimelineReportComponent } from './components/shared/timeline-report/timeline-report.component';
 import { TournamentComponent } from './components/tournament/tournament.component';
@@ -64,7 +65,8 @@ import { DatePickerIntl } from './models/DatePickerIntl';
         RankingReportComponent,
         NotificationReportComponent,
         MostPlayedReportComponent,
-        ConfirmDialogComponent
+        ConfirmDialogComponent,
+        SettingComponent
     ],
     imports: [
         BrowserModule,

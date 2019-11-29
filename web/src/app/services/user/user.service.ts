@@ -13,7 +13,8 @@ export class UserService {
     constructor(private http: HttpClient) { }
 
     activate(params): Promise<ErrorResponse | IHttpResponse> {
-        return UtilityService.pipeHttpResponse(this.http.put<IHttpResponse>(ENDPOINTS.ACTIVATE(), UtilityService.setHttpParams(params)))
+        return UtilityService.pipeHttpResponse(this.http.put<IHttpResponse>(ENDPOINTS.ACTIVATE(),
+            UtilityService.setHttpParams(params)))
     }
 
     login(email: string, password: string | number): Promise<ErrorResponse | IHttpResponse> {
@@ -28,11 +29,17 @@ export class UserService {
     }
 
     refreshUser(): Promise<ErrorResponse | IHttpResponse> {
-        return UtilityService.pipeHttpResponse(this.http.get<IHttpResponse>(ENDPOINTS.REFRESH_USER()))
+        return UtilityService.pipeHttpResponse(this.http.get<IHttpResponse>(ENDPOINTS.REFRESH_USER()));
     }
 
     register(params): Promise<ErrorResponse | IHttpResponse> {
-        return UtilityService.pipeHttpResponse(this.http.post<IHttpResponse>(ENDPOINTS.REGISTER(), UtilityService.setHttpParams(params)))
+        return UtilityService.pipeHttpResponse(this.http.post<IHttpResponse>(ENDPOINTS.REGISTER(),
+            UtilityService.setHttpParams(params)));
+    }
+
+    updateSettings(params): Promise<ErrorResponse | IHttpResponse> {
+        return UtilityService.pipeHttpResponse(this.http.put<IHttpResponse>(ENDPOINTS.UPDATE_SETTINGS(),
+            UtilityService.setHttpParams(params)));
     }
 
 }

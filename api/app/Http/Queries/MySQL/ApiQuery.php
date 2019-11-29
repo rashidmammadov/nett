@@ -560,18 +560,37 @@ class ApiQuery {
     }
 
     /**
+     * @description query to activate user.
+     * @param $userId
+     * @param $parameters
+     * @return mixed
+     */
+    public static function activateUser($userId, $parameters) {
+        $user = self::getUserById($userId);
+        !empty($parameters[NAME])               && ($user[NAME] = $parameters[NAME]);
+        !empty($parameters[SURNAME])            && ($user[SURNAME] = $parameters[SURNAME]);
+        !empty($parameters[PHONE])              && ($user[PHONE] = $parameters[PHONE]);
+        !empty($parameters[BIRTHDAY])           && ($user[BIRTHDAY] = strval($parameters[BIRTHDAY]));
+        ($user[STATE] == USER_STATE_DISABLE)    && ($user[STATE] = USER_STATE_ACTIVE);
+        $user->save();
+        return $user;
+    }
+
+    /**
      * @description query to update user.
      * @param $userId
      * @param $parameters
      * @return mixed
      */
-    public static function updateUser($userId, $parameters) {
+    public static function updateUserSettings($userId, $parameters) {
         $user = self::getUserById($userId);
-        !empty($parameters[NAME]) && ($user[NAME] = $parameters[NAME]);
-        !empty($parameters[SURNAME]) && ($user[SURNAME] = $parameters[SURNAME]);
-        !empty($parameters[PHONE]) && ($user[PHONE] = $parameters[PHONE]);
-        !empty($parameters[BIRTHDAY]) && ($user[BIRTHDAY] = strval($parameters[BIRTHDAY]));
-        ($user[STATE] == USER_STATE_DISABLE) && ($user[STATE] = USER_STATE_ACTIVE);
+        !empty($parameters[NAME])       && ($user[NAME] = $parameters[NAME]);
+        !empty($parameters[SURNAME])    && ($user[SURNAME] = $parameters[SURNAME]);
+        !empty($parameters[CITY])       && ($user[CITY] = $parameters[CITY]);
+        !empty($parameters[DISTRICT])   && ($user[DISTRICT] = $parameters[DISTRICT]);
+        !empty($parameters[PHONE])      && ($user[PHONE] = $parameters[PHONE]);
+        !empty($parameters[IBAN])       && ($user[IBAN] = $parameters[IBAN]);
+        !empty($parameters[ADDRESS])    && ($user[ADDRESS] = $parameters[ADDRESS]);
         $user->save();
         return $user;
     }
