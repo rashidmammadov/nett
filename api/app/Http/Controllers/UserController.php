@@ -3,15 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Queries\MySQL\ApiQuery;
+use App\Http\Utility\Email;
 use App\Repository\Transformers\UserTransformer;
 use Illuminate\Http\Request;
 use \Illuminate\Http\Response as Res;
-use Illuminate\Support\Facades\Log;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Validator;
-
 
 class UserController extends ApiController {
 
@@ -66,7 +65,7 @@ class UserController extends ApiController {
                 }
 
                 $remember_token = $user->remember_token;
-                if ($remember_token == NULL){
+                if ($remember_token == NULL) {
                     return $this->login($request, false);
                 }
 
@@ -240,7 +239,7 @@ class UserController extends ApiController {
         $user->save();
 
         if ($newUser) {
-            // TODO: send email
+            Email::send(WELCOME_EMAIL, $request);
         }
         return $this->respondCreated(LOGGED_IN_SUCCESSFULLY, $this->userTransformer->transform($user));
     }

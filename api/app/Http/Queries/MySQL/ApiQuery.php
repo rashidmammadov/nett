@@ -95,7 +95,6 @@ class ApiQuery {
             DEVELOPER => $parameters[DEVELOPER],
             GAME_TYPE => $parameters[GAME_TYPE]
         ]);
-
         return $queryResult;
     }
 
@@ -110,7 +109,6 @@ class ApiQuery {
                 $query->where(GAME_ID, EQUAL_SIGN, $gameId);
             }
         })->get();
-
         return $queryResult;
     }
 
@@ -143,7 +141,6 @@ class ApiQuery {
             [TOURNAMENT_ID, EQUAL_SIGN, $tournamentId],
             [PARTICIPANT_ID, EQUAL_SIGN, $participantId]
         ])->exists();
-
         return $queryResult;
     }
 
@@ -353,7 +350,6 @@ class ApiQuery {
             STATUS => $tournament[STATUS],
             DAYS => $tournament[DAYS]
         ]);
-
         return $queryResult;
     }
 

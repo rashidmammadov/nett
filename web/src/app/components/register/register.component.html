@@ -59,25 +59,23 @@
                         </mat-error>
                     </mat-form-field>
 
-                    <div fxLayout="row" fxLayoutGap="16px">
-                        <mat-form-field fxFlex appearance="outline">
-                            <mat-label>İl</mat-label>
-                            <mat-select formControlName="city" (selectionChange)="setDistricts(registerForm.controls.city.value)">
-                                <mat-option *ngFor="let city of cities" [value]="city">
-                                    {{city}}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
+                    <mat-form-field fxFlex appearance="outline">
+                        <mat-label>İl</mat-label>
+                        <mat-select formControlName="city" (selectionChange)="setDistricts(registerForm.controls.city.value)">
+                            <mat-option *ngFor="let city of cities" [value]="city">
+                                {{city}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
 
-                        <mat-form-field fxFlex appearance="outline">
-                            <mat-label>İlçe</mat-label>
-                            <mat-select formControlName="district">
-                                <mat-option *ngFor="let district of districts" [value]="district">
-                                    {{district}}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
+                    <mat-form-field fxFlex appearance="outline">
+                        <mat-label>İlçe</mat-label>
+                        <mat-select formControlName="district">
+                            <mat-option *ngFor="let district of districts" [value]="district">
+                                {{district}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
 
                     <button mat-flat-button color="primary" type="sumbit" mat-button (click)="register()"
                             [disabled]="!registerForm.valid">Kayıt Ol</button>
