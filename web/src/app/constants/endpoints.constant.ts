@@ -36,6 +36,8 @@ export const ENDPOINTS = {
         return PREFIX + (!!tournamentId ? `tournaments/${tournamentId}` : 'tournaments') + queryParams;
     },
 
+    UPDATE_PASSWORD: () => `${PREFIX}updatePassword`,
+
     UPDATE_SETTINGS: () => `${PREFIX}updateSettings`,
 
 };

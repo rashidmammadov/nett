@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 import { UserType } from '../../interfaces/user-type';
 import { loaded, loading } from '../../store/actions/progress.action';
@@ -10,7 +11,8 @@ import { DataService } from '../../services/data/data.service';
 import { REGEX } from '../../constants/regex.constant';
 import { set } from '../../store/actions/user.action';
 import { UserService } from '../../services/user/user.service';
-import {ToastService} from "../../services/toast/toast.service";
+import { ToastService } from '../../services/toast/toast.service';
+import { Cookie } from '../../services/cookie/cookies.service';
 
 @Component({
   selector: 'app-setting',
@@ -24,8 +26,8 @@ export class SettingComponent implements OnInit {
     public districts: any;
 
     passwordForm = new FormGroup({
-        newPassword: new FormControl('', [Validators.required, Validators.pattern(REGEX.PASSWORD)]),
-        oldPassword: new FormControl('', [Validators.required])
+        password: new FormControl('', [Validators.required, Validators.pattern(REGEX.PASSWORD)]),
+        passwordConfirmation: new FormControl('', [Validators.required, Validators.pattern(REGEX.PASSWORD)])
     });
 
     settingsForm = new FormGroup({
@@ -41,11 +43,25 @@ export class SettingComponent implements OnInit {
     });
 
     constructor(private store: Store<{user: UserType, progress: boolean}>, private dataService: DataService,
-                private userService: UserService) {}
+                private userService: UserService, private router: Router) {}
 
     ngOnInit() {
         this.getRegions().then(this.getUserData);
     }
+
+    public updatePassword = async () => {
+        if (this.passwordForm.valid) {
+            this.store.dispatch(loading());
+            const result = await this.userService.updatePassword(this.setPasswordFormData());
+            UtilityService.handleResponseFromService(result, (response: IHttpResponse) => {
+                Cookie.delete('_nrt');
+                this.store.dispatch(set({user: null}));
+                ToastService.show(response.message);
+                this.router.navigateByUrl('login');
+            });
+            this.store.dispatch(loaded());
+        }
+    };
 
     public updateSettings = async () => {
         if (this.settingsForm.valid) {
@@ -86,6 +102,14 @@ export class SettingComponent implements OnInit {
         form.username.disable();
         Object.keys(form).forEach((key: string) => { form[key].setValue(this.user[key]); });
         this.setDistricts(form.city.value, false);
+    }
+
+    private setPasswordFormData() {
+        let form = this.passwordForm.controls;
+        return {
+            'password': form.password.value,
+            'passwordConfirmation': form.passwordConfirmation.value
+        }
     }
 
     private setSettingsFormData() {

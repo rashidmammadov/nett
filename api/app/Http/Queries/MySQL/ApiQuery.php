@@ -615,6 +615,16 @@ class ApiQuery {
             ->update([TICKET => $ticket]);
     }
 
+    /**
+     * @description query to update user` password.
+     * @param integer $userId - the given user`s id
+     * @param string $newPassword - updated password
+     */
+    public static function updateUserPassword($userId, $newPassword) {
+        User::where(IDENTIFIER, EQUAL_SIGN, $userId)
+            ->update([PASSWORD => \Hash::make($newPassword)]);
+    }
+
     /** -------------------- REPORT QUERIES -------------------- **/
 
     /**

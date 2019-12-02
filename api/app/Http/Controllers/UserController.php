@@ -175,6 +175,39 @@ class UserController extends ApiController {
     }
 
     /**
+     * @description: update password of user.
+     * @param Request $request
+     * @return mixed
+     */
+    public function updatePassword(Request $request) {
+        try {
+            $user = JWTAuth::parseToken()->authenticate();
+            $rules = array(
+                PASSWORD => 'required',
+                PASSWORD_CONFIRMATION => 'required'
+            );
+
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return $this->respondValidationError(FIELDS_VALIDATION_FAILED, $validator->errors());
+            } else {
+                if ($request[PASSWORD] != $request[PASSWORD_CONFIRMATION]) {
+                    return $this->respondWithError(PASSWORD_VALIDATION_FAILED);
+                } else {
+                    ApiQuery::updateUserPassword($user[IDENTIFIER], $request[PASSWORD]);
+                    $user->remember_token = NULL;
+                    $user->save();
+                    return $this->respondCreated(PASSWORD_UPDATED_SUCCESSFULLY);
+                }
+            }
+        } catch(JWTException $e) {
+            $this->setStatusCode($e->getStatusCode());
+            $this->setMessage(AUTHENTICATION_ERROR);
+            return $this->respondWithError($this->getMessage());
+        }
+    }
+
+    /**
      * @description: update settings of user.
      * @param Request $request
      * @return mixed
@@ -202,7 +235,6 @@ class UserController extends ApiController {
         if ( ! $token = JWTAuth::attempt($credentials)) {
             return $this->respondWithError(USER_DOES_NOT_EXIST);
         }
-
         $user = JWTAuth::toUser($token);
         $user->remember_token = $token;
         $user->save();
@@ -210,7 +242,6 @@ class UserController extends ApiController {
         if ($newUser) {
             // TODO: send email
         }
-
         return $this->respondCreated(LOGGED_IN_SUCCESSFULLY, $this->userTransformer->transform($user));
     }
 
