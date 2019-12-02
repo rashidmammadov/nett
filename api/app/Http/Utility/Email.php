@@ -7,9 +7,23 @@ use Mail;
 class Email {
 
     public static function send($type, $data) {
-        if ($type == WELCOME_EMAIL) {
+        if ($type == RESET_PASSWORD) {
+            self::sendResetPasswordEmail($data);
+        } else if ($type == WELCOME_EMAIL) {
             self::sendWelcomeEmail($data);
         }
+    }
+
+    private static function sendResetPasswordEmail($data) {
+        $user = array(
+            EMAIL => $data[EMAIL],
+            PASSWORD => $data[PASSWORD]
+        );
+        Mail::send('emails/resetPassword', $user, function ($message) use ($user) {
+            $message->subject('🎉 Şifre Yenileme');
+            $message->from(NO_REPLY, 'özelden team');
+            $message->to($user[EMAIL]);
+        });
     }
 
     private static function sendWelcomeEmail($data) {

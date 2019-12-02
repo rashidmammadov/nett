@@ -613,11 +613,11 @@ class ApiQuery {
 
     /**
      * @description query to update user` password.
-     * @param integer $userId - the given user`s id
+     * @param integer $email - the given user`s email
      * @param string $newPassword - updated password
      */
-    public static function updateUserPassword($userId, $newPassword) {
-        User::where(IDENTIFIER, EQUAL_SIGN, $userId)
+    public static function updateUserPassword($email, $newPassword) {
+        User::where(EMAIL, EQUAL_SIGN, $email)
             ->update([PASSWORD => \Hash::make($newPassword)]);
     }
 

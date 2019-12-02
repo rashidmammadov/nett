@@ -9,6 +9,7 @@ import { Cookie } from '../../services/cookie/cookies.service';
 import { UserType } from '../../interfaces/user-type';
 import { loaded, loading } from '../../store/actions/progress.action';
 import { set } from '../../store/actions/user.action';
+import { ToastService } from '../../services/toast/toast.service';
 
 @Component({
   selector: 'app-login',
@@ -39,5 +40,15 @@ export class LoginComponent {
             this.progress.dispatch(loaded());
         }
     };
+
+    public resetPassword = async () => {
+      // TODO::
+        this.progress.dispatch(loading());
+        const result = await this.userService.resetPassword({email: this.loginForm.controls.email.value});
+        UtilityService.handleResponseFromService(result, (response: IHttpResponse) => {
+            ToastService.show(response.message);
+        });
+        this.progress.dispatch(loaded());
+    }
 
 }

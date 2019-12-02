@@ -126,6 +126,29 @@ class UserController extends ApiController {
     }
 
     /**
+     * @description handle request to reset password of user with given email.
+     * @param Request $request - hold the user`s email address.
+     * @return mixed
+     */
+    public function resetPassword(Request $request) {
+        $rules = array (
+            EMAIL => 'required'
+        );
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return $this->respondValidationError(FIELDS_VALIDATION_FAILED, $validator->errors());
+        } else {
+            $checkEmail = ApiQuery::checkEmail($request[EMAIL]);
+            if (!$checkEmail) {
+                return $this->respondWithError(USER_DOES_NOT_EXIST);
+            } else {
+                $this->setNewPassword($request[EMAIL]);
+                return $this->respondCreated(PASSWORD_SEND_TO_MAIL);
+            }
+        }
+    }
+
+    /**
      * @description handle request to activate user.
      * @param Request $request
      * @return mixed
@@ -152,7 +175,6 @@ class UserController extends ApiController {
             $this->setMessage(AUTHENTICATION_ERROR);
             return $this->respondWithError($this->getMessage());
         }
-
     }
 
     /**
@@ -193,7 +215,7 @@ class UserController extends ApiController {
                 if ($request[PASSWORD] != $request[PASSWORD_CONFIRMATION]) {
                     return $this->respondWithError(PASSWORD_VALIDATION_FAILED);
                 } else {
-                    ApiQuery::updateUserPassword($user[IDENTIFIER], $request[PASSWORD]);
+                    ApiQuery::updateUserPassword($user[EMAIL], $request[PASSWORD]);
                     $user->remember_token = NULL;
                     $user->save();
                     return $this->respondCreated(PASSWORD_UPDATED_SUCCESSFULLY);
@@ -251,6 +273,29 @@ class UserController extends ApiController {
     private function addRandomAvatar() {
         $imageUrl = env('HOST_NAME') . env('AVATARS_PATH') . rand(MIN_AVATAR_COUNT, MAX_AVATAR_COUNT) . '.png';
         return $imageUrl;
+    }
+
+    private function setNewPassword($email) {
+        $lowerCases = 'abcdefghijklmnopqrstuvwxyz';
+        $upperCases = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $digits = '1234567890';
+        $newPassword = $this->randomKeys($upperCases, 2) . $this->randomKeys($digits, 2) . $this->randomKeys($lowerCases, 2);
+        ApiQuery::updateUserPassword($email, $newPassword);
+        $data = array(
+            EMAIL => $email,
+            PASSWORD => $newPassword
+        );
+        Email::send(RESET_PASSWORD, $data);
+    }
+
+    private function randomKeys($keys, $limit) {
+        $pass = array();
+        $keyLength = strlen($keys) - 1;
+        for ($i = 0; $i < $limit; $i++) {
+            $n = rand(0, $keyLength);
+            $pass[] = $keys[$n];
+        }
+        return implode($pass);
     }
 
 }

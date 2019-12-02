@@ -37,6 +37,11 @@ export class UserService {
             UtilityService.setHttpParams(params)));
     }
 
+    resetPassword(params): Promise<ErrorResponse | IHttpResponse> {
+        return UtilityService.pipeHttpResponse(this.http.post<IHttpResponse>(ENDPOINTS.RESET_PASSWORD(),
+            UtilityService.setHttpParams(params)));
+    }
+
     updatePassword(params): Promise<ErrorResponse | IHttpResponse> {
         return UtilityService.pipeHttpResponse(this.http.put<IHttpResponse>(ENDPOINTS.UPDATE_PASSWORD(),
             UtilityService.setHttpParams(params)));

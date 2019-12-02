@@ -24,6 +24,8 @@ export const ENDPOINTS = {
 
     REPORTS: (reportType: string) => `${PREFIX}reports?reportType=${reportType}`,
 
+    RESET_PASSWORD: () => `${PREFIX}resetPassword`,
+
     MY_TOURNAMENTS: (status: number | string = 0) => {
         let queryParams: string = '';
         status >= 0 && (queryParams = `?status=${status}`);
