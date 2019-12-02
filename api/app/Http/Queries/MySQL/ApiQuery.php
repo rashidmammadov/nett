@@ -520,7 +520,6 @@ class ApiQuery {
         $queryResult = User::where([
             [EMAIL, EQUAL_SIGN, $email]
         ])->first();
-
         return $queryResult;
     }
 
@@ -533,7 +532,6 @@ class ApiQuery {
         $queryResult = User::where([
             [IDENTIFIER, EQUAL_SIGN, $userId]
         ])->first();
-
         return $queryResult;
     }
 
@@ -619,6 +617,32 @@ class ApiQuery {
     public static function updateUserPassword($email, $newPassword) {
         User::where(EMAIL, EQUAL_SIGN, $email)
             ->update([PASSWORD => \Hash::make($newPassword)]);
+    }
+
+    /**
+     * @description query to update user`s previous and current rankings.
+     * @param integer $userId
+     * @param integer $ranking
+     * @param integer $previousRanking
+     */
+    public static function updateUserRanking($userId, $ranking, $previousRanking) {
+        User::where(IDENTIFIER, EQUAL_SIGN, $userId)
+            ->update([RANKING => $ranking, PREVIOUS_RANKING => $previousRanking]);
+    }
+
+    /**
+     * @description query to get user which are participated to closed tournaments.
+     * @return mixed
+     */
+    public static function getPlayersListByTournamentPoint() {
+        $result = User::where(DB_USERS_TABLE.'.'.TYPE, EQUAL_SIGN, PLAYER)
+            ->where(DB_USERS_TABLE.'.'.STATE, EQUAL_SIGN, USER_STATE_ACTIVE)
+            ->join(DB_PARTICIPANT_TABLE, DB_PARTICIPANT_TABLE.'.'.PARTICIPANT_ID, EQUAL_SIGN, DB_USERS_TABLE.'.'.IDENTIFIER)
+            ->where(DB_PARTICIPANT_TABLE.'.'.TOURNAMENT_RANKING, NOT_EQUAL_SIGN, null)
+            ->where(DB_PARTICIPANT_TABLE.'.'.POINT, NOT_EQUAL_SIGN, null)
+            ->get()
+            ->groupBy(IDENTIFIER);
+        return $result;
     }
 
     /** -------------------- REPORT QUERIES -------------------- **/

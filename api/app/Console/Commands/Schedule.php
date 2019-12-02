@@ -13,6 +13,38 @@ class Schedule extends Command {
 
     protected $name = 'schedule';
 
+    public function calculateUserRankings() {
+        $listedUsers = array();
+        Log::info('**************************************************');
+        Log::info('RANKING CALCULATOR STARTED');
+        $users = ApiQuery::getPlayersListByTournamentPoint();
+        foreach ($users as $tournamentResult) {
+            $id = null;
+            $ranking = null;
+            $totalPoint = null;
+            foreach ($tournamentResult as $user) {
+                $id = $user[IDENTIFIER];
+                $ranking = $user[RANKING];
+                $totalPoint = $totalPoint + $user[POINT];
+            }
+            if ($id && $totalPoint) {
+                $listedUser = array(
+                    IDENTIFIER => $id,
+                    RANKING => $ranking,
+                    POINT => $totalPoint
+                );
+                array_push($listedUsers, $listedUser);
+            }
+        }
+        usort($listedUsers, function ($a, $b) { return $b[POINT] - $a[POINT]; });
+        foreach ($listedUsers as $index => $user) {
+            $user[PREVIOUS_RANKING] = $user[RANKING];
+            $user[RANKING] = $index + 1;
+            ApiQuery::updateUserRanking($user[IDENTIFIER], $user[RANKING], $user[PREVIOUS_RANKING]);
+        }
+        Log::info('TOTAL RANKED USERS: ' . $users->count());
+    }
+
     public function changeStartedTournamentsStatus() {
         $currentDate = CustomDate::getCurrentMilliseconds();
         Log::info('**************************************************');

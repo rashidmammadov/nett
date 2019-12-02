@@ -24,6 +24,7 @@ class Kernel extends ConsoleKernel {
     protected function schedule(Schedule $schedule) {
         $schedule->call('App\Console\Commands\Schedule@changeStartedTournamentsStatus')->hourly();
         $schedule->call('App\Console\Commands\Schedule@payWaitingPaymentsFromTournament')->hourly();
+        $schedule->call('App\Console\Commands\Schedule@calculateUserRankings')->dailyAt('03:30');
     }
 
     /**
