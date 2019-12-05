@@ -18,6 +18,7 @@ import { AttendButtonComponent } from './components/shared/attend-button/attend-
 import { AttendDialogComponent } from './components/shared/attend-dialog/attend-dialog.component';
 import { BelongComponent } from './components/belong/belong.component';
 import { ConfirmDialogComponent } from './components/shared/confirm-dialog/confirm-dialog.component';
+import { ForgotPasswordDialogComponent } from './components/shared/forgot-password-dialog/forgot-password-dialog.component';
 import { HomeComponent } from './components/home/home.component';
 import { PieChartReportComponent } from './components/shared/pie-chart-report/pie-chart-report.component';
 import { LoginComponent } from './components/login/login.component';
@@ -66,7 +67,8 @@ import { DatePickerIntl } from './models/DatePickerIntl';
         NotificationReportComponent,
         MostPlayedReportComponent,
         ConfirmDialogComponent,
-        SettingComponent
+        SettingComponent,
+        ForgotPasswordDialogComponent
     ],
     imports: [
         BrowserModule,
@@ -81,7 +83,13 @@ import { DatePickerIntl } from './models/DatePickerIntl';
         OwlDateTimeModule,
         OwlNativeDateTimeModule,
     ],
-    entryComponents: [AttendDialogComponent, ConfirmDialogComponent, LeaveDialogComponent, SetMatchScoreDialogComponent],
+    entryComponents: [
+        AttendDialogComponent,
+        ConfirmDialogComponent,
+        ForgotPasswordDialogComponent,
+        LeaveDialogComponent,
+        SetMatchScoreDialogComponent
+    ],
     providers: [CookieService,
         { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
         { provide: OWL_DATE_TIME_LOCALE, useValue: 'tr'},

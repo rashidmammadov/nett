@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { UserService } from '../../services/user/user.service';
 import { UtilityService } from '../../services/utility/utility.service';
 import { IHttpResponse } from '../../interfaces/i-http-response';
@@ -10,6 +11,7 @@ import { UserType } from '../../interfaces/user-type';
 import { loaded, loading } from '../../store/actions/progress.action';
 import { set } from '../../store/actions/user.action';
 import { ToastService } from '../../services/toast/toast.service';
+import { ForgotPasswordDialogComponent } from '../shared/forgot-password-dialog/forgot-password-dialog.component';
 
 @Component({
   selector: 'app-login',
@@ -25,7 +27,8 @@ export class LoginComponent {
     });
 
     constructor(private userService: UserService, private user: Store<{user: UserType}>,
-                private progress: Store<{progress: boolean}>, private router: Router) { }
+                private progress: Store<{progress: boolean}>, private router: Router,
+                private dialog: MatDialog) { }
 
     public login = async () => {
         if (this.loginForm.valid) {
@@ -41,10 +44,18 @@ export class LoginComponent {
         }
     };
 
-    public resetPassword = async () => {
-      // TODO::
+    public resetPasswordDialog() {
+        this.dialog.open(ForgotPasswordDialogComponent, {
+            width: '400px',
+            data: this.loginForm.controls.email.value
+        }).afterClosed().toPromise().then((email) => {
+            !!email && this.resetPassword(email);
+        });
+    }
+
+    private resetPassword = async (email: string) => {
         this.progress.dispatch(loading());
-        const result = await this.userService.resetPassword({email: this.loginForm.controls.email.value});
+        const result = await this.userService.resetPassword({email: email});
         UtilityService.handleResponseFromService(result, (response: IHttpResponse) => {
             ToastService.show(response.message);
         });

@@ -25,15 +25,12 @@
                         </mat-error>
                     </mat-form-field>
 
-                    <button mat-flat-button color="primary" type="sumbit" mat-button (click)="login()"
+                    <div fxLayout="column" fxLayoutGap="8px">
+                        <a mat-flat-button mat-button (click)="resetPasswordDialog()">Şifremi Unuttum</a>
+                        <button mat-flat-button color="primary" type="sumbit" mat-button (click)="login()"
                             [disabled]="!loginForm.valid">Giriş Yap</button>
+                    </div>
                 </form>
-            </mat-card-content>
-        </mat-card>
-
-        <mat-card class="mat-elevation-z4">
-            <mat-card-content class="link" fxLayoutAlign="center center" (click)="resetPassword()">
-                <p>Bir hesabın yok mu? <b>Kayıt ol</b></p>
             </mat-card-content>
         </mat-card>
 
