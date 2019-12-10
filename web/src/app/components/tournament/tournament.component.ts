@@ -23,6 +23,8 @@ export class TournamentComponent {
 
     tournamentType = TYPES.TOURNAMENT_TYPE;
 
+    dateParser = UtilityService.millisecondsToDate;
+
     constructor(private activatedRoute: ActivatedRoute, private progress: Store<{progress: boolean}>,
                 private dialog: MatDialog, private fixtureService: FixtureService) {
         this.getTournamentData().then();
