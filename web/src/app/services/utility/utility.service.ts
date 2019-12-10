@@ -1,6 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { IHttpResponse } from '../../interfaces/i-http-response';
@@ -9,7 +10,7 @@ import { ToastService } from '../toast/toast.service';
 import { Cookie } from '../cookie/cookies.service';
 import { MESSAGES } from '../../constants/messages.constant';
 import { environment } from '../../../environments/environment';
-import {DomSanitizer} from "@angular/platform-browser";
+import { DATE_TIME } from '../../constants/date-time.constant';
 
 @Injectable({
   providedIn: 'root'
@@ -55,9 +56,20 @@ export class UtilityService {
         return body;
     }
 
-    public static millisecondsToDate(milliseconds): Date {
+    public static millisecondsToDate(milliseconds, format = null): Date {
         if (typeof milliseconds === 'string' || typeof milliseconds === 'number') {
-            return new Date(Number(milliseconds));
+            let date: any = new Date(Number(milliseconds));
+            const day = date.getDate();
+            const monthIndex = date.getMonth();
+            const year = date.getFullYear();
+            const hour = date.getHours() < 10 ? '0' + date.getHours() : date.getHours();
+            const minute = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
+            if (format === DATE_TIME.FORMAT.DATE) {
+                date = `${day} ${DATE_TIME.MONTHS_MAP[monthIndex]} ${year}`;
+            } else if (format === DATE_TIME.FORMAT.DATE_TIME) {
+                date = `${day} ${DATE_TIME.MONTHS_MAP[monthIndex]} ${year} ${hour}:${minute}`;
+            }
+            return date;
         } else {
             return milliseconds;
         }

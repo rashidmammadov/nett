@@ -10,6 +10,7 @@ export const TYPES = {
     },
 
     REPORT: {
+        'EARNING': 'earning',
         'FINANCE': 'finance',
         'MOST_PLAYED': 'most-played',
         'NOTIFICATION': 'notification',

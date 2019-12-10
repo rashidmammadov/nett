@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Queries\MySQL\ApiQuery;
+use App\Http\Utility\EarningReport;
 use App\Http\Utility\FinanceReport;
 use App\Http\Utility\MostPlayedReport;
 use App\Http\Utility\NotificationReport;
@@ -29,7 +30,9 @@ class ReportController extends ApiController {
                 return $this->respondValidationError(FIELDS_VALIDATION_FAILED, $validator->errors());
             } else {
                 $data = array();
-                if ($request[REPORT_TYPE] == FINANCE_REPORT) {
+                if ($request[REPORT_TYPE] == EARNING_REPORT && $user[TYPE] == HOLDER) {
+                    $data = $this->earningReport($user[IDENTIFIER]);
+                } else if ($request[REPORT_TYPE] == FINANCE_REPORT) {
                     $data = $this->financeReport($user[IDENTIFIER]);
                 } else if ($request[REPORT_TYPE] == MOST_PLAYED_REPORT) {
                     $data = $this->mostPlayedReport();
@@ -47,6 +50,23 @@ class ReportController extends ApiController {
             $this->setMessage(AUTHENTICATION_ERROR);
             return $this->respondWithError($this->getMessage());
         }
+    }
+
+    private function earningReport($userId) {
+        $queryResult = ApiQuery::getEarningReport($userId);
+        $result = array();
+        $maxEarning = 0;
+        foreach ($queryResult as $item) {
+            $maxEarning = $item[AMOUNT] > $maxEarning ? $item[AMOUNT] : $maxEarning;
+        }
+        foreach ($queryResult as $item) {
+            $report = new EarningReport($item);
+            $earningPercentage = ($item[AMOUNT] * 100) / $maxEarning;
+            $report::setEarnings($item[AMOUNT] . TURKISH_LIRA);
+            $report::setEarningPercentage($earningPercentage);
+            array_push($result, $report::get());
+        }
+        return $result;
     }
 
     /**

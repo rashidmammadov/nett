@@ -19,6 +19,7 @@ import { AttendDialogComponent } from './components/shared/attend-dialog/attend-
 import { BelongComponent } from './components/belong/belong.component';
 import { ConfirmDialogComponent } from './components/shared/confirm-dialog/confirm-dialog.component';
 import { ForgotPasswordDialogComponent } from './components/shared/forgot-password-dialog/forgot-password-dialog.component';
+import { HalfDonutReportComponent } from './components/shared/half-donut-report/half-donut-report.component';
 import { HomeComponent } from './components/home/home.component';
 import { PieChartReportComponent } from './components/shared/pie-chart-report/pie-chart-report.component';
 import { LoginComponent } from './components/login/login.component';
@@ -38,6 +39,7 @@ import { TournamentCardComponent } from './components/shared/tournament-card/tou
 import { Cookie } from './services/cookie/cookies.service';
 import { ToastService } from './services/toast/toast.service';
 import { UtilityService } from './services/utility/utility.service';
+import { VisualService } from './services/visual/visual.service';
 import { userReducer } from './store/reducers/user.reducer';
 
 import { progressReducer } from './store/reducers/progress.reducer';
@@ -68,7 +70,8 @@ import { DatePickerIntl } from './models/DatePickerIntl';
         MostPlayedReportComponent,
         ConfirmDialogComponent,
         SettingComponent,
-        ForgotPasswordDialogComponent
+        ForgotPasswordDialogComponent,
+        HalfDonutReportComponent
     ],
     imports: [
         BrowserModule,
@@ -102,5 +105,6 @@ export class AppModule {
         Cookie.injector = injector;
         ToastService.injector = injector;
         UtilityService.injector = injector;
+        VisualService.injector = injector;
     }
 }

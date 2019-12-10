@@ -37,6 +37,12 @@ app-application { height: 100%; }
     .overflow-card { max-height: 100%; overflow-y: hidden; }
 }
 
+.half-donut {
+    .slice {
+        path.focus { transition: ease .3s; transform: scale(1.05); }
+    }
+}
+
 .timeline {
     .y-axis {
         .tick {

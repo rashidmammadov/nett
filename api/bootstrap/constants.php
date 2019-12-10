@@ -44,6 +44,8 @@ define('DISTRICT', 'district');
 define('DRAWS', 'draws');
 define('DRAW_TITLE', 'drawTitle');
 define('EARNINGS', 'earnings');
+define('EARNING_PERCENTAGE', 'earningPercentage');
+define('EARNING_REPORT', 'earning');
 define('EQUAL_SIGN', '=');
 define('EQUAL_OR_GREATER_SIGN', '>=');
 define('EQUAL_OR_LESS_SIGN', '<=');

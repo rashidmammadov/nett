@@ -648,6 +648,22 @@ class ApiQuery {
     /** -------------------- REPORT QUERIES -------------------- **/
 
     /**
+     * @description query to get holder`s earning report result.
+     * @param integer $userId - the given user`s id
+     * @return mixed
+     */
+    public static function getEarningReport($userId) {
+        $result = Finance::where(DB_FINANCE_TABLE.'.'.USER_ID, EQUAL_SIGN, $userId)
+            ->where(DB_FINANCE_TABLE.'.'.CHANNEL, EQUAL_SIGN, TOURNAMENT)
+            ->where(DB_FINANCE_TABLE.'.'.STATUS, EQUAL_SIGN, FINANCE_STATUS_APPROVED)
+            ->join(DB_TOURNAMENT_TABLE, DB_TOURNAMENT_TABLE.'.'.TOURNAMENT_ID, EQUAL_SIGN, DB_FINANCE_TABLE.'.'.TOURNAMENT_ID)
+            ->join(DB_GAME_TABLE, DB_GAME_TABLE.'.'.GAME_ID, EQUAL_SIGN, DB_TOURNAMENT_TABLE.'.'.GAME_ID)
+            ->orderBy(START_DATE, 'desc')
+            ->get();
+        return $result;
+    }
+
+    /**
      * @description query to get participant`s finance report result.
      * @param integer $userId - the given user`s id
      * @return mixed

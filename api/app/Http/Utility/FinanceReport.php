@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Http\Utility;
-
 
 class FinanceReport {
 
@@ -30,7 +28,7 @@ class FinanceReport {
 
     public static function getAmount() { return self::$amount; }
 
-    public static function setAmount($amount): void { self::$amount = $amount; }
+    public static function setAmount($amount): void { self::$amount = number_format($amount, 2, '.', ''); }
 
     public static function getCurrency() { return self::$currency; }
 
