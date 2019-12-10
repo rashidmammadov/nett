@@ -2,6 +2,7 @@ import { Component, ElementRef, HostListener, Input, OnChanges, ViewChild } from
 import * as d3 from 'd3';
 import { TimelineReportType } from '../../../interfaces/timeline-report-type';
 import { UtilityService } from '../../../services/utility/utility.service';
+import { VisualService } from '../../../services/visual/visual.service';
 
 let element;
 let margin: {top: number, right: number, bottom: number, left: number};
@@ -129,17 +130,10 @@ export class TimelineReportComponent implements OnChanges {
         d3.select('app-timeline-report .bar[tournament-id="' + d.tournamentId + '"]').attr('opacity', 1);
 
         const event = d3.event;
-        tooltip.style('left', event.offsetX + (((width - 160) <= event.offsetX) ?
-             - (160 + margin.left + margin.right) : (margin.left + margin.right)) + 'px');
-        tooltip.style('top', event.offsetY - margin.top - margin.bottom + 'px');
-
-        tooltip.style('display', 'inline-block');
-        tooltip.html(`<img src="${d.gameImage}"><br/>
-            <b>${d.gameName}</b><br/>
-            Sıralama: <b>${d.tournamentRanking}. yer</b><br/>
-            Katılımcı Sayısı: <b>${d.participantCount} kişi</b><br/>
-            Turnuva Tarihi: <b>${new Date(d.startDate).getDate() + '/' + (new Date(d.startDate).getMonth() + 1) + '/' + 
-              new Date(d.startDate).getFullYear()}</b>`);
+        tooltip.style('left', VisualService.getTooltipXPosition(event, margin, width))
+            .style('top', VisualService.getTooltipYPosition(event, margin))
+            .style('display', 'inline-block')
+            .html(VisualService.prepareTooltipHTML(d));
     }
 
     mouseout() {

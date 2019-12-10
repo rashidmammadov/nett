@@ -35,6 +35,7 @@ app-application { height: 100%; }
 @media (max-width: 960px) {
     .container {  margin: 16px 0; }
     .overflow-card { max-height: 100%; overflow-y: hidden; }
+    mat-label { margin: 0 8px; }
 }
 
 .half-donut {

@@ -1,7 +1,7 @@
 import { Component, ElementRef, HostListener, Input, OnChanges, ViewChild } from '@angular/core';
 import * as d3 from 'd3';
 import { HalfDonutReportType } from '../../../interfaces/half-donut-report-type';
-import {VisualService} from "../../../services/visual/visual.service";
+import { VisualService } from '../../../services/visual/visual.service';
 
 let element;
 let svg;
@@ -71,7 +71,7 @@ export class HalfDonutReportComponent implements OnChanges {
 
         svg = d3.select(element).append('svg').classed('half-donut', true)
             .attr('width', width).attr('height', height / 2 + margin.top + margin.bottom)
-            .append('g').attr('transform', translation(width / 2 + margin.left, height / 2 + margin.top));
+            .append('g').attr('transform', translation(width / 2, height / 2 + margin.top));
 
         d3.select('app-half-donut-report .directive-tooltip').remove();
         tooltip = d3.select(element).append('div')
@@ -120,15 +120,13 @@ export class HalfDonutReportComponent implements OnChanges {
     mouseover(d) {
         svg.select('path[pie="tournament-' + (d.data.tournamentId) + '"]').classed('focus', true);
         const event = d3.event;
-        tooltip.style('left', event.offsetX + (((width - 190) <= event.offsetX) ?
-          - (160 + margin.left + margin.right) : (margin.left + margin.right)) + 'px');
-        tooltip.style('top', event.offsetY - margin.top - margin.bottom + 'px');
-
-        tooltip.style('display', 'inline-block');
-        tooltip.html(VisualService.prepareTooltipHTML(d.data));
+        tooltip.style('left', VisualService.getTooltipXPosition(event, margin, width))
+            .style('top', VisualService.getTooltipYPosition(event, margin))
+            .style('display', 'inline-block')
+            .html(VisualService.prepareTooltipHTML(d.data));
     }
 
-    mouseout(d, i) {
+    mouseout(d) {
         svg.select('path[pie="tournament-' + (d.data.tournamentId) + '"]').classed('focus', false);
         tooltip.style('display', 'none');
     }

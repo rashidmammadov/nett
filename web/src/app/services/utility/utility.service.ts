@@ -1,16 +1,16 @@
-import { Injectable, Injector } from '@angular/core';
-import { HttpParams } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { DomSanitizer } from '@angular/platform-browser';
-import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { IHttpResponse } from '../../interfaces/i-http-response';
-import { ErrorResponse } from '../../models/error-response';
-import { ToastService } from '../toast/toast.service';
-import { Cookie } from '../cookie/cookies.service';
-import { MESSAGES } from '../../constants/messages.constant';
-import { environment } from '../../../environments/environment';
-import { DATE_TIME } from '../../constants/date-time.constant';
+import {Injectable, Injector} from '@angular/core';
+import {HttpParams} from '@angular/common/http';
+import {Router} from '@angular/router';
+import {DomSanitizer} from '@angular/platform-browser';
+import {Observable, of} from 'rxjs';
+import {catchError} from 'rxjs/operators';
+import {IHttpResponse} from '../../interfaces/i-http-response';
+import {ErrorResponse} from '../../models/error-response';
+import {ToastService} from '../toast/toast.service';
+import {Cookie} from '../cookie/cookies.service';
+import {MESSAGES} from '../../constants/messages.constant';
+import {environment} from '../../../environments/environment';
+import {DATE_TIME} from '../../constants/date-time.constant';
 
 @Injectable({
   providedIn: 'root'
@@ -59,20 +59,26 @@ export class UtilityService {
     public static millisecondsToDate(milliseconds, format = null): Date {
         if (typeof milliseconds === 'string' || typeof milliseconds === 'number') {
             let date: any = new Date(Number(milliseconds));
-            const day = date.getDate();
-            const monthIndex = date.getMonth();
-            const year = date.getFullYear();
-            const hour = date.getHours() < 10 ? '0' + date.getHours() : date.getHours();
-            const minute = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
-            if (format === DATE_TIME.FORMAT.DATE) {
-                date = `${day} ${DATE_TIME.MONTHS_MAP[monthIndex]} ${year}`;
-            } else if (format === DATE_TIME.FORMAT.DATE_TIME) {
-                date = `${day} ${DATE_TIME.MONTHS_MAP[monthIndex]} ${year} ${hour}:${minute}`;
-            }
-            return date;
+            return this.convertToFormat(date, format);
+        } else if (format) {
+            return this.convertToFormat(milliseconds, format);
         } else {
             return milliseconds;
         }
+    }
+
+    private static convertToFormat(date, format = null) {
+        const day = date.getDate();
+        const monthIndex = date.getMonth();
+        const year = date.getFullYear();
+        const hour = date.getHours() < 10 ? '0' + date.getHours() : date.getHours();
+        const minute = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
+        if (format === DATE_TIME.FORMAT.DATE) {
+            date = `${day} ${DATE_TIME.MONTHS_MAP[monthIndex]} ${year}`;
+        } else if (format === DATE_TIME.FORMAT.DATE_TIME) {
+            date = `${day} ${DATE_TIME.MONTHS_MAP[monthIndex]} ${year} ${hour}:${minute}`;
+        }
+        return date;
     }
 
 }
