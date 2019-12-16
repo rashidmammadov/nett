@@ -4,7 +4,7 @@
             <div fxLayout="column" fxLayoutGap="16px" fxFlex="40%" fxFlex.lt-md="60%" fxFlex.lt-sm="100%"
                  fxFlexOffset="30%" fxFlexOffset.lt-md="20%" fxFlexOffset.lt-sm="0">
                 <app-tournament-card *ngFor="let data of tab.data" [data]="data"></app-tournament-card>
-                <div *ngIf="!tab.data.length" fxLayoutAlign="center center">
+                <div *ngIf="!tab.data.length" fxLayout="row" fxLayoutAlign="center center">
                     <p>Sonuç Bulunamadı</p>
                 </div>
             </div>

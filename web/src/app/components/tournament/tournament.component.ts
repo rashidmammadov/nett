@@ -19,6 +19,9 @@ import { ToastService } from '../../services/toast/toast.service';
 })
 export class TournamentComponent {
     public googleMap: string;
+    public firstPlaceAward = {amount: 0, ticket: 0};
+    public secondPlaceAward = {amount: 0, ticket: 0};
+    public thirdPlaceAward = {amount: 0, ticket: 0};
     private _tournament: TournamentType;
 
     tournamentType = TYPES.TOURNAMENT_TYPE;
@@ -42,10 +45,19 @@ export class TournamentComponent {
         });
     }
 
+    private calculateWinnersEarnings(participantCount, participationFee) {
+        this.firstPlaceAward = UtilityService.calculateWinnersEarnings(participantCount, participationFee, 1);
+        this.secondPlaceAward = UtilityService.calculateWinnersEarnings(participantCount, participationFee, 2);
+        this.thirdPlaceAward = UtilityService.calculateWinnersEarnings(participantCount, participationFee, 3);
+    }
+
     private getTournamentData = async () => {
         const result = await this.activatedRoute.data.pipe(first()).toPromise();
         if (result.tournament && result.tournament.data) {
             this.tournament = result.tournament.data as TournamentType;
+            if (this.tournament.participants && this.tournament.participationFee) {
+                this.calculateWinnersEarnings(this.tournament.participantCount, this.tournament.participationFee);
+            }
             this.googleMap = UtilityService.prepareGoogleMap('offside%20playstation%20k%C3%BC%C3%A7%C3%BCkpark');
         }
         this.progress.dispatch(loaded());

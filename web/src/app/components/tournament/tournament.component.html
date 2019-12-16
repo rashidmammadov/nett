@@ -1,5 +1,5 @@
 <div class="container tournament-info-container" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="16px">
-    <div fxLayout="column" fxLayoutGap="8px" fxFlex>
+    <div *ngIf="tournament.game" fxLayout="column" fxLayoutGap="8px" fxFlex>
         <mat-label>Genel Bilgiler</mat-label>
         <mat-card class="mat-elevation-z4 overflow-card">
             <img class="image" *ngIf="tournament.game" mat-card-image src="{{tournament.game.gameImage}}"
@@ -66,30 +66,57 @@
         </mat-card>
     </div>
 
-    <div fxLayout="column" fxLayoutGap="8px" fxFlex>
-        <mat-label>Katılımcılar</mat-label>
-        <mat-card class="mat-elevation-z4 participants-card overflow-card">
-            <mat-card-content>
-                <mat-list>
-                    <mat-list-item *ngFor="let participant of tournament.participants">
-                        <img mat-list-avatar [src]="participant.picture">
-                        <p mat-line> {{participant.username}} </p>
-                        <h4 mat-line>{{participant.name}} {{participant.surname}}</h4>
-                        <h4 *ngIf="participant.tournamentRanking">#{{participant.tournamentRanking}}</h4>
-                        <mat-divider></mat-divider>
-                    </mat-list-item>
-                </mat-list>
-            </mat-card-content>
-            <mat-card-content align="center" style="margin: 8px">
+    <div *ngIf="tournament.participants" fxLayout="column" fxLayoutGap="16px" fxFlex>
+        <div fxLayout="column" fxLayoutGap="8px">
+            <mat-label>Maksimum Katılımcı Ödülleri</mat-label>
+            <mat-card class="mat-elevation-z4">
+                <mat-card-content fxLayout="row" fxFlexAlign="space-around center" fxLayoutGap="8px">
+                    <div align="center" fxFlex fxLayout="column" fxFlexAlign="center center" fxLayoutGap="8px"
+                         class="first-place-award" matTooltip="Birincilik Ödülü">
+                        <div><mat-icon svgIcon="award"></mat-icon></div>
+                        <b>{{firstPlaceAward.amount}} ₺ | {{firstPlaceAward.ticket}} bilet</b>
+                    </div>
+                    <div align="center" fxFlex fxLayout="column" fxFlexAlign="center center" fxLayoutGap="8px"
+                         class="second-place-award" matTooltip="İkincilik Ödülü">
+                        <div><mat-icon svgIcon="award"></mat-icon></div>
+                        <b>{{secondPlaceAward.amount}} ₺ | {{secondPlaceAward.ticket}} bilet</b>
+                    </div>
+                    <div align="center" fxFlex fxLayout="column" fxFlexAlign="center center" fxLayoutGap="8px"
+                         class="third-place-award" matTooltip="Üçüncülük Ödülü">
+                        <div><mat-icon svgIcon="award"></mat-icon></div>
+                        <b>{{thirdPlaceAward.amount}} ₺ | {{thirdPlaceAward.ticket}} bilet</b>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+        <div class="overflow-card" fxLayout="column" fxLayoutGap="8px" fxFlex>
+            <mat-label>Katılımcılar</mat-label>
+            <mat-card class="mat-elevation-z4 participants-card overflow-card">
+                <mat-card-content *ngIf="tournament.participants.length">
+                    <mat-list>
+                        <mat-list-item *ngFor="let participant of tournament.participants">
+                            <img mat-list-avatar [src]="participant.picture">
+                            <p mat-line> {{participant.username}} </p>
+                            <h4 mat-line>{{participant.name}} {{participant.surname}}</h4>
+                            <div fxLayout="column">
+                                <h5 align="right" *ngIf="participant.tournamentRanking">#{{participant.tournamentRanking}}</h5>
+                                <h4 *ngIf="participant.referenceCode">{{participant.referenceCode}}</h4>
+                            </div>
+                            <mat-divider></mat-divider>
+                        </mat-list-item>
+                    </mat-list>
+                </mat-card-content>
+            </mat-card>
+            <mat-card *ngIf="!tournament.participants.length" class="mat-elevation-z4" align="center">
                 Katılımcı Bulunamadı
-            </mat-card-content>
-        </mat-card>
+            </mat-card>
+        </div>
     </div>
 
-    <div fxLayout="column" fxLayoutGap="8px" fxFlex>
+    <div *ngIf="tournament.fixture" fxLayout="column" fxLayoutGap="8px" fxFlex>
         <mat-label>Fikstür</mat-label>
-        <mat-card class="mat-elevation-z4 fixture-card overflow-card">
-            <mat-card-content *ngIf="tournament.fixture">
+        <mat-card *ngIf="tournament.fixture.draws && tournament.fixture.draws.length" class="mat-elevation-z4 fixture-card overflow-card">
+            <mat-card-content>
                 <div *ngFor="let draw of tournament.fixture.draws">
                     <div class="fixture-title" fxLayout="row" fxLayoutAlign="space-between center">
                         <p>{{draw.drawTitle}} turu</p>
@@ -110,9 +137,13 @@
                     </div>
                 </div>
             </mat-card-content>
-            <mat-card-content align="center" style="margin: 16px; padding: 16px">
-                Fikstür Daha Belirlenmedi
-            </mat-card-content>
         </mat-card>
+        <mat-card *ngIf="!tournament.fixture.draws || !tournament.fixture.draws.length" class="mat-elevation-z4" align="center">
+            Fikstür Daha Belirlenmedi
+        </mat-card>
+    </div>
+
+    <div *ngIf="!tournament.game" fxFlex="row" fxLayoutAlign="center">
+        <p align="center">Gösterilecek Veri Bulunamadı</p>
     </div>
 </div>

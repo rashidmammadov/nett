@@ -67,18 +67,21 @@
             </mat-card>
         </div>
         <div fxLayout="column" fxLayoutGap="8px">
-            <mat-label>Yarışmacı Ödülleri</mat-label>
+            <mat-label>Maksimum Katılımcı Ödülleri</mat-label>
             <mat-card class="mat-elevation-z4">
                 <mat-card-content fxLayout="row" fxFlexAlign="space-around center" fxLayoutGap="8px">
-                    <div align="center" fxFlex fxLayout="column" fxFlexAlign="center center" fxLayoutGap="8px" class="first-place-award">
+                    <div align="center" fxFlex fxLayout="column" fxFlexAlign="center center" fxLayoutGap="8px"
+                         class="first-place-award" matTooltip="Birincilik Ödülü">
                         <div><mat-icon svgIcon="award"></mat-icon></div>
                         <b>{{firstPlaceAward.amount}} ₺ | {{firstPlaceAward.ticket}} bilet</b>
                     </div>
-                    <div align="center" fxFlex fxLayout="column" fxFlexAlign="center center" fxLayoutGap="8px" class="second-place-award">
+                    <div align="center" fxFlex fxLayout="column" fxFlexAlign="center center" fxLayoutGap="8px"
+                         class="second-place-award" matTooltip="İkincilik Ödülü">
                         <div><mat-icon svgIcon="award"></mat-icon></div>
                         <b>{{secondPlaceAward.amount}} ₺ | {{secondPlaceAward.ticket}} bilet</b>
                     </div>
-                    <div align="center" fxFlex fxLayout="column" fxFlexAlign="center center" fxLayoutGap="8px" class="third-place-award">
+                    <div align="center" fxFlex fxLayout="column" fxFlexAlign="center center" fxLayoutGap="8px"
+                         class="third-place-award" matTooltip="Üçüncülük Ödülü">
                         <div><mat-icon svgIcon="award"></mat-icon></div>
                         <b>{{thirdPlaceAward.amount}} ₺ | {{thirdPlaceAward.ticket}} bilet</b>
                     </div>

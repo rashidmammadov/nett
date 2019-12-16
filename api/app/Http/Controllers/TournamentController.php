@@ -15,6 +15,7 @@ use App\Http\Utility\Match;
 use App\Repository\Transformers\ParticipantTransformer;
 use App\Repository\Transformers\TournamentTransformer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Validator;
@@ -203,18 +204,22 @@ class TournamentController extends ApiController {
      * @return array
      */
     private function prepareTournamentGeneralData($tournament, $user, $attended = false) {
-        $tournament[CURRENT_PARTICIPANTS] = ApiQuery::getParticipants($tournament[TOURNAMENT_ID])->count();
-        if ($attended) {
-            $tournament[ATTENDED] = true;
-        } else {
-            $tournament[ATTENDED] = ApiQuery::checkIfAttended($tournament[TOURNAMENT_ID], $user[IDENTIFIER]);
-        }
+        if ($tournament && !empty($tournament[TOURNAMENT_ID])) {
+            $tournament[CURRENT_PARTICIPANTS] = ApiQuery::getParticipants($tournament[TOURNAMENT_ID])->count();
+            if ($attended) {
+                $tournament[ATTENDED] = true;
+            } else {
+                $tournament[ATTENDED] = ApiQuery::checkIfAttended($tournament[TOURNAMENT_ID], $user[IDENTIFIER]);
+            }
 
-        if ($tournament[ATTENDED]) {
-            $participatedUser = ApiQuery::getParticipants($tournament[TOURNAMENT_ID], $user[IDENTIFIER])->first();
-            $tournament[REFERENCE_CODE] = $participatedUser[REFERENCE_CODE];
+            if ($tournament[ATTENDED]) {
+                $participatedUser = ApiQuery::getParticipants($tournament[TOURNAMENT_ID], $user[IDENTIFIER])->first();
+                $tournament[REFERENCE_CODE] = $participatedUser[REFERENCE_CODE];
+            }
+            return $this->tournamentTransformer->transform($tournament);
+        } else {
+            return array();
         }
-        return $this->tournamentTransformer->transform($tournament);
     }
 
     /**
