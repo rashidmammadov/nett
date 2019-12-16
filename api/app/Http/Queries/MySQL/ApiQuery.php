@@ -346,6 +346,7 @@ class ApiQuery {
             GAME_ID => $tournament[GAME_ID],
             TOURNAMENT_TYPE => $tournament[TOURNAMENT_TYPE],
             PARTICIPANT_COUNT => $tournament[PARTICIPANT_COUNT],
+            PARTICIPATION_FEE => $tournament[PARTICIPATION_FEE],
             START_DATE => strval($tournament[START_DATE]),
             STATUS => $tournament[STATUS],
             DAYS => $tournament[DAYS]

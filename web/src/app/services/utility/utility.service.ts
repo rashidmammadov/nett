@@ -1,16 +1,17 @@
-import {Injectable, Injector} from '@angular/core';
-import {HttpParams} from '@angular/common/http';
-import {Router} from '@angular/router';
-import {DomSanitizer} from '@angular/platform-browser';
-import {Observable, of} from 'rxjs';
-import {catchError} from 'rxjs/operators';
-import {IHttpResponse} from '../../interfaces/i-http-response';
-import {ErrorResponse} from '../../models/error-response';
-import {ToastService} from '../toast/toast.service';
-import {Cookie} from '../cookie/cookies.service';
-import {MESSAGES} from '../../constants/messages.constant';
-import {environment} from '../../../environments/environment';
-import {DATE_TIME} from '../../constants/date-time.constant';
+import { Injectable, Injector } from '@angular/core';
+import { HttpParams } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { DomSanitizer } from '@angular/platform-browser';
+import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { IHttpResponse } from '../../interfaces/i-http-response';
+import { ErrorResponse } from '../../models/error-response';
+import { ToastService } from '../toast/toast.service';
+import { Cookie } from '../cookie/cookies.service';
+import { MESSAGES } from '../../constants/messages.constant';
+import { environment } from '../../../environments/environment';
+import { DATE_TIME } from '../../constants/date-time.constant';
+import { TYPES } from 'src/app/constants/types.constant';
 
 @Injectable({
   providedIn: 'root'
@@ -48,6 +49,29 @@ export class UtilityService {
         return this.injector.get(DomSanitizer).bypassSecurityTrustHtml(result);
     }
 
+    public static calculateAppCommission(participantCount, participationFee) {
+        return Number((((participantCount * participationFee) * 12.5) / 100).toFixed(2));
+    }
+
+    public static calculateHolderEarnings(participantCount, participationFee) {
+        return Number((participantCount * ((participationFee * TYPES.MIN_COEFFICIENT) / TYPES.MIN_PARTICIPATION_FEE)).toFixed(2));
+    }
+
+    public static calculateWinnersEarnings(participantCount, participationFee, place) {
+        let award = {amount: 0, ticket: 0};
+        const minEarnings = ((participantCount * participationFee) -
+            UtilityService.calculateAppCommission(participantCount, participationFee) -
+            UtilityService.calculateHolderEarnings(participantCount, participationFee)) / 3;
+        if (place === 1) {
+            award.amount = Number((minEarnings * 2).toFixed(2));
+        } else if (place === 2) {
+            award.amount = Number(minEarnings.toFixed(2));
+        } else if (place === 3) {
+            award.ticket = participantCount >= (TYPES.MIN_PARTICIPANT_COUNT + TYPES.MIN_PARTICIPANT_COUNT / 2) ? 2 : 1;
+        }
+        return award;
+    }
+
     public static setHttpParams(params) {
         let body = new HttpParams();
         Object.keys(params).forEach((key: string) => {
@@ -59,9 +83,9 @@ export class UtilityService {
     public static millisecondsToDate(milliseconds, format = null): Date {
         if (typeof milliseconds === 'string' || typeof milliseconds === 'number') {
             let date: any = new Date(Number(milliseconds));
-            return this.convertToFormat(date, format);
+            return UtilityService.convertToFormat(date, format);
         } else if (format) {
-            return this.convertToFormat(milliseconds, format);
+            return UtilityService.convertToFormat(milliseconds, format);
         } else {
             return milliseconds;
         }

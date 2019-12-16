@@ -41,6 +41,7 @@ class TournamentController extends ApiController {
                 GAME_ID => 'required',
                 TOURNAMENT_TYPE => 'required',
                 PARTICIPANT_COUNT => 'required|numeric|min:16|max:32',
+                PARTICIPATION_FEE => 'required|numeric|min:15|max:20',
                 START_DATE => 'required'
             );
 

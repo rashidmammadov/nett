@@ -44,7 +44,7 @@
                     <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
                         <mat-icon svgIcon="dollar-sign"></mat-icon> <p>Katılım Ücreti</p>
                     </div>
-                    <p>{{tournament.price.amount}} ₺</p>
+                    <p>{{tournament.participationFee}} {{tournament.feeCurrency}}</p>
                 </div>
                 <mat-divider></mat-divider>
                 <div fxLayout="row" fxLayoutAlign="space-between center">
@@ -80,6 +80,9 @@
                     </mat-list-item>
                 </mat-list>
             </mat-card-content>
+            <mat-card-content align="center" style="margin: 8px">
+                Katılımcı Bulunamadı
+            </mat-card-content>
         </mat-card>
     </div>
 
@@ -106,6 +109,9 @@
                         <mat-divider *ngIf="match.home && match.away && !end"></mat-divider>
                     </div>
                 </div>
+            </mat-card-content>
+            <mat-card-content align="center" style="margin: 16px; padding: 16px">
+                Fikstür Daha Belirlenmedi
             </mat-card-content>
         </mat-card>
     </div>

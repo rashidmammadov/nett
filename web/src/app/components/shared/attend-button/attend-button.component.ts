@@ -10,9 +10,9 @@ import { loaded, loading } from '../../../store/actions/progress.action';
 import { UtilityService } from '../../../services/utility/utility.service';
 import { IHttpResponse } from '../../../interfaces/i-http-response';
 import { TYPES } from '../../../constants/types.constant';
-import {ToastService} from "../../../services/toast/toast.service";
-import {set} from "../../../store/actions/user.action";
-import {LeaveDialogComponent} from "../leave-dialog/leave-dialog.component";
+import { ToastService } from '../../../services/toast/toast.service';
+import { set } from '../../../store/actions/user.action';
+import { LeaveDialogComponent } from '../leave-dialog/leave-dialog.component';
 
 @Component({
   selector: 'app-attend-button',
@@ -27,11 +27,10 @@ export class AttendButtonComponent implements OnInit {
     loading: boolean = false;
 
     constructor(private participantService: ParticipantService, private progress: Store<{progress: boolean}>,
-                private dialog: MatDialog, private store: Store<{user: UserType}>) {
-        this.getUserData();
-    }
+                private dialog: MatDialog, private store: Store<{user: UserType}>) { }
 
-    ngOnInit() {
+    async ngOnInit() {
+        await this.getUserData();
     }
 
     attendLeaveDialog(attended) {

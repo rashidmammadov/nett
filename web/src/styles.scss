@@ -28,6 +28,9 @@ app-application { height: 100%; }
 .overflow-card { max-height: calc(100% - 64px); overflow-y: auto; }
 .overflow-card-half { height: auto; overflow-y: auto; }
 .link { cursor: pointer; outline: none; }
+.first-place-award { color: gold; fill: gold; }
+.second-place-award { color: silver; fill: silver; }
+.third-place-award { color: #cd7f32; fill: #cd7f32; }
 
 ::-webkit-scrollbar-thumb { border-radius: 2px; background-color: #f0f0f0; }
 ::-webkit-scrollbar { width: 6px; height: 6px; }

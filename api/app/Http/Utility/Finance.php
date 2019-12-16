@@ -78,19 +78,21 @@ class Finance {
     public static function setStatus($status): void { self::$status = $status; }
 
     /**
-     * @description prepare participant`s earnings data for save finance table.
-     * @param integer $tournamentId - holds the tournament id
+     * Prepare participant`s earnings data for save finance table.
+     *
+     * @param integer $tournamentId - holds the tournament id.
      * @param array $participants - holds the participant.
+     * @param double $participationFee - the participation fee of tournament.
      */
-    public static function setKnockOutFixtureParticipantsEarnings($tournamentId, $participants) {
+    public static function setKnockOutFixtureParticipantsEarnings($tournamentId, $participants, $participationFee) {
         foreach ($participants as $participant) {
             $finance = new Finance();
             $finance::setUserId($participant[PARTICIPANT_ID]);
             $finance::setType(PLAYER);
             $finance::setChannel(TOURNAMENT);
             $finance::setTournamentId($tournamentId);
-            list($amount, $ticket) = Fixture::calculateKnockOutParticipantEarnings($participant[TOURNAMENT_RANKING],
-                count($participants));
+            list($amount, $ticket) = Fixture::calculateKnockOutWinnersEarnings(count($participants),
+                $participationFee, $participant[TOURNAMENT_RANKING]);
             $finance::setAmount($amount);
             $finance::setTicket($ticket);
             $finance::setStatus(FINANCE_STATUS_WAITING);
@@ -101,18 +103,20 @@ class Finance {
     }
 
     /**
-     * @description prepare holder`s earnings data for save finance table.
-     * @param integer $tournamentId - holds the tournament id
-     * @param integer $holderId - holds the tournament`s holder id
-     * @param integer $participantsCount - holds the tournament`s participants count
+     * Prepare holder`s earnings data for save finance table.
+     *
+     * @param integer $tournamentId - holds the tournament id.
+     * @param integer $holderId - holds the tournament`s holder id.
+     * @param integer $participantsCount - holds the tournament`s participants count.
+     * @param double $participationFee - the participation fee of tournament.
      */
-    public static function setKnockOutFixtureHolderEarnings($tournamentId, $holderId, $participantsCount) {
+    public static function setKnockOutFixtureHolderEarnings($tournamentId, $holderId, $participantsCount, $participationFee) {
         $finance = new Finance();
         $finance::setUserId($holderId);
         $finance::setType(HOLDER);
         $finance::setChannel(TOURNAMENT);
         $finance::setTournamentId($tournamentId);
-        $earning = Fixture::calculateKnockOutHolderEarning($participantsCount);
+        $earning = Fixture::calculateKnockOutHolderEarnings($participantsCount, $participationFee);
         $finance::setAmount($earning);
         $finance::setTicket(0);
         $finance::setStatus(FINANCE_STATUS_WAITING);

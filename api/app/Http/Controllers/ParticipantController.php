@@ -20,7 +20,8 @@ class ParticipantController extends ApiController {
     public function __construct() { }
 
     /**
-     * @description: attend player to given tournament.
+     * Attend player to given tournament.
+     *
      * @param Request $request
      * @return mixed
      */
@@ -47,8 +48,8 @@ class ParticipantController extends ApiController {
                             $ifAttended = ApiQuery::checkIfAttended($request[TOURNAMENT_ID], $user[IDENTIFIER]);
                             /** check if user did not attended before **/
                             if (!$ifAttended) {
-                                if (strtolower($request[PAYMENT_TYPE]) == strtolower(MONEY) && $user[BUDGET] >= MIN_AMOUNT) {
-                                    $data = $this->attendWithMoney($request[TOURNAMENT_ID], $user);
+                                if (strtolower($request[PAYMENT_TYPE]) == strtolower(MONEY) && $user[BUDGET] >= $tournament[PARTICIPATION_FEE]) {
+                                    $data = $this->attendWithMoney($request[TOURNAMENT_ID], $user, $tournament[PARTICIPATION_FEE]);
                                 } else if (strtolower($request[PAYMENT_TYPE]) == strtolower(TICKET) && $user[TICKET] > 0) {
                                     $data = $this->attendWithTicket($request[TOURNAMENT_ID], $user);
                                 } else {
@@ -77,7 +78,8 @@ class ParticipantController extends ApiController {
     }
 
     /**
-     * @description: leave participant from tournament.
+     * Leave participant from tournament.
+     *
      * @param Request $request
      * @return mixed
      */
@@ -114,21 +116,23 @@ class ParticipantController extends ApiController {
     }
 
     /**
-     * @description: attend tournament with money.
-     * @param integer $tournamentId
-     * @param object $user
-     * @return mixed
+     * Attend tournament with money.
+     *
+     * @param integer $tournamentId - the id of participated tournament.
+     * @param object $user - holds the current user data.
+     * @param double $paymentAmount - the min participation fee of tournament.
+     * @return array
      */
-    private function attendWithMoney($tournamentId, $user) {
+    private function attendWithMoney($tournamentId, $user, $paymentAmount) {
         $participantId = $user[IDENTIFIER];
         $referenceCode = Str::random(8);
         $params = array(
-            PAYMENT_AMOUNT => MIN_AMOUNT,
+            PAYMENT_AMOUNT => $paymentAmount,
             PAYMENT_TYPE => MONEY,
             REFERENCE_CODE => $referenceCode
         );
         ApiQuery::attendTournament($tournamentId, $participantId, $params);
-        $user[BUDGET] = number_format($user[BUDGET] - MIN_AMOUNT, 2, '.', '');
+        $user[BUDGET] = number_format($user[BUDGET] - $paymentAmount, 2, '.', '');
         $user->save();
 
         return array(
@@ -140,10 +144,11 @@ class ParticipantController extends ApiController {
     }
 
     /**
-     * @description: attend tournament with ticket.
-     * @param integer $tournamentId
-     * @param object $user
-     * @return mixed
+     * Attend tournament with ticket.
+     *
+     * @param integer $tournamentId - the id of participated tournament.
+     * @param object $user - holds the current user data.
+     * @return array
      */
     private function attendWithTicket($tournamentId, $user) {
         $participantId = $user[IDENTIFIER];
@@ -166,9 +171,10 @@ class ParticipantController extends ApiController {
     }
 
     /**
-     * @description: leave tournament.
-     * @param integer $tournamentId
-     * @param object $user
+     * Leave tournament.
+     *
+     * @param integer $tournamentId - the id of participated tournament.
+     * @param object $user - holds the current user data.
      * @return mixed
      */
     private function leaveTournament($tournamentId, $user) {

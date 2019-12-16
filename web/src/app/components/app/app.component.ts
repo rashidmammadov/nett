@@ -45,7 +45,7 @@ export class AppComponent {
     };
 
     private setSvgIcons() {
-        const svgArray: string[] = ['alert', 'briefcase', 'clock', 'credit-card', 'dollar-sign', 'flag', 'grid', 'hash',
+        const svgArray: string[] = ['alert', 'award', 'briefcase', 'clock', 'credit-card', 'dollar-sign', 'flag', 'grid', 'hash',
             'home', 'info', 'log-out', 'map-pin', 'plus-square', 'ranking-down', 'ranking-new', 'ranking-not', 'ranking-stable',
             'ranking-up', 'search', 'tag', 'tournament-active', 'tournament-cancel', 'tournament-close', 'tournament-open',
             'user', 'users'];

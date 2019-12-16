@@ -10,13 +10,15 @@ export interface TournamentType {
     time: string;
     participantCount: number | string;
     currentParticipants?: number | string;
+    participationFee: number | string;
+    feeCurrency: string;
     status: number | string;
     referenceCode?: string;
     tournamentType: string;
-    price: {
-        amount: number | string,
-        currency: string
-    },
+    // price: {
+    //     amount: number | string,
+    //     currency: string
+    // },
     game: GameType,
     holder: UserType,
     participants?: ParticipantType[],

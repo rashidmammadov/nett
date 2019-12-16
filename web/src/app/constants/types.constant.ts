@@ -4,6 +4,16 @@ export const TYPES = {
         'TOURNAMENT': 'Ödüller'
     },
 
+    MIN_COEFFICIENT: 5.5,
+
+    MIN_PARTICIPANT_COUNT: 16,
+
+    MAX_PARTICIPANT_COUNT: 32,
+
+    MIN_PARTICIPATION_FEE: 15,
+
+    MAX_PARTICIPATION_FEE: 20,
+
     PAYMENT: {
         'MONEY': 'money',
         'TICKET': 'ticket'

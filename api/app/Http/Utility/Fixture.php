@@ -65,9 +65,10 @@ class Fixture {
     public static function setDraws($value) { self::$fixture[DRAWS] = $value; }
 
     /**
-     * @description: prepare tournament`s fixture data.
-     * @param integer $tournamentId
-     * @return mixed
+     * Prepare tournament`s fixture data.
+     *
+     * @param integer $tournamentId - the id of tournament.
+     * @return array $fixture - the fixture of tournament.
      */
     public static function prepareTournamentFixtureData($tournamentId) {
         $fixture = new Fixture();
@@ -119,7 +120,8 @@ class Fixture {
     }
 
     /**
-     * @description handle request to set starting fixture draws.
+     * Handle request to set starting fixture draws.
+     *
      * @param integer $tournamentId - holds the tournament id which is started.
      * @param integer $date - holds the start date of tournament.
      * @param array $participants - holds the participants of tournament.
@@ -139,7 +141,8 @@ class Fixture {
     }
 
     /**
-     * @description set matches for draws.
+     * Set matches for draws.
+     *
      * @param integer $tournamentId - holds the tournament id which is started.
      * @param integer $tourId - holds the id of draw.
      * @param integer $date - holds the start date of tournament.
@@ -169,9 +172,10 @@ class Fixture {
     }
 
     /**
-     * @description set knock out tournament`s ranking.
+     * Set knock out tournament`s ranking.
+     *
      * @param integer $tournamentId - the id of tournament.
-     * @return mixed - ranking result
+     * @return array - ranking result
      */
     public static function setKnockOutRanking($tournamentId) {
         $participants = ApiQuery::getParticipantsListedWithoutRanking($tournamentId);
@@ -187,28 +191,52 @@ class Fixture {
         return $rankings;
     }
 
-    public static function calculateKnockOutParticipantEarnings($standing, $participantCount): array {
-        $amount = 0;
-        $ticket = 0;
-        $result = (MAX_EARNINGS - (self::MAX_PARTICIPANT - $participantCount));
-        if (intval($standing) == 1) {
-            $amount = number_format($result, 2, '.', '');;
-        } else if (intval($standing) == 2) {
-            $amount = number_format($result / 2, 2, '.', '');;
-        } else if (intval($standing) == 3) {
-            $ticket = 1;
-        }
-        return array($amount, $ticket);
+    /**
+     * Calculate app commissions of each tournament.
+     *
+     * @param integer $participantCount - the count of participants of tournament.
+     * @param double $participationFee - the participation fee of tournament.
+     * @return integer $appCommission - the commission of app.
+     */
+    public static function calculateAppCommission($participantCount, $participationFee) {
+        $appCommission = (($participantCount * $participationFee) * 12.5) / 100;
+        return number_format((float)$appCommission, 2, '.', '');
     }
 
-    public static function calculateKnockOutHolderEarning($participantCount) {
-        $earning = $participantCount * MIN_AMOUNT;
-        for ($standing = 1; $standing <= 3; $standing++) {
-            list($amount, $ticket) = self::calculateKnockOutParticipantEarnings($standing, $participantCount);
-            $earning -= $amount;
+    /**
+     * Calculate earnings of knock out tournament.
+     *
+     * @param integer $participantCount - the count of participants of tournament.
+     * @param double $participationFee - the participation fee of tournament.
+     * @return integer $holderEarnings - the earnings of holder.
+     */
+    public static function calculateKnockOutHolderEarnings($participantCount, $participationFee) {
+        $holderEarnings = $participantCount * (($participationFee * MIN_COEFFICIENT) / MIN_PARTICIPATION_FEE);
+        return number_format((float)$holderEarnings, 2, '.', '');
+    }
+
+    /**
+     * Calculate earnings of knock out tournament`s winners.
+     *
+     * @param integer $participantCount - the count of participants of tournament.
+     * @param double $participationFee - the participation fee of tournament.
+     * @param integer $place - the standing of winner.
+     * @return array ($amount, $ticket) - the amount and ticker of awards.
+     */
+    public static function calculateKnockOutWinnersEarnings($participantCount, $participationFee, $place) {
+        $amount = 0;
+        $ticket = 0;
+        $minEarnings = (($participantCount * $participationFee) -
+            self::calculateAppCommission($participantCount, $participationFee) -
+            self::calculateKnockOutHolderEarnings($participantCount, $participationFee)) / 3;
+        if ($place == 1) {
+            $amount = number_format((float)($minEarnings * 2), 2, '.', '');
+        } else if ($place == 2) {
+            $amount = number_format((float)($minEarnings), 2, '.', '');
+        } else if ($place == 3) {
+            $ticket = $participantCount >= (MIN_PARTICIPANT_COUNT + MIN_PARTICIPANT_COUNT / 2) ? 2 : 1;
         }
-        $earning = $earning - (MIN_AMOUNT + ($earning * COMMISSION_PERCENTAGE) / 100);
-        return number_format($earning, 2, '.', '');
+        return array($amount, $ticket);
     }
 
 }

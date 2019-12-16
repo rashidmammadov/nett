@@ -22,23 +22,7 @@ import { HalfDonutReportType } from '../../interfaces/half-donut-report-type';
 export class HomeComponent implements OnInit {
     user: UserType;
     financeReportData: PieChartReportType[] = [];
-    halfDonutReportData: HalfDonutReportType[] = [{
-      earnings: '131 TL',
-      gameImage: 'https://steamcdn-a.akamaihd.net/steam/apps/770240/header.jpg?t=1535587388',
-      gameName: 'PES 2019',
-      participantCount: 24,
-      tournamentId: 5,
-      startDate: new Date().getTime(),
-      earningPercentage: 85,
-    }, {
-      earnings: '100 TL',
-      gameImage: 'https://s3.eu-central-1.amazonaws.com/images.gamesatis.com/products/images/000/023/869/big/fifa-19.jpg',
-      gameName: 'FIFA 2019',
-      participantCount: 16,
-      tournamentId: 6,
-      startDate: new Date().getTime(),
-      earningPercentage: 70,
-    }];
+    halfDonutReportData: HalfDonutReportType[] = [];
     mostPlayedReportData: MostPlayedReportType[] = [];
     notificationReportData: NotificationReportType[] = [];
     rankingReportData: RankingReportType[] = [];
@@ -48,12 +32,12 @@ export class HomeComponent implements OnInit {
         this.getUserData().then();
     }
 
-    ngOnInit() {
+    async ngOnInit() {
         if (this.user.type === TYPES.USER.HOLDER) {
-            this.fetchReport(TYPES.REPORT.EARNING, 'halfDonutReportData').then();
-            this.fetchReport(TYPES.REPORT.FINANCE, 'financeReportData').then();
-            this.fetchReport(TYPES.REPORT.MOST_PLAYED, 'mostPlayedReportData').then();
-            this.fetchReport(TYPES.REPORT.NOTIFICATION, 'notificationReportData').then();
+            await this.fetchReport(TYPES.REPORT.EARNING, 'halfDonutReportData');
+            await this.fetchReport(TYPES.REPORT.FINANCE, 'financeReportData');
+            await this.fetchReport(TYPES.REPORT.MOST_PLAYED, 'mostPlayedReportData');
+            await this.fetchReport(TYPES.REPORT.NOTIFICATION, 'notificationReportData');
         } else if (this.user.type === TYPES.USER.PLAYER) {
             this.fetchReport(TYPES.REPORT.FINANCE, 'financeReportData').then();
             this.fetchReport(TYPES.REPORT.NOTIFICATION, 'notificationReportData').then();

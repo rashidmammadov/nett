@@ -21,11 +21,15 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.
   styleUrls: ['./set-tournament.component.scss']
 })
 export class SetTournamentComponent implements OnInit {
-    public list: number[] = [];
+    public participantList: number[] = [];
+    public feeList: number[] = [];
     public games: GameType[] = [];
     public types: string[] = [];
     public tournamentData: TournamentType = <TournamentType>Object();
     public income: number = 0.00;
+    public firstPlaceAward = {amount: 0, ticket: 0};
+    public secondPlaceAward = {amount: 0, ticket: 0};
+    public thirdPlaceAward = {amount: 0, ticket: 0};
     public tournamentTypesMap = TYPES.TOURNAMENT_TYPE;
 
     date = new Date();
@@ -36,14 +40,18 @@ export class SetTournamentComponent implements OnInit {
         gameId: new FormControl(1, [Validators.required]),
         tournamentType: new FormControl('knock_out', [Validators.required]),
         days: new FormControl(1, [Validators.required]),
-        participantCount: new FormControl(16, [Validators.min(16), Validators.max(32)]),
+        participantCount: new FormControl(TYPES.MIN_PARTICIPANT_COUNT,
+            [Validators.min(TYPES.MIN_PARTICIPANT_COUNT), Validators.max(TYPES.MAX_PARTICIPANT_COUNT)]),
+        participationFee: new FormControl(TYPES.MIN_PARTICIPATION_FEE,
+            [Validators.min(TYPES.MIN_PARTICIPATION_FEE), Validators.max(TYPES.MAX_PARTICIPATION_FEE)]),
         startDate: new FormControl(this.minDate, [Validators.required])
     });
 
     constructor(private activatedRoute: ActivatedRoute, private user: Store<{user: UserType}>, private router: Router,
                 private tournamentService: TournamentService, private progress: Store<{progress: boolean}>,
                 private dialog: MatDialog) {
-        for (let i = 16; i <= 32; i++) this.list.push(i);
+        for (let i = 16; i <= 32; i++) this.participantList.push(i);
+        for (let i = 15; i <= 20; i++) this.feeList.push(i);
     }
 
     async ngOnInit() {
@@ -52,7 +60,7 @@ export class SetTournamentComponent implements OnInit {
         this.tournamentData.holder = await this.user.select('user').pipe(first()).toPromise();
         this.changeTournamentDate();
         this.changeTournamentGame();
-        this.changeParticipantCount();
+        this.changeTournamentData();
     }
 
     public changeTournamentDate() {
@@ -73,10 +81,15 @@ export class SetTournamentComponent implements OnInit {
         this.tournamentData.game = game;
     }
 
-    public changeParticipantCount() {
+    public changeTournamentData() {
         const participantCount = this.tournamentForm.controls.participantCount.value;
+        const participationFee = this.tournamentForm.controls.participationFee.value;
         this.tournamentData.participantCount = participantCount;
-        this.income = Number((Number(participantCount) * (5 + Number(participantCount) / 11)).toFixed(2));
+        this.tournamentData.participationFee = participationFee;
+        this.income = UtilityService.calculateHolderEarnings(participantCount, participationFee);
+        this.firstPlaceAward = UtilityService.calculateWinnersEarnings(participantCount, participationFee, 1);
+        this.secondPlaceAward = UtilityService.calculateWinnersEarnings(participantCount, participationFee, 2);
+        this.thirdPlaceAward = UtilityService.calculateWinnersEarnings(participantCount, participationFee, 3);
     }
 
     public submitDialog() {
@@ -98,7 +111,7 @@ export class SetTournamentComponent implements OnInit {
             const result = await this.tournamentService.add(this.setTournamentFormData());
             UtilityService.handleResponseFromService(result, (response: IHttpResponse) => {
                 ToastService.show(response.message);
-                this.router.navigateByUrl('app/home');
+                this.router.navigateByUrl(`app/tournament/${response.data.tournamentId}`);
             });
             this.progress.dispatch(loaded());
         }
@@ -111,6 +124,7 @@ export class SetTournamentComponent implements OnInit {
             'tournamentType': form.tournamentType.value,
             'days': form.days.value,
             'participantCount': form.participantCount.value,
+            'participationFee': form.participationFee.value,
             'startDate': new Date(form.startDate.value).getTime()
         }
     }

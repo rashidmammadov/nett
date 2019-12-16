@@ -19,6 +19,8 @@ class CreateTournamentTable extends Migration
             $table->integer(GAME_ID)->references(GAME_ID)->on(DB_GAME_TABLE);
             $table->char(TOURNAMENT_TYPE, 20);
             $table->integer(PARTICIPANT_COUNT);
+            $table->double(PARTICIPATION_FEE);
+            $table->char(FEE_CURRENCY, 3)->default(TURKISH_LIRA);
             $table->string(START_DATE,20);
             $table->integer(STATUS)->default(2);
             $table->integer(DAYS)->nullable();

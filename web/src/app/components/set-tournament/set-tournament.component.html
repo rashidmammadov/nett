@@ -1,53 +1,93 @@
 <div class="container" fxLayout="row" fxLayout.lt-md="column" fxFlex="60%" fxFlex.lt-md="100%" fxFlexOffset="20%"
      fxFlexOffset.lt-md="0" fxLayoutGap="16px">
-    <mat-card class="mat-elevation-z4" fxFlex="60%" fxFlex.lt-md="100%">
-        <mat-card-content>
-            <form ngNoForm fxLayout="column" [formGroup]="tournamentForm">
-                <mat-form-field fxFlex="100%" appearance="outline">
-                    <mat-label>Turnuva Oyunu</mat-label>
-                    <mat-select formControlName="gameId" (selectionChange)="changeTournamentGame()">
-                        <mat-option *ngFor="let game of games" [value]="game.gameId">
-                            {{game.gameName}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-
-                <mat-form-field fxFlex="100%" appearance="outline">
-                    <mat-label>Turnuva Türü</mat-label>
-                    <mat-select formControlName="tournamentType">
-                        <mat-option *ngFor="let type of types" [value]="type">
-                            {{tournamentTypesMap[type]}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-
-                <mat-form-field fxFlex="100%" appearance="outline">
-                    <mat-label>Katılımcı Sayısı</mat-label>
-                    <mat-select formControlName="participantCount" (selectionChange)="changeParticipantCount()">
-                        <mat-option *ngFor="let c of list" [value]="c">
-                            {{c}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-
-                <mat-form-field fxFlex="100%" appearance="outline">
-                    <mat-label>Turnuva Tarihi</mat-label>
-                    <input matInput [owlDateTime]="dt" [owlDateTimeTrigger]="dt" [min]="minDate" [max]="maxDate"
-                           (dateTimeChange)="changeTournamentDate()" formControlName="startDate">
-                </mat-form-field>
-                <owl-date-time #dt></owl-date-time>
-
-                <button mat-flat-button color="primary" type="sumbit" mat-button (click)="submitDialog()"
-                        [disabled]="!tournamentForm.valid">Oluştur</button>
-            </form>
-        </mat-card-content>
-    </mat-card>
-    <div fxLayout="column" fxFlex="40%" fxFlex.lt-md="100%" fxLayoutGap="16px">
+    <div fxLayout="column" fxLayoutGap="8px" fxFlex="60%" fxFlex.lt-md="100%">
+        <mat-label>Turnuva Ayarları</mat-label>
         <mat-card class="mat-elevation-z4">
             <mat-card-content>
-                Tahminin Kazanç: <b style="color: green">{{income}} ₺</b>
+                <form ngNoForm fxLayout="column" [formGroup]="tournamentForm">
+                    <mat-form-field fxFlex appearance="outline">
+                        <mat-label>Turnuva Oyunu</mat-label>
+                        <mat-select formControlName="gameId" (selectionChange)="changeTournamentGame()">
+                            <mat-option *ngFor="let game of games" [value]="game.gameId">
+                                {{game.gameName}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field fxFlex appearance="outline">
+                        <mat-label>Turnuva Türü</mat-label>
+                        <mat-select formControlName="tournamentType">
+                            <mat-option *ngFor="let type of types" [value]="type">
+                                {{tournamentTypesMap[type]}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap.gt-md="16px">
+                        <mat-form-field fxFlex appearance="outline">
+                            <mat-label>Katılımcı Sayısı</mat-label>
+                            <mat-select formControlName="participantCount" (selectionChange)="changeTournamentData()">
+                                <mat-option *ngFor="let count of participantList" [value]="count">
+                                    {{count}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field fxFlex appearance="outline">
+                            <mat-label>Katılım Ücreti</mat-label>
+                            <span matPrefix>₺ &nbsp;</span>
+                            <mat-select formControlName="participationFee" (selectionChange)="changeTournamentData()">
+                              <mat-option *ngFor="let fee of feeList" [value]="fee">
+                                {{fee}}
+                              </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <mat-form-field fxFlex appearance="outline">
+                        <mat-label>Turnuva Tarihi</mat-label>
+                        <input matInput [owlDateTime]="dt" [owlDateTimeTrigger]="dt" [min]="minDate" [max]="maxDate"
+                               (dateTimeChange)="changeTournamentDate()" formControlName="startDate">
+                    </mat-form-field>
+                    <owl-date-time #dt></owl-date-time>
+
+                    <button mat-flat-button color="primary" type="sumbit" mat-button (click)="submitDialog()"
+                            [disabled]="!tournamentForm.valid">Oluştur</button>
+                </form>
             </mat-card-content>
         </mat-card>
-        <app-tournament-card [data]="tournamentData" fxFlex="40%" fxFlex.lt-md="100%"></app-tournament-card>
+    </div>
+    <div fxLayout="column" fxFlex="40%" fxFlex.lt-md="100%" fxLayoutGap="16px">
+        <div fxLayout="column" fxLayoutGap="8px">
+            <mat-label>Turnuva Sahibi Kazancı</mat-label>
+            <mat-card class="mat-elevation-z4">
+                <mat-card-content>
+                    Tahminin Kazanç: <b style="color: green">{{income}} ₺</b>
+                </mat-card-content>
+            </mat-card>
+        </div>
+        <div fxLayout="column" fxLayoutGap="8px">
+            <mat-label>Yarışmacı Ödülleri</mat-label>
+            <mat-card class="mat-elevation-z4">
+                <mat-card-content fxLayout="row" fxFlexAlign="space-around center" fxLayoutGap="8px">
+                    <div align="center" fxFlex fxLayout="column" fxFlexAlign="center center" fxLayoutGap="8px" class="first-place-award">
+                        <div><mat-icon svgIcon="award"></mat-icon></div>
+                        <b>{{firstPlaceAward.amount}} ₺ | {{firstPlaceAward.ticket}} bilet</b>
+                    </div>
+                    <div align="center" fxFlex fxLayout="column" fxFlexAlign="center center" fxLayoutGap="8px" class="second-place-award">
+                        <div><mat-icon svgIcon="award"></mat-icon></div>
+                        <b>{{secondPlaceAward.amount}} ₺ | {{secondPlaceAward.ticket}} bilet</b>
+                    </div>
+                    <div align="center" fxFlex fxLayout="column" fxFlexAlign="center center" fxLayoutGap="8px" class="third-place-award">
+                        <div><mat-icon svgIcon="award"></mat-icon></div>
+                        <b>{{thirdPlaceAward.amount}} ₺ | {{thirdPlaceAward.ticket}} bilet</b>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+        <div fxLayout="column" fxLayoutGap="8px">
+            <mat-label>Ön İzleme</mat-label>
+            <app-tournament-card [data]="tournamentData" fxFlex="40%" fxFlex.lt-md="100%"></app-tournament-card>
+        </div>
     </div>
 </div>

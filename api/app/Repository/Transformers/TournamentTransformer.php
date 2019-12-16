@@ -21,13 +21,15 @@ class TournamentTransformer extends Transformer {
             TIME => CustomDate::getDateFromMilliseconds($tournament[START_DATE], TIME),
             PARTICIPANT_COUNT => $tournament[PARTICIPANT_COUNT],
             CURRENT_PARTICIPANTS => $tournament[CURRENT_PARTICIPANTS],
+            PARTICIPATION_FEE => $tournament[PARTICIPATION_FEE],
+            FEE_CURRENCY => $tournament[FEE_CURRENCY],
             STATUS => $tournament[STATUS],
             REFERENCE_CODE => $tournament[REFERENCE_CODE],
             TOURNAMENT_TYPE => $tournament[TOURNAMENT_TYPE],
-            PRICE => array(
-                AMOUNT => MIN_AMOUNT,
-                CURRENCY => TURKISH_LIRA,
-            ),
+//            PRICE => array(
+//                AMOUNT => MIN_AMOUNT,
+//                CURRENCY => TURKISH_LIRA,
+//            ),
             GAME => array(
                 GAME_ID => $tournament[GAME_ID],
                 GAME_NAME => $tournament[GAME_NAME],

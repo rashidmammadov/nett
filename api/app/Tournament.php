@@ -16,7 +16,8 @@ class Tournament extends Model {
     protected $primaryKey = TOURNAMENT_ID;
 
     protected $fillable = [
-        TOURNAMENT_ID, HOLDER_ID, GAME_ID, TOURNAMENT_TYPE, PARTICIPANT_COUNT, START_DATE, DAYS, STATUS
+        TOURNAMENT_ID, HOLDER_ID, GAME_ID, TOURNAMENT_TYPE, PARTICIPANT_COUNT, PARTICIPATION_FEE, FEE_CURRENCY,
+        START_DATE, DAYS, STATUS
     ];
 
     public function user() {

@@ -9,7 +9,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Queries\MySQL\ApiQuery;
-use App\Http\Utility\CustomDate;
 use App\Http\Utility\Finance;
 use App\Http\Utility\Fixture;
 use App\Http\Utility\Match;
@@ -24,7 +23,8 @@ class FixtureController extends ApiController {
     public function __construct() {}
 
     /**
-     * @description: handle request to set match score
+     * Handle request to set match score.
+     *
      * @param Request $request
      * @return mixed: tournament info
      */
@@ -74,6 +74,16 @@ class FixtureController extends ApiController {
         }
     }
 
+    /**
+     * Set match result of knock out fixture.
+     *
+     * @param integer $tournamentId - the id of tournament.
+     * @param integer $tourId - the tour id of fixture.
+     * @param integer $matchId - the match id of fixture.
+     * @param integer $homePoint - the point (goal count) of home player.
+     * @param integer $awayPoint - the point (goal count) of away player.
+     * @return array|bool - the updated result of fixture if available or returns false.
+     */
     private function setKnockOutFixtureMatchResult($tournamentId, $tourId, $matchId, $homePoint, $awayPoint) {
         $matchQueryResult = ApiQuery::getMatch($tournamentId, $tourId, $matchId);
         if ($matchQueryResult[AVAILABLE]) {
@@ -87,7 +97,7 @@ class FixtureController extends ApiController {
             $minPoint = min($homePoint, $awayPoint);
             Participant::calculatePlayerPoint($tournamentId, $winnerId, $maxPoint, ($tourId + 1) * 100);
             Participant::calculatePlayerPoint($tournamentId, $loserId, $minPoint, ($tourId + 1) * 1);
-            $this->updateParticipantsRanking($tournamentId, $tourName, $winnerId, $loserId);
+            $this->updateWinnerParticipantsRanking($tournamentId, $tourName, $winnerId, $loserId);
             $this->closeTournament($tournamentId);
             return Fixture::prepareTournamentFixtureData($tournamentId);
         } else {
@@ -96,13 +106,14 @@ class FixtureController extends ApiController {
     }
 
     /**
-     * @param $tournamentId
-     * @param $tourName
-     * @param $winnerId
-     * @param $loserId
+     * Update ranking of participant if semi final or final tour.
+     *
+     * @param integer $tournamentId - the id of tournament.
+     * @param string $tourName - the name of tour of fixture.
+     * @param integer $winnerId - the id of winner participant.
+     * @param integer $loserId - the id of loser participant.
      */
-    private function updateParticipantsRanking($tournamentId, $tourName, $winnerId, $loserId): void {
-        /** update participants` ranking */
+    private function updateWinnerParticipantsRanking($tournamentId, $tourName, $winnerId, $loserId): void {
         if (Match::isFinal($tourName)) {
             $rankings = array(
                 array(PARTICIPANT_ID => $winnerId, TOURNAMENT_RANKING => 1),
@@ -119,17 +130,21 @@ class FixtureController extends ApiController {
     }
 
     /**
-     * @param $tournamentId
+     * Change tournament status to closed if all match has played.
+     * Set participant rankings and points.
+     * Calculate earnings of winners and holder.
+     *
+     * @param integer $tournamentId - the id of tournament.
      */
     private function closeTournament($tournamentId): void {
-        /** if all match is played */
         if (ApiQuery::isAllMatchPlayed($tournamentId)) {
             $tournament = ApiQuery::getTournament($tournamentId);
             $rankings = Fixture::setKnockOutRanking($tournamentId);
             Participant::setKnockOutFixtureRanking($tournamentId, $rankings);
             $participants = ApiQuery::getParticipants($tournamentId);
-            Finance::setKnockOutFixtureParticipantsEarnings($tournamentId, $participants);
-            Finance::setKnockOutFixtureHolderEarnings($tournamentId, $tournament[HOLDER_ID], count($participants));
+            Finance::setKnockOutFixtureParticipantsEarnings($tournamentId, $participants, $tournament[PARTICIPATION_FEE]);
+            Finance::setKnockOutFixtureHolderEarnings($tournamentId, $tournament[HOLDER_ID], count($participants),
+                $tournament[PARTICIPATION_FEE]);
             ApiQuery::updateTournamentStatus($tournament, TOURNAMENT_STATUS_CLOSE);
         }
     }
