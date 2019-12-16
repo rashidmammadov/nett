@@ -16,6 +16,7 @@ import { ActivateComponent } from './components/activate/activate.component';
 import { ApplicationComponent } from './components/application/application.component';
 import { AttendButtonComponent } from './components/shared/attend-button/attend-button.component';
 import { AttendDialogComponent } from './components/shared/attend-dialog/attend-dialog.component';
+import { BankComponent } from './components/bank/bank.component';
 import { BelongComponent } from './components/belong/belong.component';
 import { ConfirmDialogComponent } from './components/shared/confirm-dialog/confirm-dialog.component';
 import { ForgotPasswordDialogComponent } from './components/shared/forgot-password-dialog/forgot-password-dialog.component';
@@ -71,7 +72,8 @@ import { DatePickerIntl } from './models/DatePickerIntl';
         ConfirmDialogComponent,
         SettingComponent,
         ForgotPasswordDialogComponent,
-        HalfDonutReportComponent
+        HalfDonutReportComponent,
+        BankComponent
     ],
     imports: [
         BrowserModule,

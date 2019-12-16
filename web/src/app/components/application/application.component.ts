@@ -8,7 +8,7 @@ const HOME = {link: 'home', icon: 'home'};
 const BELONG = {link: 'belongs', icon: 'grid'};
 const SEARCH = {link: 'search', icon: 'search'};
 const SET_TOURNAMENT = {link: 'set-tournament', icon: 'plus-square'};
-const BALANCE = {link: 'balance', icon: 'credit-card'};
+const BANK = {link: 'bank', icon: 'credit-card'};
 const SETTINGS = {link: 'settings', icon: 'user'};
 @Component({
   selector: 'app-application',
@@ -30,9 +30,9 @@ export class ApplicationComponent {
 
     private prepareTabs(userType: string) {
         if (userType === TYPES.USER.HOLDER) {
-            this.tabs = [HOME, BELONG, SEARCH, SET_TOURNAMENT, SETTINGS];
+            this.tabs = [HOME, BELONG, SEARCH, SET_TOURNAMENT, BANK, SETTINGS];
         } else if (userType === TYPES.USER.PLAYER) {
-            this.tabs = [HOME, BELONG, SEARCH, BALANCE, SETTINGS];
+            this.tabs = [HOME, BELONG, SEARCH, BANK, SETTINGS];
         }
     }
 }
