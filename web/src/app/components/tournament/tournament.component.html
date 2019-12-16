@@ -89,7 +89,7 @@
                 </mat-card-content>
             </mat-card>
         </div>
-        <div class="overflow-card" fxLayout="column" fxLayoutGap="8px" fxFlex>
+        <div class="overflow-card" fxLayout="column" fxLayoutGap="8px">
             <mat-label>Katılımcılar</mat-label>
             <mat-card class="mat-elevation-z4 participants-card overflow-card">
                 <mat-card-content *ngIf="tournament.participants.length">
@@ -100,7 +100,7 @@
                             <h4 mat-line>{{participant.name}} {{participant.surname}}</h4>
                             <div fxLayout="column">
                                 <h5 align="right" *ngIf="participant.tournamentRanking">#{{participant.tournamentRanking}}</h5>
-                                <h4 *ngIf="participant.referenceCode">{{participant.referenceCode}}</h4>
+                                <h4 matTooltip="Referans Kodu" *ngIf="participant.referenceCode">{{participant.referenceCode}}</h4>
                             </div>
                             <mat-divider></mat-divider>
                         </mat-list-item>

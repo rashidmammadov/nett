@@ -660,6 +660,8 @@ class ApiQuery {
             ->join(DB_TOURNAMENT_TABLE, DB_TOURNAMENT_TABLE.'.'.TOURNAMENT_ID, EQUAL_SIGN, DB_FINANCE_TABLE.'.'.TOURNAMENT_ID)
             ->join(DB_GAME_TABLE, DB_GAME_TABLE.'.'.GAME_ID, EQUAL_SIGN, DB_TOURNAMENT_TABLE.'.'.GAME_ID)
             ->orderBy(START_DATE, 'desc')
+            ->offset(0)
+            ->limit(10)
             ->get();
         return $result;
     }

@@ -123,7 +123,7 @@ class ReportController extends ApiController {
     }
 
     /**
-     * @description Prepare participant`s notifications.
+     * Prepare participant`s notifications.
      * @param integer $userId
      * @param string $type
      * @return array
@@ -147,9 +147,9 @@ class ReportController extends ApiController {
     }
 
     /**
-     * @description Prepare players ranking.
+     * Prepare players ranking.
      * @param $user - Holds the current user data.
-     * @return array
+     * @return array - ranking report data.
      */
     private function rankingReport($user) {
         $limit = 10;
@@ -174,9 +174,9 @@ class ReportController extends ApiController {
     }
 
     /**
-     * @description Prepare participant`s tournaments result by timeline.
-     * @param $userId
-     * @return array
+     * Prepare participant`s tournaments result by timeline.
+     * @param integer $userId - the id of user.
+     * @return array - timeline report data.
      */
     private function timelineReport($userId) {
         $queryResult = ApiQuery::getTimelineReport($userId);
