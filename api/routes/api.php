@@ -34,6 +34,8 @@ Route::group(['middleware' => 'cors', 'prefix' => '/v1'], function () {
             'migrate: '.$migrate;
     });
 
+    Route::get('/finance', 'FinanceController@get');
+
     Route::put('/fixture', 'FixtureController@setScore');
 
     Route::post('/games', 'GameController@add');

@@ -77,7 +77,7 @@ class Schedule extends Command {
     public function payWaitingPaymentsFromTournament() {
         Log::info('**************************************************');
         Log::info('EARNINGS PAYER STARTED');
-        $earnings = ApiQuery::getFinance(FINANCE_STATUS_WAITING);
+        $earnings = ApiQuery::getFinanceWithStatus(FINANCE_STATUS_WAITING);
         Log::info('TOTAL WAITING EARNINGS COUNT: ' . count($earnings));
         $totalBudget = 0;
         $totalTicket = 0;

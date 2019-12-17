@@ -15,12 +15,21 @@ class ApiQuery {
 
     /** -------------------- FINANCE QUERIES -------------------- **/
 
+    public static function getFinanceWithPagination($userId, $pageNo, $itemPerPage) {
+        $queryResult = Finance::where(USER_ID, EQUAL_SIGN, $userId)
+            ->orderBy('updated_at', 'desc')
+            ->offset(($pageNo - 1) * $itemPerPage)
+            ->limit($itemPerPage)
+            ->get();
+        return $queryResult;
+    }
+
     /**
      * @description query to get finance data
      * @param integer $status - the status of finance
      * @return mixed
      */
-    public static function getFinance($status) {
+    public static function getFinanceWithStatus($status) {
         $queryResult = Finance::where(STATUS, EQUAL_SIGN, $status)->get();
         return $queryResult;
     }

@@ -2,7 +2,7 @@
      fxFlexOffset="30%" fxFlexOffset.lt-md="20%" fxFlexOffset.lt-sm="0">
     <div class="bank-container" fxLayout="column" fxLayoutGap="16px">
         <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="8px">
-            <mat-label>Kullanılabilir Bakiyen</mat-label>
+            <mat-label>Kullanılabilir Bakiye</mat-label>
             <h3 *ngIf="user" class="available-budget">{{user.budget}} ₺</h3>
         </div>
         <mat-card class="mat-elevation-z4">
@@ -29,14 +29,14 @@
             </mat-card-content>
         </mat-card>
 
-        <mat-card class="mat-elevation-z4">
+        <mat-card class="mat-elevation-z4" (click)="openFinanceArchiveSheet()">
             <mat-card-content fxLayout="row">
                 <div fxLayout="column" fxLayoutAlign="center center">
                     <mat-icon svgIcon="archive"></mat-icon>
                 </div>
                 <div fxLayout="column" fxLayoutAlign="center start" fxLayoutGap="8px" fxFlex>
-                    <h3>Para Çek</h3>
-                    <p>Bakiyenden banka hesabına para gönder</p>
+                    <h3>İşlem Geçmişi</h3>
+                    <p>Tüm mali işlemler geçmişini görüntüle</p>
                 </div>
             </mat-card-content>
         </mat-card>

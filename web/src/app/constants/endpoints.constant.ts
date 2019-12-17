@@ -6,6 +6,9 @@ export const ENDPOINTS = {
 
     ACTIVATE: () => `${PREFIX}activate`,
 
+    FINANCE: (pageNo: number = null, itemPerPage: number = null) => pageNo && itemPerPage ?
+        `${PREFIX}finance?pageNo=${pageNo}&itemPerPage=${itemPerPage}` : `${PREFIX}finance`,
+
     FIXTURE: () => `${PREFIX}fixture`,
 
     GAMES: (id:number = null) => !!id ? `${PREFIX}games/${id}` : `${PREFIX}games`,
