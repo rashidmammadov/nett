@@ -68,7 +68,7 @@ export class SetTournamentComponent implements OnInit {
         let convert = (value) => value < 10 ? '0' + value : value;
 
         if (selectedDate) {
-            this.tournamentData.date = convert(selectedDate.getDate()) + '/' + convert(selectedDate.getMonth());
+            this.tournamentData.date = convert(selectedDate.getDate()) + '/' + convert(selectedDate.getMonth() + 1);
             this.tournamentData.time = convert(selectedDate.getHours()) + ':' + convert(selectedDate.getMinutes());
         }
     }

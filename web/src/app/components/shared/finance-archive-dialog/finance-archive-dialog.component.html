@@ -1,0 +1,23 @@
+<mat-dialog-content class="finance-archive-component">
+    <div *ngIf="data.length" fxLayout="column" fxLayoutGap="16px">
+        <div class="finance-item" fxLayout="row" fxLayoutAlign="space-between center" *ngFor="let d of data"
+             [ngClass]="{'approved': d.status === 0, 'waiting': d.status === 1, 'order': d.status === 2, 'cancelled': d.status === 99}">
+            <div fxLayout="column">
+                <p class="status">{{FINANCE_STATUS[d.status]}}</p>
+                <p class="channel">{{FINANCE_TYPE[d.channel]}}</p>
+                <p class="date">{{d.date}}</p>
+            </div>
+            <div fxLayout="column">
+                <p class="amount">{{d.amount}} ₺</p>
+                <p class="reference">{{d.referenceCode}}</p>
+            </div>
+        </div>
+        <button [disabled]="progress" *ngIf="totalPage > currentPage" mat-button (click)="loadMore()">daha fazla</button>
+    </div>
+    <div *ngIf="!data.length">
+        <p align="center">Gösterilecek Veri Bulunamadı</p>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Tamam</button>
+</mat-dialog-actions>

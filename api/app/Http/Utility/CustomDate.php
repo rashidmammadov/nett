@@ -35,4 +35,8 @@ class CustomDate {
         }
         return $result;
     }
+
+    public static function convertDateToMillisecond($date) {
+        return strtotime($date) * 1000;
+    }
 }

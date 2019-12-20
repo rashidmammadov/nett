@@ -9,18 +9,24 @@ use App\Match;
 use App\Participant;
 use App\Tournament;
 use App\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ApiQuery {
 
     /** -------------------- FINANCE QUERIES -------------------- **/
 
-    public static function getFinanceWithPagination($userId, $pageNo, $itemPerPage) {
+    /**
+     * Query to get finance data with pagination.
+     * @param integer $userId - the id of user.
+     * @param integer $itemPerPage - the count of item per page.
+     * @return array
+     */
+    public static function getFinanceWithPagination($userId, $itemPerPage) {
         $queryResult = Finance::where(USER_ID, EQUAL_SIGN, $userId)
+            ->where(AMOUNT, NOT_EQUAL_SIGN, 0)
             ->orderBy('updated_at', 'desc')
-            ->offset(($pageNo - 1) * $itemPerPage)
-            ->limit($itemPerPage)
-            ->get();
+            ->paginate($itemPerPage);
         return $queryResult;
     }
 

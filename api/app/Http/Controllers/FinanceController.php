@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Queries\MySQL\ApiQuery;
 use App\Http\Utility\CustomDate;
+use App\Http\Utility\FinanceArchive;
 use App\Http\Utility\Fixture;
 use App\Http\Utility\Match;
 use App\Repository\Transformers\ParticipantTransformer;
@@ -21,11 +22,28 @@ class FinanceController extends ApiController {
     public function get(Request $request) {
         try {
             $user = JWTAuth::parseToken()->authenticate();
-            $userId = $user[IDENTIFIER];
-            $pageNo = !empty($request[PAGE_NO]) ? $request[PAGE_NO] : null;
-            $itemPerPage = !empty($request[ITEM_PER_PAGE]) ? $request[ITEM_PER_PAGE] : null;
-            $data = ApiQuery::getFinanceWithPagination($userId, $pageNo, $itemPerPage);
-            return $this->respondCreated('', $data);
+            $rules = array(
+                PAGE => 'required'
+            );
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return $this->respondValidationError(FIELDS_VALIDATION_FAILED, $validator->errors());
+            } else {
+                $userId = $user[IDENTIFIER];
+                $itemPerPage = !empty($request[ITEM_PER_PAGE]) ? $request[ITEM_PER_PAGE] : 50;
+                $pagination = ApiQuery::getFinanceWithPagination($userId, $itemPerPage);
+                $data = array();
+                foreach ($pagination->items() as $item) {
+                    $financeArchive = new FinanceArchive();
+                    $financeArchive::setAmount($item[AMOUNT]);
+                    $financeArchive::setChannel($item[CHANNEL]);
+                    $financeArchive::setReferenceCode($item[REFERENCE_CODE]);
+                    $financeArchive::setStatus($item[STATUS]);
+                    $financeArchive::setDate(CustomDate::convertDateToMillisecond($item['updated_at']));
+                    array_push($data, $financeArchive::get());
+                }
+                return $this->respondWithPagination('', $pagination, $data);
+            }
         } catch(JWTException $e) {
             $this->setStatusCode($e->getStatusCode());
             $this->setMessage(AUTHENTICATION_ERROR);

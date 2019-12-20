@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { first } from 'rxjs/operators';
 import { UserType } from '../../interfaces/user-type';
-import { FinanceArchiveSheetComponent } from '../shared/finance-archive-sheet/finance-archive-sheet.component';
+import { FinanceArchiveDialogComponent } from '../shared/finance-archive-dialog/finance-archive-dialog.component';
 
 @Component({
   selector: 'app-bank',
@@ -14,14 +14,16 @@ export class BankComponent implements OnInit {
 
     public user: UserType;
 
-    constructor(private store: Store<{user: UserType}>, private bottomSheet: MatBottomSheet) { }
+    constructor(private store: Store<{user: UserType}>, private dialog: MatDialog) { }
 
     async ngOnInit() {
         await this.getUserData();
     }
 
-    openFinanceArchiveSheet(): void {
-        this.bottomSheet.open(FinanceArchiveSheetComponent);
+    openFinanceArchiveDialog(): void {
+        this.dialog.open(FinanceArchiveDialogComponent, {
+            width: '500px'
+        });
     }
 
     private getUserData = async () => {

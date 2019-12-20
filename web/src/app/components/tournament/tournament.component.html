@@ -91,8 +91,8 @@
         </div>
         <div class="overflow-card" fxLayout="column" fxLayoutGap="8px">
             <mat-label>Katılımcılar</mat-label>
-            <mat-card class="mat-elevation-z4 participants-card overflow-card">
-                <mat-card-content *ngIf="tournament.participants.length">
+            <mat-card *ngIf="tournament.participants.length" class="mat-elevation-z4 participants-card overflow-card">
+                <mat-card-content>
                     <mat-list>
                         <mat-list-item *ngFor="let participant of tournament.participants">
                             <img mat-list-avatar [src]="participant.picture">

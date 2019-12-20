@@ -1,0 +1,16 @@
+.finance-archive-component {
+    p { margin: 0; }
+    .finance-item {
+        padding: 0 16px;
+        .status { font-size: 16px; font-weight: 600; }
+        .channel { font-size: 14px; color: #d3d3d3; }
+        .date { font-size: 14px; color: #d3d3d3; }
+        .amount { font-size: 16px; font-weight: 600; }
+        .reference { font-size: 14px; color: #d3d3d3; }
+    }
+    .approved { border-left: 4px solid #5FDC96; }
+    .cancelled { border-left: 4px solid #f44336; }
+    .order { border-left: 4px solid #00BFFF; }
+    .waiting { border-left: 4px solid #DAA520; }
+}
+

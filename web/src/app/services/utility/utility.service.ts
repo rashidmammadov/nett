@@ -20,6 +20,8 @@ export class UtilityService {
 
     public static injector: Injector;
 
+    public static CURRENT_DATE = new Date();
+
     public static handleResponseFromService(result: IHttpResponse | ErrorResponse, successCallback: (result) => void): void {
         if (!navigator.onLine) {
             ToastService.show(MESSAGES.ERROR.ERR_INTERNET_DISCONNECTED);
@@ -89,6 +91,26 @@ export class UtilityService {
         } else {
             return milliseconds;
         }
+    }
+
+    public static dateFromNow(date: string | number | null) {
+        let result: string = null;
+        if (date) {
+            const givenDate = new Date(date);
+            const difference = UtilityService.CURRENT_DATE.getTime() - givenDate.getTime();
+            if (difference <= DATE_TIME.ONE_MINUTE) {
+                result = Math.ceil(difference / DATE_TIME.ONE_SECOND) + ' sn önce';
+            } else if (difference <= DATE_TIME.ONE_HOUR) {
+                result = Math.ceil(difference / DATE_TIME.ONE_MINUTE) + ' dk önce';
+            } else if (difference <= DATE_TIME.ONE_DAY) {
+                result = Math.ceil(difference / DATE_TIME.ONE_HOUR) + ' saat önce';
+            } else if (difference <= DATE_TIME.ONE_WEEK) {
+                result = Math.ceil(difference / DATE_TIME.ONE_DAY) + ' gün önce';
+            } else {
+                result = UtilityService.convertToFormat(givenDate, DATE_TIME.FORMAT.DATE_TIME);
+            }
+        }
+        return result;
     }
 
     private static convertToFormat(date, format = null) {

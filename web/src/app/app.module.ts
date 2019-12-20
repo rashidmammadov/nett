@@ -46,7 +46,7 @@ import { userReducer } from './store/reducers/user.reducer';
 import { progressReducer } from './store/reducers/progress.reducer';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { DatePickerIntl } from './models/DatePickerIntl';
-import { FinanceArchiveSheetComponent } from './components/shared/finance-archive-sheet/finance-archive-sheet.component';
+import { FinanceArchiveDialogComponent } from './components/shared/finance-archive-dialog/finance-archive-dialog.component';
 
 @NgModule({
     declarations: [
@@ -75,7 +75,7 @@ import { FinanceArchiveSheetComponent } from './components/shared/finance-archiv
         ForgotPasswordDialogComponent,
         HalfDonutReportComponent,
         BankComponent,
-        FinanceArchiveSheetComponent
+        FinanceArchiveDialogComponent
     ],
     imports: [
         BrowserModule,
@@ -93,7 +93,7 @@ import { FinanceArchiveSheetComponent } from './components/shared/finance-archiv
     entryComponents: [
         AttendDialogComponent,
         ConfirmDialogComponent,
-        FinanceArchiveSheetComponent,
+        FinanceArchiveDialogComponent,
         ForgotPasswordDialogComponent,
         LeaveDialogComponent,
         SetMatchScoreDialogComponent

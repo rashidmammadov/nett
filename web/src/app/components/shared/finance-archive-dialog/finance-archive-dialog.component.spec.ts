@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FinanceArchiveSheetComponent } from './finance-archive-sheet.component';
+import { FinanceArchiveDialogComponent } from './finance-archive-dialog.component';
 
 describe('FinanceArchiveSheetComponent', () => {
-  let component: FinanceArchiveSheetComponent;
-  let fixture: ComponentFixture<FinanceArchiveSheetComponent>;
+  let component: FinanceArchiveDialogComponent;
+  let fixture: ComponentFixture<FinanceArchiveDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FinanceArchiveSheetComponent ]
+      declarations: [ FinanceArchiveDialogComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FinanceArchiveSheetComponent);
+    fixture = TestBed.createComponent(FinanceArchiveDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

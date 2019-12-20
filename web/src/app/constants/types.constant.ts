@@ -1,7 +1,15 @@
 export const TYPES = {
+    FINANCE_STATUS: {
+        0: 'Onaylandı',
+        1: 'Onay Bekliyor',
+        2: 'İşlem Emri Verildi',
+        99: 'İptal Edildi',
+    },
+
     FINANCE_TYPE: {
-        'DEPOSIT': 'Yatırılan',
-        'TOURNAMENT': 'Ödüller'
+        'deposit': 'Para Yatırma',
+        'tournament': 'Kazanç',
+        'withdraw': 'Para Çekme'
     },
 
     MIN_COEFFICIENT: 5.5,

@@ -1,7 +1,0 @@
-<mat-nav-list *ngIf="!loading">
-  <a *ngFor="let data of financeArchiveData" mat-list-item>
-    <span mat-line>Google Keep</span>
-    <span mat-line>{{data.updated_at}}</span>
-  </a>
-  <button mat-button (click)="loadMore()">load more</button>
-</mat-nav-list>
