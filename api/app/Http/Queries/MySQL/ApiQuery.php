@@ -280,14 +280,16 @@ class ApiQuery {
      * @param integer $loserId
      * @param integer $homePoint
      * @param integer $awayPoint
+     * @param string $note
      */
-    public static function setMatchWinner($matchId, $winnerId, $loserId, $homePoint, $awayPoint) {
+    public static function setMatchWinner($matchId, $winnerId, $loserId, $homePoint, $awayPoint, $note) {
         Match::where(DB_MATCH_TABLE.'.'.MATCH_ID, EQUAL_SIGN, $matchId)
             ->update([
                 WINNER_ID => $winnerId,
                 LOSER_ID => $loserId,
                 HOME_POINT => $homePoint,
                 AWAY_POINT => $awayPoint,
+                NOTE => $note ? $note : null,
                 AVAILABLE => false
             ]);
     }

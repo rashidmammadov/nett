@@ -110,9 +110,10 @@ class Match {
      * @param $awayId
      * @param $homePoint
      * @param $awayPoint
+     * @param string $note - holds the extra info about match.
      * @return array
      */
-    public static function setMatchWinner($matchId, $homeId, $awayId, $homePoint, $awayPoint): array {
+    public static function setMatchWinner($matchId, $homeId, $awayId, $homePoint, $awayPoint, $note): array {
         $winnerId = null;
         $loserId = null;
         if ($homePoint >= 0 && $awayPoint >= 0 && $homePoint != $awayPoint) {
@@ -123,7 +124,7 @@ class Match {
                 $winnerId = $awayId;
                 $loserId = $homeId;
             }
-            ApiQuery::setMatchWinner($matchId, $winnerId, $loserId, $homePoint, $awayPoint);
+            ApiQuery::setMatchWinner($matchId, $winnerId, $loserId, $homePoint, $awayPoint, $note);
         }
         return array($winnerId, $loserId);
     }

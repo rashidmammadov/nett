@@ -50,7 +50,7 @@ class FixtureController extends ApiController {
                         if ($request[TOURNAMENT_TYPE] == KNOCK_OUT) {
                             if ($request[HOME_POINT] != $request[AWAY_POINT]) {
                                 $data = $this->setKnockOutFixtureMatchResult($request[TOURNAMENT_ID], $request[TOUR_ID],
-                                    $request[MATCH_ID], $request[HOME_POINT], $request[AWAY_POINT]);
+                                    $request[MATCH_ID], $request[HOME_POINT], $request[AWAY_POINT], $request[NOTE]);
                                 if ($data) {
                                     return $this->respondCreated(MATCH_RESULT_UPDATED_SUCCESSFULLY, $data);
                                 } else {
@@ -82,14 +82,15 @@ class FixtureController extends ApiController {
      * @param integer $matchId - the match id of fixture.
      * @param integer $homePoint - the point (goal count) of home player.
      * @param integer $awayPoint - the point (goal count) of away player.
+     * @param string $note - holds the extra info about match.
      * @return array|bool - the updated result of fixture if available or returns false.
      */
-    private function setKnockOutFixtureMatchResult($tournamentId, $tourId, $matchId, $homePoint, $awayPoint) {
+    private function setKnockOutFixtureMatchResult($tournamentId, $tourId, $matchId, $homePoint, $awayPoint, $note) {
         $matchQueryResult = ApiQuery::getMatch($tournamentId, $tourId, $matchId);
         if ($matchQueryResult[AVAILABLE]) {
             $tourName = $matchQueryResult[TOUR_NAME];
             list($winnerId, $loserId) = Match::setMatchWinner($matchId, $matchQueryResult[HOME_ID],
-                $matchQueryResult[AWAY_ID], $homePoint, $awayPoint);
+                $matchQueryResult[AWAY_ID], $homePoint, $awayPoint, $note);
             Match::setNextTourMatch($tournamentId, $tourId, $tourName, $loserId, $winnerId, $matchQueryResult[DATE]);
 
             /** update participants` point */

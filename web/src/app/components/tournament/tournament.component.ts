@@ -41,7 +41,8 @@ export class TournamentComponent {
             }
         })
         .afterClosed().toPromise().then(result => {
-            !!result && this.sendSetMatchScore(this.setMatchScoreData(tourId, matchId, result.homePoint, result.awayPoint));
+            !!result && this.sendSetMatchScore(this.setMatchScoreData(tourId, matchId, result.homePoint,
+                result.awayPoint, result.note));
         });
     }
 
@@ -73,14 +74,15 @@ export class TournamentComponent {
         this.progress.dispatch(loaded());
     };
 
-    private setMatchScoreData(tourId: number, matchId: number, homePoint: number, awayPoint: number) {
+    private setMatchScoreData(tourId: number, matchId: number, homePoint: number, awayPoint: number, note: string = null) {
         return {
             'tournamentId': this.tournament.tournamentId,
             'tournamentType': this.tournament.tournamentType,
             'tourId': tourId,
             'matchId': matchId,
             'homePoint': homePoint,
-            'awayPoint': awayPoint
+            'awayPoint': awayPoint,
+            'note': note
         }
     }
 

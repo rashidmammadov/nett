@@ -6,19 +6,18 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   templateUrl: './set-match-score-dialog.component.html',
   styleUrls: ['./set-match-score-dialog.component.scss']
 })
-export class SetMatchScoreDialogComponent implements OnInit {
+export class SetMatchScoreDialogComponent {
     homePoint: number = 0;
     awayPoint: number = 0;
+    note: string;
 
     constructor(public dialog: MatDialogRef<SetMatchScoreDialogComponent>, @Inject(MAT_DIALOG_DATA) public data) { }
-
-    ngOnInit() {
-    }
 
     apply() {
         this.dialog.close({
             homePoint: this.homePoint,
-            awayPoint: this.awayPoint
+            awayPoint: this.awayPoint,
+            note: this.note
         });
     }
 
