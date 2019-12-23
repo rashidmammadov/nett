@@ -10,6 +10,7 @@ use App\Participant;
 use App\Tournament;
 use App\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
 
 class ApiQuery {
@@ -23,15 +24,19 @@ class ApiQuery {
      * @return array
      */
     public static function getFinanceWithPagination($userId, $itemPerPage) {
-        $queryResult = Finance::where(USER_ID, EQUAL_SIGN, $userId)
-            ->where(AMOUNT, NOT_EQUAL_SIGN, 0)
-            ->orderBy('updated_at', 'desc')
-            ->paginate($itemPerPage);
-        return $queryResult;
+        try {
+            $queryResult = Finance::where(USER_ID, EQUAL_SIGN, $userId)
+                ->where(AMOUNT, NOT_EQUAL_SIGN, 0)
+                ->orderBy('updated_at', 'desc')
+                ->paginate($itemPerPage);
+            return $queryResult;
+        } catch (QueryException $e) {
+            self::throwException($e, debug_backtrace());
+        }
     }
 
     /**
-     * @description query to get finance data
+     * @description query to get finance dat a
      * @param integer $status - the status of finance
      * @return mixed
      */
@@ -666,7 +671,7 @@ class ApiQuery {
     /** -------------------- REPORT QUERIES -------------------- **/
 
     /**
-     * @description query to get holder`s earning report result.
+     * Query to get holder`s earning report result.
      * @param integer $userId - the given user`s id
      * @return mixed
      */
@@ -684,7 +689,7 @@ class ApiQuery {
     }
 
     /**
-     * @description query to get participant`s finance report result.
+     * Query to get participant`s finance report result.
      * @param integer $userId - the given user`s id
      * @return mixed
      */
@@ -698,7 +703,7 @@ class ApiQuery {
     }
 
     /**
-     * @description query to get holder`s notification report result.
+     * Query to get holder`s notification report result.
      * @param integer $userId - the given user`s id
      * @param integer $limit - the limit of query
      * @return mixed
@@ -714,7 +719,7 @@ class ApiQuery {
     }
 
     /**
-     * @description query to get participant`s notification report result.
+     * Query to get participant`s notification report result.
      * @param integer $userId - the given user`s id
      * @param integer $limit - the limit of query
      * @return mixed
@@ -732,7 +737,7 @@ class ApiQuery {
     }
 
     /**
-     * @description query to get most played games report result.
+     * Query to get most played games report result.
      * @return mixed
      */
     public static function getMostPlayedReport() {
@@ -744,7 +749,7 @@ class ApiQuery {
     }
 
     /**
-     * @description query to get player`s ranking report result.
+     * Query to get player`s ranking report result.
      * @param $limit - The limit of query.
      * @return mixed
      */
@@ -760,7 +765,7 @@ class ApiQuery {
     }
 
     /**
-     * @description query to get participant`s timeline report result.
+     * Query to get participant`s timeline report result.
      * @param integer $userId - the given user`s id
      * @return mixed
      */
@@ -773,4 +778,15 @@ class ApiQuery {
             ->get();
         return $result;
     }
+
+    /**
+     * Log exception error.
+     * @param QueryException $e - holds the exception.
+     * @param array $backtrace - holds the backtrace array.
+     */
+    private static function throwException(QueryException $e, $backtrace) {
+        $caller = array_shift($backtrace);
+        Log::error($e->getMessage() . ' (' . $caller['class'] . '->' . $caller['function'] . ':' . $caller['line'] . ')');
+    }
+
 }

@@ -162,6 +162,7 @@ define('STATE', 'state');
 define('STATUS', 'status');
 define('STATUS_CODE', 'status_code');
 define('STATUS_MUST_BE_ACTIVE_FOR_CHANGE', 'Değişiklik yapabilmek için turnuva durumu aktif olmalıdır');
+define('SOMETHING_WRONG_WITH_DB', 'Veri tabanıyla bağlanmada bir sorun oluştu');
 define('SUCCESS', 'success');
 define('SURNAME', 'surname');
 define('THIS_EMAIL_ALREADY_EXIST', 'Bu email zaten mevcut');
