@@ -5,6 +5,7 @@ export interface UserType {
     city: string;
     district: string;
     email: string;
+    iban?: string;
     id?: number;
     name?: string;
     picture?: string;

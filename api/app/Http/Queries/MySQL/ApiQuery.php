@@ -48,9 +48,15 @@ class ApiQuery {
     /**
      * @description query to create new finance data
      * @param $finance
+     * @return mixed
      */
     public static function setFinance($finance) {
-        Finance::create($finance);
+        try {
+            $queryResult = Finance::create($finance);
+            return $queryResult;
+        } catch (QueryException $e) {
+            self::throwException($e, debug_backtrace());
+        }
     }
 
     /**
@@ -613,13 +619,19 @@ class ApiQuery {
     }
 
     /**
-     * @description query to update user` budget.
+     * Query to update user` budget.
      * @param integer $userId - the given user`s id
      * @param double $budget - updated budget amount
+     * @return mixed
      */
     public static function updateUserBudget($userId, $budget) {
-        User::where(IDENTIFIER, EQUAL_SIGN, $userId)
-            ->update([BUDGET => $budget]);
+        try {
+            $queryResult = User::where(IDENTIFIER, EQUAL_SIGN, $userId)
+                ->update([BUDGET => $budget]);
+            return $queryResult;
+        } catch (QueryException $e) {
+            self::throwException($e, debug_backtrace());
+        }
     }
 
     /**

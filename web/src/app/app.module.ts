@@ -19,6 +19,7 @@ import { AttendDialogComponent } from './components/shared/attend-dialog/attend-
 import { BankComponent } from './components/bank/bank.component';
 import { BelongComponent } from './components/belong/belong.component';
 import { ConfirmDialogComponent } from './components/shared/confirm-dialog/confirm-dialog.component';
+import { FinanceArchiveDialogComponent } from './components/shared/finance-archive-dialog/finance-archive-dialog.component';
 import { ForgotPasswordDialogComponent } from './components/shared/forgot-password-dialog/forgot-password-dialog.component';
 import { HalfDonutReportComponent } from './components/shared/half-donut-report/half-donut-report.component';
 import { HomeComponent } from './components/home/home.component';
@@ -36,6 +37,7 @@ import { LeaveDialogComponent } from './components/shared/leave-dialog/leave-dia
 import { TimelineReportComponent } from './components/shared/timeline-report/timeline-report.component';
 import { TournamentComponent } from './components/tournament/tournament.component';
 import { TournamentCardComponent } from './components/shared/tournament-card/tournament-card.component';
+import { WithdrawDialogComponent } from './components/shared/withdraw-dialog/withdraw-dialog.component';
 
 import { Cookie } from './services/cookie/cookies.service';
 import { ToastService } from './services/toast/toast.service';
@@ -46,7 +48,6 @@ import { userReducer } from './store/reducers/user.reducer';
 import { progressReducer } from './store/reducers/progress.reducer';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { DatePickerIntl } from './models/DatePickerIntl';
-import { FinanceArchiveDialogComponent } from './components/shared/finance-archive-dialog/finance-archive-dialog.component';
 
 @NgModule({
     declarations: [
@@ -75,7 +76,8 @@ import { FinanceArchiveDialogComponent } from './components/shared/finance-archi
         ForgotPasswordDialogComponent,
         HalfDonutReportComponent,
         BankComponent,
-        FinanceArchiveDialogComponent
+        FinanceArchiveDialogComponent,
+        WithdrawDialogComponent
     ],
     imports: [
         BrowserModule,
@@ -96,7 +98,8 @@ import { FinanceArchiveDialogComponent } from './components/shared/finance-archi
         FinanceArchiveDialogComponent,
         ForgotPasswordDialogComponent,
         LeaveDialogComponent,
-        SetMatchScoreDialogComponent
+        SetMatchScoreDialogComponent,
+        WithdrawDialogComponent
     ],
     providers: [CookieService,
         { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},

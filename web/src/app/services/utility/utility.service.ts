@@ -20,8 +20,6 @@ export class UtilityService {
 
     public static injector: Injector;
 
-    public static CURRENT_DATE = new Date();
-
     public static handleResponseFromService(result: IHttpResponse | ErrorResponse, successCallback: (result) => void): void {
         if (!navigator.onLine) {
             ToastService.show(MESSAGES.ERROR.ERR_INTERNET_DISCONNECTED);
@@ -94,10 +92,11 @@ export class UtilityService {
     }
 
     public static dateFromNow(date: string | number | null) {
+        const CURRENT_DATE = new Date();
         let result: string = null;
         if (date) {
             const givenDate = new Date(date);
-            const difference = UtilityService.CURRENT_DATE.getTime() - givenDate.getTime();
+            const difference = CURRENT_DATE.getTime() - givenDate.getTime();
             if (difference <= DATE_TIME.ONE_MINUTE) {
                 result = Math.ceil(difference / DATE_TIME.ONE_SECOND) + ' sn önce';
             } else if (difference <= DATE_TIME.ONE_HOUR) {

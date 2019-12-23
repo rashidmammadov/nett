@@ -15,4 +15,8 @@ export class FinanceService {
     get(page: number = null, itemPerPage: number = null): Promise<ErrorResponse | IHttpResponse> {
         return UtilityService.pipeHttpResponse(this.http.get<IHttpResponse>(ENDPOINTS.FINANCE(page, itemPerPage)));
     }
+
+    withdraw(params): Promise<ErrorResponse | IHttpResponse> {
+        return UtilityService.pipeHttpResponse(this.http.put<IHttpResponse>(ENDPOINTS.FINANCE(), UtilityService.setHttpParams(params)));
+    }
 }

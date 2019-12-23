@@ -8,7 +8,6 @@
 
 namespace App\Http\Utility;
 
-
 use App\Http\Queries\MySQL\ApiQuery;
 
 class Finance {
@@ -18,6 +17,7 @@ class Finance {
     private static $type;
     private static $channel;
     private static $tournamentId;
+    private static $iban;
     private static $amount;
     private static $ticket;
     private static $status;
@@ -27,18 +27,20 @@ class Finance {
         self::setType($parameters[TYPE]);
         self::setChannel($parameters[CHANNEL]);
         self::setTournamentId($parameters[TOURNAMENT_ID]);
+        self::setIban($parameters[IBAN]);
         self::setAmount($parameters[AMOUNT]);
         self::setTicket($parameters[TICKET]);
         self::setStatus($parameters[STATUS]);
     }
 
-    public static function getFinance() {
+    public static function get() {
         return array(
             FINANCE_ID => self::getFinanceId(),
             USER_ID => self::getUserId(),
             TYPE => self::getType(),
             CHANNEL => self::getChannel(),
             TOURNAMENT_ID => self::getTournamentId(),
+            IBAN => self::getIban(),
             AMOUNT => self::getAmount(),
             TICKET => self::getTicket(),
             STATUS => self::getStatus()
@@ -64,6 +66,10 @@ class Finance {
     public static function getTournamentId() { return self::$tournamentId; }
 
     public static function setTournamentId($tournamentId): void { self::$tournamentId = $tournamentId; }
+
+    public static function getIban() { return self::$iban; }
+
+    public static function setIban($iban): void { self::$iban = $iban; }
 
     public static function getAmount() { return self::$amount; }
 
@@ -97,7 +103,7 @@ class Finance {
             $finance::setTicket($ticket);
             $finance::setStatus(FINANCE_STATUS_WAITING);
             if ($finance::getAmount() > 0 || $finance::getTicket() > 0) {
-                ApiQuery::setFinance($finance::getFinance());
+                ApiQuery::setFinance($finance::get());
             }
         }
     }
@@ -121,7 +127,7 @@ class Finance {
         $finance::setTicket(0);
         $finance::setStatus(FINANCE_STATUS_WAITING);
         if ($finance::getAmount() > 0) {
-            ApiQuery::setFinance($finance::getFinance());
+            ApiQuery::setFinance($finance::get());
         }
     }
 

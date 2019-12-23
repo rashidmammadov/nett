@@ -17,6 +17,7 @@ class CreateFinanceTable extends Migration {
             $table->char(TYPE, 10);
             $table->char(CHANNEL, 20);
             $table->integer(TOURNAMENT_ID)->nullable();
+            $table->char(IBAN, 255)->nullable();
             $table->double(AMOUNT)->nullable();
             $table->integer(TICKET)->nullable();
             $table->integer(STATUS)->default(0);

@@ -1,0 +1,36 @@
+<div align="center">
+    <p>Para Çekme</p>
+</div>
+<mat-dialog-content>
+    <form ngNoForm fxLayout="column" [formGroup]="withdrawForm">
+        <mat-form-field fxFlex appearance="outline">
+            <mat-label>Çekilecek Tutar</mat-label>
+            <span matPrefix>₺ &nbsp;</span>
+            <input matInput placeholder="Tutar" type="number" formControlName="withdrawalAmount" min="0">
+            <mat-error *ngIf="withdrawForm.controls.withdrawalAmount.hasError('required')">
+                Çekilecek tutar alanı boş bırakılamaz.
+            </mat-error>
+            <mat-error *ngIf="withdrawForm.controls.withdrawalAmount.hasError('min')">
+                Çekilecek tutar en az 50 ₺ olmalı.
+            </mat-error>
+            <mat-error *ngIf="withdrawForm.controls.withdrawalAmount.hasError('max')">
+                Çekilecek tutar en fazla {{params.budget}} ₺ olabilir.
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field fxFlex appearance="outline">
+            <mat-label>IBAN</mat-label>
+            <input matInput placeholder="IBAN" type="text" formControlName="iban">
+            <mat-error *ngIf="withdrawForm.controls.iban.hasError('required')">
+                IBAN alanı boş bırakılamaz ve uluslararası standartda olmalıdır.
+            </mat-error>
+        </mat-form-field>
+    </form>
+    <div class="info" fxLayout="column">
+        <p>* Çekilecek paranın hesabınıza yatması 3-5 iş günü sürecektir.</p>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Vazgeç</button>
+    <button mat-button (click)="withdraw()" mat-flat-button class="mat-primary"
+            [disabled]="!withdrawForm.valid || !withdrawForm.controls.withdrawalAmount">Onayla</button>
+</mat-dialog-actions>
