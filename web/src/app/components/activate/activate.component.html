@@ -24,6 +24,14 @@
                     </mat-form-field>
 
                     <mat-form-field fxFlex appearance="outline">
+                        <mat-label>TC Numarası</mat-label>
+                        <input matInput type="number" placeholder="TC Numarası" formControlName="identityNumber" minlength="11" maxlength="11">
+                        <mat-error *ngIf="activateForm.controls.identityNumber.hasError('required')">
+                            TC Numarası alanı boş bırakılamaz.
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field fxFlex appearance="outline">
                         <mat-label>Telefon</mat-label>
                         <span matPrefix>+90 &nbsp;</span>
                         <input type="tel" matInput placeholder="Telefon" maxlength="10" formControlName="phone">
@@ -33,7 +41,7 @@
                         </mat-error>
                     </mat-form-field>
 
-                    <div style="margin-top: 8px" fxLayout="row" fxFlex fxLayoutGap="4px">
+                    <div style="margin-top: 8px" fxLayout="row" fxFlex fxLayoutGap="8px">
                         <mat-form-field fxFlex="32%" appearance="outline">
                             <mat-label>Gün</mat-label>
                             <mat-select [(value)]="selectedDay" (valueChange)="setBirthday()">
@@ -46,7 +54,7 @@
                             <mat-label>Ay</mat-label>
                             <mat-select [(value)]="selectedMonth" (valueChange)="setBirthday()">
                                 <mat-option *ngFor="let month of months" [value]="month">
-                                    {{month}}
+                                    {{MONTHS_MAP[month - 1]}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>

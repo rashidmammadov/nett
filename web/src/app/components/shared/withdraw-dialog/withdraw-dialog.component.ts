@@ -33,10 +33,12 @@ export class WithdrawDialogComponent implements OnInit {
 
     withdraw() {
         const controls = this.withdrawForm.controls;
-        this.dialog.close({
-            withdrawalAmount: controls.withdrawalAmount.value,
-            iban: controls.iban.value
-        });
+        if (this.withdrawForm.valid) {
+            this.dialog.close({
+                withdrawalAmount: controls.withdrawalAmount.value,
+                iban: controls.iban.value
+            });
+        }
     }
 
 }

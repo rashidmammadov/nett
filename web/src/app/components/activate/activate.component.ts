@@ -8,6 +8,7 @@ import { UserService } from '../../services/user/user.service';
 import { UtilityService } from '../../services/utility/utility.service';
 import { IHttpResponse } from '../../interfaces/i-http-response';
 import { set } from '../../store/actions/user.action';
+import { DATE_TIME } from '../../constants/date-time.constant';
 
 @Component({
   selector: 'app-activate',
@@ -22,11 +23,13 @@ export class ActivateComponent implements OnInit {
     public selectedDay: number = 1;
     public selectedMonth: number = 1;
     public selectedYear: number = this.currentDate.getFullYear() - 18;
+    public MONTHS_MAP = DATE_TIME.MONTHS_MAP;
     private _user: UserType;
 
     activateForm = new FormGroup({
         name: new FormControl('', [Validators.required]),
         surname: new FormControl('', [Validators.required]),
+        identityNumber: new FormControl('', [Validators.required]),
         phone: new FormControl('', [Validators.required]),
         birthday: new FormControl('', [Validators.required]),
     });
@@ -83,6 +86,7 @@ export class ActivateComponent implements OnInit {
         return {
             'name': form.name.value,
             'surname': form.surname.value,
+            'identityNumber': form.identityNumber.value.toString(),
             'phone': form.phone.value.toString(),
             'birthday': form.birthday.value
         }

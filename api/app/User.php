@@ -15,8 +15,8 @@ class User extends Authenticatable {
      * @var array
      */
     protected $fillable = [
-        USERNAME, EMAIL, TYPE, PASSWORD, NAME, SURNAME, BIRTHDAY, SEX, PHONE, CITY, DISTRICT, ADDRESS, PICTURE, IBAN,
-        BUDGET, PROMOTION, TICKET, RANKING, PREVIOUS_RANKING, ONESIGNAL_DEVICE_ID, STATE
+        USERNAME, EMAIL, TYPE, PASSWORD, NAME, SURNAME, BIRTHDAY, SEX, PHONE, COUNTRY, CITY, DISTRICT, ADDRESS,
+        GOOGLE_MAP_ADDRESS, PICTURE, BUDGET, PROMOTION, TICKET, RANKING, PREVIOUS_RANKING, ONESIGNAL_DEVICE_ID, STATE
     ];
 
     /**
@@ -30,6 +30,10 @@ class User extends Authenticatable {
 
     public function finance() {
         return $this->hasMany('App\Finance');
+    }
+
+    public function merchant() {
+        return $this->hasOne('App\Merchant');
     }
 
     public function tournament() {
