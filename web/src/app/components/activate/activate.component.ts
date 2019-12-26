@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { first } from 'rxjs/operators';
 import { UserType } from '../../interfaces/user-type';
 import { loaded, loading } from '../../store/actions/progress.action';
 import { UserService } from '../../services/user/user.service';
@@ -9,6 +10,7 @@ import { UtilityService } from '../../services/utility/utility.service';
 import { IHttpResponse } from '../../interfaces/i-http-response';
 import { set } from '../../store/actions/user.action';
 import { DATE_TIME } from '../../constants/date-time.constant';
+import { TYPES } from '../../constants/types.constant';
 
 @Component({
   selector: 'app-activate',
@@ -23,6 +25,7 @@ export class ActivateComponent implements OnInit {
     public selectedDay: number = 1;
     public selectedMonth: number = 1;
     public selectedYear: number = this.currentDate.getFullYear() - 18;
+    public MERCHANT_TYPES;
     public MONTHS_MAP = DATE_TIME.MONTHS_MAP;
     private _user: UserType;
 
@@ -32,6 +35,8 @@ export class ActivateComponent implements OnInit {
         identityNumber: new FormControl('', [Validators.required]),
         phone: new FormControl('', [Validators.required]),
         birthday: new FormControl('', [Validators.required]),
+        merchantType: new FormControl(''),
+        companyTitle: new FormControl('')
     });
 
     constructor(private store: Store<{user: UserType}>, private progress: Store<{progress: boolean}>,
@@ -39,6 +44,11 @@ export class ActivateComponent implements OnInit {
         for (let i = 1; i <= 31; i++) this.days.push(i);
         for (let i = 1; i <= 12; i++) this.months.push(i);
         for (let i = this.currentDate.getFullYear(); i >= this.currentDate.getFullYear() - 70; i--) this.years.push(i);
+        this.MERCHANT_TYPES = [];
+        Object.keys(TYPES.MERCHANT_TYPES).forEach((key: string) => {
+            this.MERCHANT_TYPES.push({name: TYPES.MERCHANT_TYPES[key], value: key});
+        });
+        this.activateForm.controls.merchantType.setValue(this.MERCHANT_TYPES[0].value);
     }
 
     ngOnInit() {
@@ -75,11 +85,13 @@ export class ActivateComponent implements OnInit {
         this.activateForm.controls.birthday.setValue(birthday.getTime().toString());
     }
 
-    private fetchUser() {
-        this.store.select('user').subscribe((data: UserType) => {
-            this.user = data;
-        });
-    }
+    private fetchUser = async () => {
+        this.user = await this.store.select('user').pipe(first()).toPromise();
+        if (this.user.type === TYPES.USER.HOLDER) {
+            this.activateForm.controls.merchantType.setValidators([Validators.required]);
+            this.activateForm.controls.companyTitle.setValidators([Validators.required]);
+        }
+    };
 
     private setActivateFormData() {
         let form = this.activateForm.controls;

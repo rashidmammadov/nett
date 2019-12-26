@@ -22,6 +22,12 @@ export const TYPES = {
 
     MAX_PARTICIPATION_FEE: 20,
 
+    MERCHANT_TYPES: {
+        'PERSONAL': 'Bireysel',
+        'PRIVATE_COMPANY': 'Şahıs Şirketi',
+        'LIMITED_OR_JOINT_STOCK_COMPANY': 'Limited veya Anonim Şirket'
+    },
+
     PAYMENT: {
         'MONEY': 'money',
         'TICKET': 'ticket'

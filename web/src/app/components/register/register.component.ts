@@ -22,7 +22,7 @@ export class RegisterComponent implements OnInit {
     public regions: object[] = [];
     public cities: string[] = [];
     public districts: any;
-    public userTypes: object[] = [{value: 'holder', name: 'Holder'}, {value: 'player', name: 'Player'}];
+    public userTypes: object[] = [{value: 'holder', name: 'Turnuva Düzenlemek İstiyorum'}, {value: 'player', name: 'Yarışmak İstiyorum'}];
 
     registerForm = new FormGroup({
         username: new FormControl('', [Validators.required, Validators.pattern(REGEX.USERNAME)]),

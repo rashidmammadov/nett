@@ -21,7 +21,7 @@ class UserController extends ApiController {
     }
 
     /**
-     * @description: refresh user by token
+     * Refresh user by token
      * @return mixed: User info
      */
     public function refreshUser() {
@@ -42,7 +42,7 @@ class UserController extends ApiController {
     }
 
     /**
-     * @description: authorized user to login.
+     * Authorized user to login.
      * @param Request $request
      * @return mixed
      */
@@ -86,7 +86,7 @@ class UserController extends ApiController {
     }
 
     /**
-     * @description handle request to create new user.
+     * Handle request to create new user.
      * @param Request $request
      * @return mixed
      */
@@ -126,7 +126,7 @@ class UserController extends ApiController {
     }
 
     /**
-     * @description handle request to reset password of user with given email.
+     * Handle request to reset password of user with given email.
      * @param Request $request - hold the user`s email address.
      * @return mixed
      */
@@ -149,7 +149,7 @@ class UserController extends ApiController {
     }
 
     /**
-     * @description handle request to activate user.
+     * Handle request to activate user.
      * @param Request $request
      * @return mixed
      */
@@ -178,7 +178,7 @@ class UserController extends ApiController {
     }
 
     /**
-     * @description: logout user and clear token.
+     * Logout user and clear token.
      * @return mixed
      */
     public function logout() {
@@ -196,7 +196,7 @@ class UserController extends ApiController {
     }
 
     /**
-     * @description: update password of user.
+     * Update password of user.
      * @param Request $request
      * @return mixed
      */
@@ -229,7 +229,7 @@ class UserController extends ApiController {
     }
 
     /**
-     * @description: update settings of user.
+     * Update settings of user.
      * @param Request $request
      * @return mixed
      */
@@ -246,7 +246,7 @@ class UserController extends ApiController {
     }
 
     /**
-     * @description: login user if exist.
+     * Login user if exist.
      * @param Request $request
      * @param boolean $newUser
      * @return mixed
@@ -267,7 +267,7 @@ class UserController extends ApiController {
     }
 
     /**
-     * @description: set random avatar for user.
+     * Set random avatar for user.
      * @return mixed
      */
     private function addRandomAvatar() {

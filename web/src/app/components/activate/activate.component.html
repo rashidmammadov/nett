@@ -7,21 +7,23 @@
             </mat-card-header>
             <mat-card-content>
                 <form ngNoForm fxLayout="column" [formGroup]="activateForm">
-                    <mat-form-field fxFlex appearance="outline">
-                        <mat-label>İsim</mat-label>
-                        <input matInput placeholder="İsim" formControlName="name">
-                        <mat-error *ngIf="activateForm.controls.name.hasError('required')">
-                            İsim alanı boş bırakılamaz.
-                        </mat-error>
-                    </mat-form-field>
+                    <div fxLayout="row" fxLayout.lt-md="column" fxFlex fxLayoutGap="4%" fxLayoutGap.lt-md="8px">
+                        <mat-form-field fxFlex="48%" fxFlex.lt-md appearance="outline">
+                            <mat-label>İsim</mat-label>
+                            <input matInput placeholder="İsim" formControlName="name">
+                            <mat-error *ngIf="activateForm.controls.name.hasError('required')">
+                                İsim alanı boş bırakılamaz.
+                            </mat-error>
+                        </mat-form-field>
 
-                    <mat-form-field fxFlex appearance="outline">
-                        <mat-label>Soyisim</mat-label>
-                        <input matInput placeholder="Soyisim" formControlName="surname">
-                        <mat-error *ngIf="activateForm.controls.surname.hasError('required')">
-                            Soyisim alanı boş bırakılamaz.
-                        </mat-error>
-                    </mat-form-field>
+                        <mat-form-field fxFlex="48%" fxFlex.lt-md  appearance="outline">
+                            <mat-label>Soyisim</mat-label>
+                            <input matInput placeholder="Soyisim" formControlName="surname">
+                            <mat-error *ngIf="activateForm.controls.surname.hasError('required')">
+                                Soyisim alanı boş bırakılamaz.
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
 
                     <mat-form-field fxFlex appearance="outline">
                         <mat-label>TC Numarası</mat-label>
@@ -50,7 +52,7 @@
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
-                        <mat-form-field fxFlex="33%" appearance="outline">
+                        <mat-form-field fxFlex="32%" appearance="outline">
                             <mat-label>Ay</mat-label>
                             <mat-select [(value)]="selectedMonth" (valueChange)="setBirthday()">
                                 <mat-option *ngFor="let month of months" [value]="month">
@@ -67,6 +69,23 @@
                             </mat-select>
                         </mat-form-field>
                     </div>
+
+                    <mat-form-field fxFlex appearance="outline">
+                        <mat-label>Şirket Tipi</mat-label>
+                        <mat-select formControlName="merchantType">
+                            <mat-option *ngFor="let type of MERCHANT_TYPES" [value]="type.value">
+                                {{type.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field fxFlex appearance="outline">
+                        <mat-label>Şirketin Resmi Adı</mat-label>
+                        <input matInput placeholder="İsim" formControlName="companyTitle">
+                        <mat-error *ngIf="activateForm.controls.companyTitle.hasError('required')">
+                            Şirket ismi alanı boş bırakılamaz.
+                        </mat-error>
+                    </mat-form-field>
 
                     <button mat-flat-button color="primary" type="sumbit" mat-button (click)="activate()"
                             [disabled]="!activateForm.valid">Devam Et</button>
