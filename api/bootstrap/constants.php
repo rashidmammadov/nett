@@ -106,6 +106,7 @@ define('MATCH_RESULT_UPDATED_SUCCESSFULLY', 'Maç sonucu başarıyla güncellend
 define('MAX_AVATAR_COUNT', 31);
 define('MAX_EARNINGS', 92);
 define('MAXIMUM_PARTICIPANTS_COUNT_LIMIT', 'Turnuva katılımcı sayısı limiti dolmuştur');
+define('MERCHANT', 'merchant');
 define('MERCHANT_ID', 'merchantId');
 define('MERCHANT_TYPE', 'merchantType');
 define('MERCHANT_KEY', 'merchantKey');

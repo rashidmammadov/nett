@@ -1,13 +1,13 @@
 <div class="container">
-    <div fxFlex="30%" fxFlex.lt-md="100%" fxFlexOffset="35%" fxFlexOffset.lt-md="0">
+    <div fxFlex="40%" fxFlex.lt-md="100%" fxFlexOffset="30%" fxFlexOffset.lt-md="0">
         <mat-card class="mat-elevation-z4">
             <mat-card-header fxLayout="column" fxLayoutAlign="center center">
                 <img *ngIf="user" mat-card-image src="{{user.picture}}" alt="{{user.username}}">
                 <p *ngIf="user">{{user.username}}</p>
             </mat-card-header>
             <mat-card-content>
-                <form ngNoForm fxLayout="column" [formGroup]="activateForm">
-                    <div fxLayout="row" fxLayout.lt-md="column" fxFlex fxLayoutGap="4%" fxLayoutGap.lt-md="8px">
+                <form *ngIf="activateForm" ngNoForm fxLayout="column" [formGroup]="activateForm">
+                    <div fxLayout="row" fxLayout.lt-md="column" fxFlex fxLayoutGap="4%" fxLayoutGap.lt-md="0">
                         <mat-form-field fxFlex="48%" fxFlex.lt-md appearance="outline">
                             <mat-label>İsim</mat-label>
                             <input matInput placeholder="İsim" formControlName="name">
@@ -16,7 +16,7 @@
                             </mat-error>
                         </mat-form-field>
 
-                        <mat-form-field fxFlex="48%" fxFlex.lt-md  appearance="outline">
+                        <mat-form-field fxFlex="48%" fxFlex.lt-md appearance="outline">
                             <mat-label>Soyisim</mat-label>
                             <input matInput placeholder="Soyisim" formControlName="surname">
                             <mat-error *ngIf="activateForm.controls.surname.hasError('required')">
@@ -70,16 +70,33 @@
                         </mat-form-field>
                     </div>
 
-                    <mat-form-field fxFlex appearance="outline">
-                        <mat-label>Şirket Tipi</mat-label>
-                        <mat-select formControlName="merchantType">
-                            <mat-option *ngFor="let type of MERCHANT_TYPES" [value]="type.value">
-                                {{type.name}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
+                    <div *ngIf="isHolder()" fxLayout="row" fxLayout.lt-md="column" fxFlex fxLayoutGap="4%"
+                         fxLayoutGap.lt-md="0">
+                        <mat-form-field fxFlex="48%" fxFlex.lt-md appearance="outline">
+                            <mat-label>Şirket Tipi</mat-label>
+                            <mat-select formControlName="merchantType">
+                                <mat-option *ngFor="let type of MERCHANT_TYPES" [value]="type.value">
+                                    {{type.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
 
-                    <mat-form-field fxFlex appearance="outline">
+                        <mat-form-field fxFlex="48%" fxFlex.lt-md appearance="outline">
+                            <mat-label>Vergi Dairesi</mat-label>
+                            <input type="text" placeholder="Vergi Dairesi" aria-label="Tax Office" matInput
+                                   formControlName="taxOffice" [matAutocomplete]="auto">
+                            <mat-error *ngIf="activateForm.controls.taxOffice.hasError('required')">
+                                Vergi dairesi alanı boş bırakılamaz.
+                            </mat-error>
+                            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                                <mat-option *ngFor="let to of filteredTaxOffices | async" [value]="to.taxOffice">
+                                    {{to.taxOffice}}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </div>
+
+                    <mat-form-field *ngIf="isHolder()" fxFlex appearance="outline">
                         <mat-label>Şirketin Resmi Adı</mat-label>
                         <input matInput placeholder="İsim" formControlName="companyTitle">
                         <mat-error *ngIf="activateForm.controls.companyTitle.hasError('required')">

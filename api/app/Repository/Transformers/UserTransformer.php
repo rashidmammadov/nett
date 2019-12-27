@@ -30,7 +30,8 @@ class UserTransformer extends Transformer {
             DISTRICT => $user[DISTRICT],
             RANKING => $user[RANKING],
             PREVIOUS_RANKING => $user[PREVIOUS_RANKING],
-            STATE => $user[STATE]
+            STATE => $user[STATE],
+            MERCHANT => $user[MERCHANT]
         ];
     }
 }

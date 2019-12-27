@@ -1,4 +1,4 @@
-import { environment } from "../../environments/environment";
+import { environment } from '../../environments/environment';
 
 const PREFIX = environment.apiPrefix;
 
@@ -23,7 +23,7 @@ export const ENDPOINTS = {
 
     REGISTER: () => `${PREFIX}register`,
 
-    REGIONS: () => 'http://api.ozelden.com/api/v1/data?regions=true',
+    REGIONS: (regions: boolean, taxOffices: boolean) => `${PREFIX}data?regions=${regions}&taxOffices=${taxOffices}`,
 
     REPORTS: (reportType: string) => `${PREFIX}reports?reportType=${reportType}`,
 

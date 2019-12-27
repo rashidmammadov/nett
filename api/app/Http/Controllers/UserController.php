@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Queries\MySQL\ApiQuery;
 use App\Http\Utility\Email;
+use App\Http\Utility\Merchant;
 use App\Repository\Transformers\UserTransformer;
 use Illuminate\Http\Request;
 use \Illuminate\Http\Response as Res;
@@ -27,12 +28,16 @@ class UserController extends ApiController {
     public function refreshUser() {
         try {
             $user = JWTAuth::parseToken()->authenticate();
+            $merchant = new Merchant(ApiQuery::getMerchant($user[IDENTIFIER]));
+            $user[MERCHANT] = $merchant::get();
             return $this->respondCreated("Get User", $this->userTransformer->transform($user));
         } catch (TokenExpiredException $e){
             $refreshedToken = JWTAuth::refresh(JWTAuth::getToken());
             $user = JWTAuth::setToken($refreshedToken)->toUser();
             $user->remember_token = $refreshedToken;
             $user->save();
+            $merchant = new Merchant(ApiQuery::getMerchant($user[IDENTIFIER]));
+            $user[MERCHANT] = $merchant::get();
             return $this->respondCreated("Token Refreshed", $this->userTransformer->transform($user));
         } catch (JWTException $e) {
             $this->setStatusCode($e->getStatusCode());
@@ -71,6 +76,8 @@ class UserController extends ApiController {
 
                 try {
                     $user = JWTAuth::toUser($remember_token);
+                    $merchant = new Merchant(ApiQuery::getMerchant($user[IDENTIFIER]));
+                    $user[MERCHANT] = $merchant::get();
                     return $this->respondCreated(LOGGED_IN_SUCCESSFULLY, $this->userTransformer->transform($user));
                 } catch (JWTException $e) {
                     $user->remember_token = NULL;
@@ -117,8 +124,12 @@ class UserController extends ApiController {
                         return $this->respondWithError(PASSWORD_VALIDATION_FAILED);
                     } else {
                         $request[PICTURE] = $this->addRandomAvatar();
-                        ApiQuery::setUser($request);
-                        return $this->login($request, true);
+                        $queryResult = ApiQuery::setUser($request);
+                        if ($queryResult) {
+                            return $this->login($request, true);
+                        } else {
+                            return $this->respondWithError(SOMETHING_WRONG_WITH_DB);
+                        }
                     }
                 }
             }
@@ -160,7 +171,8 @@ class UserController extends ApiController {
                 NAME => 'required',
                 SURNAME => 'required',
                 PHONE => 'required',
-                BIRTHDAY => 'required'
+                BIRTHDAY => 'required',
+                MERCHANT_TYPE => 'required'
             );
 
             $validator = Validator::make($request->all(), $rules);
@@ -168,6 +180,7 @@ class UserController extends ApiController {
                 return $this->respondValidationError(FIELDS_VALIDATION_FAILED, $validator->errors());
             } else {
                 $data = ApiQuery::activateUser($user[IDENTIFIER], $request);
+                $data[MERCHANT] = ApiQuery::setMerchant($user[IDENTIFIER], $request);
                 return $this->respondCreated(USER_ACTIVATED, $this->userTransformer->transform($data));
             }
         } catch (JWTException $e) {
@@ -263,6 +276,8 @@ class UserController extends ApiController {
         if ($newUser) {
             Email::send(WELCOME_EMAIL, $request);
         }
+        $merchant = new Merchant(ApiQuery::getMerchant($user[IDENTIFIER]));
+        $user[MERCHANT] = $merchant::get();
         return $this->respondCreated(LOGGED_IN_SUCCESSFULLY, $this->userTransformer->transform($user));
     }
 

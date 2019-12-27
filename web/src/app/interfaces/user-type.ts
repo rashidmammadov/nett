@@ -1,3 +1,5 @@
+import { MerchantType } from './merchant-type';
+
 export interface UserType {
     address?: string;
     birthday?: string | number;
@@ -17,4 +19,5 @@ export interface UserType {
     ticket?: string | number;
     type: string;
     username: string;
+    merchant?: MerchantType
 }

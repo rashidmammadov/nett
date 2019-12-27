@@ -6,6 +6,7 @@ use App\Finance;
 use App\Fixture;
 use App\Game;
 use App\Match;
+use App\Merchant;
 use App\Participant;
 use App\Tournament;
 use App\User;
@@ -31,7 +32,7 @@ class ApiQuery {
                 ->paginate($itemPerPage);
             return $queryResult;
         } catch (QueryException $e) {
-            self::throwException($e, debug_backtrace());
+            self::logException($e, debug_backtrace());
         }
     }
 
@@ -55,7 +56,7 @@ class ApiQuery {
             $queryResult = Finance::create($finance);
             return $queryResult;
         } catch (QueryException $e) {
-            self::throwException($e, debug_backtrace());
+            self::logException($e, debug_backtrace());
         }
     }
 
@@ -361,6 +362,46 @@ class ApiQuery {
         return $queryResult;
     }
 
+    /** -------------------- MERCHANT QUERIES -------------------- **/
+
+    /**
+     * @description query to set merchant data.
+     * @param integer $userId - the id user
+     * @param $merchant - the data of merchant
+     * @return mixed
+     */
+    public static function setMerchant($userId, $merchant) {
+        try {
+            $queryResult = Merchant::create([
+                MERCHANT_ID => $userId,
+                MERCHANT_TYPE => $merchant[MERCHANT_TYPE],
+                MERCHANT_KEY => $merchant[MERCHANT_KEY],
+                IDENTITY_NUMBER => $merchant[IDENTITY_NUMBER],
+                TAX_OFFICE => $merchant[TAX_OFFICE],
+                COMPANY_TITLE => $merchant[COMPANY_TITLE],
+                IBAN => $merchant[IBAN]
+            ]);
+            return $queryResult;
+        } catch (QueryException $e) {
+            self::logException($e, debug_backtrace());
+        }
+    }
+
+    /**
+     * @description query to get merchant data.
+     * @param integer $userId - the id user
+     * @return mixed
+     */
+    public static function getMerchant($userId) {
+        try {
+            $queryResult = Merchant::where(MERCHANT_ID, EQUAL_SIGN, $userId)
+                ->first();
+            return $queryResult;
+        } catch (QueryException $e) {
+            self::logException($e, debug_backtrace());
+        }
+    }
+
     /** -------------------- TOURNAMENT QUERIES -------------------- **/
 
     /**
@@ -565,21 +606,26 @@ class ApiQuery {
     }
 
     /**
-     * @description query to create new user.
+     * Query to create new user.
      * @param mixed $user
      * @return mixed
      */
     public static function setUser($user) {
-        User::create([
-            TYPE => $user[TYPE],
-            USERNAME => $user[USERNAME],
-            EMAIL => $user[EMAIL],
-            PASSWORD => \Hash::make($user[PASSWORD]),
-            CITY => $user[CITY],
-            DISTRICT => $user[DISTRICT],
-            PICTURE => $user[PICTURE],
-            ONESIGNAL_DEVICE_ID => $user[ONESIGNAL_DEVICE_ID]
-        ]);
+        try {
+            User::create([
+                TYPE => $user[TYPE],
+                USERNAME => $user[USERNAME],
+                EMAIL => $user[EMAIL],
+                PASSWORD => \Hash::make($user[PASSWORD]),
+                CITY => $user[CITY],
+                DISTRICT => $user[DISTRICT],
+                PICTURE => $user[PICTURE],
+                ONESIGNAL_DEVICE_ID => $user[ONESIGNAL_DEVICE_ID]
+            ]);
+            return true;
+        } catch (QueryException $e) {
+            self::logException($e, debug_backtrace());
+        }
     }
 
     /**
@@ -630,7 +676,7 @@ class ApiQuery {
                 ->update([BUDGET => $budget]);
             return $queryResult;
         } catch (QueryException $e) {
-            self::throwException($e, debug_backtrace());
+            self::logException($e, debug_backtrace());
         }
     }
 
@@ -793,12 +839,12 @@ class ApiQuery {
 
     /**
      * Log exception error.
-     * @param QueryException $e - holds the exception.
+     * @param QueryException $exception - holds the exception.
      * @param array $backtrace - holds the backtrace array.
      */
-    private static function throwException(QueryException $e, $backtrace) {
+    private static function logException(QueryException $exception, $backtrace) {
         $caller = array_shift($backtrace);
-        Log::error($e->getMessage() . ' (' . $caller['class'] . '->' . $caller['function'] . ':' . $caller['line'] . ')');
+        Log::error($exception->getMessage() . ' (' . $caller['class'] . '->' . $caller['function'] . ':' . $caller['line'] . ')');
     }
 
 }

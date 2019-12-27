@@ -12,8 +12,8 @@ export class DataService {
 
     constructor(private http: HttpClient) { }
 
-    getRegions(): Promise<ErrorResponse | IHttpResponse> {
-        return UtilityService.pipeHttpResponse(this.http.get<IHttpResponse>(ENDPOINTS.REGIONS()));
+    get(regions: boolean = false, taxOffices: boolean = false): Promise<ErrorResponse | IHttpResponse> {
+        return UtilityService.pipeHttpResponse(this.http.get<IHttpResponse>(ENDPOINTS.REGIONS(regions, taxOffices)));
     }
 
 }

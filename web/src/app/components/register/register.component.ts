@@ -62,7 +62,7 @@ export class RegisterComponent implements OnInit {
 
     private getRegions = async () => {
         this.progress.dispatch(loading());
-        const result = await this.dataService.getRegions();
+        const result = await this.dataService.get(true, false);
         UtilityService.handleResponseFromService(result, (response: IHttpResponse) => {
             this.regions = response.data.regions;
             this.cities = Object.keys(response.data.regions);
