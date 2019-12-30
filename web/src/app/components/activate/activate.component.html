@@ -104,6 +104,14 @@
                         </mat-error>
                     </mat-form-field>
 
+                    <mat-form-field appearance="outline" fxFlex>
+                        <mat-label>{{isHolder() ? 'İş Yeri Adresi' : 'Adres'}}</mat-label>
+                        <textarea matInput [placeholder]="isHolder() ? 'İş Yeri Adresi' : 'Adres'" formControlName="address"></textarea>
+                        <mat-error *ngIf="activateForm.controls.address.hasError('required')">
+                            {{isHolder() ? 'İş Yeri Adresi' : 'Adres'}} alanı boş bırakılamaz.
+                        </mat-error>
+                    </mat-form-field>
+
                     <button mat-flat-button color="primary" type="sumbit" mat-button (click)="activate()"
                             [disabled]="!activateForm.valid">Devam Et</button>
                 </form>

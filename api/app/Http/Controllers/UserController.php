@@ -9,6 +9,7 @@ use App\Http\Utility\Merchant;
 use App\Repository\Transformers\UserTransformer;
 use Illuminate\Http\Request;
 use \Illuminate\Http\Response as Res;
+use Illuminate\Support\Facades\Log;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
@@ -173,7 +174,8 @@ class UserController extends ApiController {
                 SURNAME => 'required',
                 PHONE => 'required',
                 BIRTHDAY => 'required',
-                MERCHANT_TYPE => 'required'
+                MERCHANT_TYPE => 'required',
+                ADDRESS => 'required'
             );
 
             $validator = Validator::make($request->all(), $rules);

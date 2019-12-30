@@ -2,6 +2,7 @@
 
 namespace App\Http\Utility;
 
+use App\Http\Queries\MySQL\ApiQuery;
 use Illuminate\Support\Facades\Log;
 use Iyzipay\Model;
 use Iyzipay\Options;
@@ -25,7 +26,7 @@ class Iyzico {
     }
 
     /**
-     * Set new sub merchant for iyzico account.
+     * Set new sub merchant for iyzico account and save on db.
      *
      * @param Merchant $merchant - holds the merchant data.
      * @param $user - holds the user data.
@@ -34,8 +35,8 @@ class Iyzico {
     public function setIyzicoSubMerchant(Merchant $merchant, $user) {
         $request = new CreateSubMerchantRequest();
         $request->setLocale(Model\Locale::TR);
-        $request->setConversationId(null);
-        $request->setSubMerchantExternalId($merchant->getMerchantId());
+        $request->setConversationId($user[USERNAME]);
+        $request->setSubMerchantExternalId($user[IDENTIFIER]);
         $request->setSubMerchantType($merchant->getMerchantType());
         $request->setAddress($user[ADDRESS]);
         $request->setTaxOffice($merchant->getTaxOffice());
@@ -50,7 +51,11 @@ class Iyzico {
         $request->setCurrency(Model\Currency::TL);
 
         $subMerchant = Model\SubMerchant::create($request, $this->getOptions());
-        Log::error($subMerchant->getErrorMessage());
+        if ($subMerchant->getErrorCode()) {
+            Log::error('IYZICO: ' . $subMerchant->getErrorMessage());
+        } else {
+            ApiQuery::setMerchantKey($user[IDENTIFIER], $subMerchant->getSubMerchantKey());
+        }
         return $subMerchant->getSubMerchantKey();
     }
 

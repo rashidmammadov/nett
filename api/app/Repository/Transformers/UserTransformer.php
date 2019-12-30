@@ -28,6 +28,7 @@ class UserTransformer extends Transformer {
             REMEMBER_TOKEN => $user[REMEMBER_TOKEN],
             CITY => $user[CITY],
             DISTRICT => $user[DISTRICT],
+            ADDRESS => $user[ADDRESS],
             RANKING => $user[RANKING],
             PREVIOUS_RANKING => $user[PREVIOUS_RANKING],
             STATE => $user[STATE],

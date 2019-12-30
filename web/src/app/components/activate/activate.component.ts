@@ -69,6 +69,7 @@ export class ActivateComponent implements OnInit {
                 this.user.phone = response.data.phone;
                 this.user.birthday = response.data.birthday;
                 this.user.state = response.data.state;
+                this.user.address = response.data.address;
                 this.user.merchant = response.data.merchant;
                 this.store.dispatch(set({user: this.user}));
                 this.router.navigateByUrl('app/home');
@@ -114,7 +115,8 @@ export class ActivateComponent implements OnInit {
             birthday: new FormControl('', [Validators.required]),
             merchantType: new FormControl(this.MERCHANT_TYPES[0].value, [Validators.required]),
             companyTitle: new FormControl('', this.isHolder() ? [Validators.required] : null),
-            taxOffice: new FormControl('', this.isHolder() ? [Validators.required] : null)
+            taxOffice: new FormControl('', this.isHolder() ? [Validators.required] : null),
+            address: new FormControl('', [Validators.required])
         });
         this.setBirthday();
         this.filteredTaxOffices = this.activateForm.controls.taxOffice.valueChanges.pipe(
@@ -133,7 +135,8 @@ export class ActivateComponent implements OnInit {
             'birthday': form.birthday.value,
             'merchantType': form.merchantType.value,
             'companyTitle': form.companyTitle.value,
-            'taxOffice': form.taxOffice.value
+            'taxOffice': form.taxOffice.value,
+            'address': form.address.value
         }
     }
 

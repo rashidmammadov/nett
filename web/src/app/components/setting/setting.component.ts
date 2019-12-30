@@ -39,7 +39,7 @@ export class SettingComponent implements OnInit {
         district: new FormControl('', [Validators.required]),
         phone: new FormControl('', [Validators.required]),
         iban: new FormControl(''),
-        address: new FormControl('')
+        address: new FormControl('', [Validators.required])
     });
 
     constructor(private store: Store<{user: UserType, progress: boolean}>, private dataService: DataService,

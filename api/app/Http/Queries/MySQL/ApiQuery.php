@@ -388,6 +388,22 @@ class ApiQuery {
     }
 
     /**
+     * Query to update merchant key.
+     * @param integer $merchantId - id of merchant.
+     * @param string $merchantKey - key of merchant from iyzico.
+     * @return mixed
+     */
+    public static function setMerchantKey($merchantId, $merchantKey) {
+        try {
+            $queryResult = Merchant::where(MERCHANT_ID, EQUAL_SIGN, $merchantId)
+                ->update([MERCHANT_KEY => $merchantKey]);
+            return $queryResult;
+        } catch (QueryException $e) {
+            self::logException($e, debug_backtrace());
+        }
+    }
+
+    /**
      * @description query to get merchant data.
      * @param integer $userId - the id user
      * @return mixed
@@ -640,6 +656,7 @@ class ApiQuery {
         !empty($parameters[SURNAME])            && ($user[SURNAME] = $parameters[SURNAME]);
         !empty($parameters[PHONE])              && ($user[PHONE] = $parameters[PHONE]);
         !empty($parameters[BIRTHDAY])           && ($user[BIRTHDAY] = strval($parameters[BIRTHDAY]));
+        !empty($parameters[ADDRESS])            && ($user[ADDRESS] = strval($parameters[ADDRESS]));
         ($user[STATE] == USER_STATE_DISABLE)    && ($user[STATE] = USER_STATE_ACTIVE);
         $user->save();
         return $user;
@@ -658,7 +675,6 @@ class ApiQuery {
         !empty($parameters[CITY])       && ($user[CITY] = $parameters[CITY]);
         !empty($parameters[DISTRICT])   && ($user[DISTRICT] = $parameters[DISTRICT]);
         !empty($parameters[PHONE])      && ($user[PHONE] = $parameters[PHONE]);
-        !empty($parameters[IBAN])       && ($user[IBAN] = $parameters[IBAN]);
         !empty($parameters[ADDRESS])    && ($user[ADDRESS] = $parameters[ADDRESS]);
         $user->save();
         return $user;
