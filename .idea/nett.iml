@@ -35,6 +35,7 @@
       <excludeFolder url="file://$MODULE_DIR$/api/vendor/guzzlehttp/psr7" />
       <excludeFolder url="file://$MODULE_DIR$/api/vendor/hamcrest/hamcrest-php" />
       <excludeFolder url="file://$MODULE_DIR$/api/vendor/intervention/image" />
+      <excludeFolder url="file://$MODULE_DIR$/api/vendor/iyzico/iyzipay-php" />
       <excludeFolder url="file://$MODULE_DIR$/api/vendor/jakub-onderka/php-console-color" />
       <excludeFolder url="file://$MODULE_DIR$/api/vendor/jakub-onderka/php-console-highlighter" />
       <excludeFolder url="file://$MODULE_DIR$/api/vendor/laravel/framework" />
