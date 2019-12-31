@@ -10,7 +10,7 @@ class Merchant extends Model {
     protected $primaryKey = MERCHANT_ID;
 
     protected $fillable = [
-        MERCHANT_ID, MERCHANT_TYPE, MERCHANT_KEY, IDENTITY_NUMBER, TAX_OFFICE, COMPANY_TITLE, IBAN
+        MERCHANT_ID, MERCHANT_TYPE, MERCHANT_KEY, IDENTITY_NUMBER, TAX_OFFICE, TAX_NUMBER, COMPANY_TITLE, IBAN
     ];
 
     public function user() {

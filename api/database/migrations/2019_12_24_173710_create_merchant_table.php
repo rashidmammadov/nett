@@ -18,6 +18,7 @@ class CreateMerchantTable extends Migration {
             $table->string(MERCHANT_KEY, 50)->nullable();
             $table->string(IDENTITY_NUMBER, 11);
             $table->string(TAX_OFFICE, 100)->nullable();
+            $table->string(TAX_NUMBER, 11)->nullable();
             $table->string(COMPANY_TITLE, 500)->nullable();
             $table->string(IBAN, 30)->nullable();
             $table->timestamps();

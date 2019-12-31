@@ -9,6 +9,7 @@ class Merchant {
     private $merchantKey;
     private $identityNumber;
     private $taxOffice;
+    private $taxNumber;
     private $companyTitle;
     private $iban;
 
@@ -18,6 +19,7 @@ class Merchant {
         $this->setMerchantKey($parameters[MERCHANT_KEY]);
         $this->setIdentityNumber($parameters[IDENTITY_NUMBER]);
         $this->setTaxOffice($parameters[TAX_OFFICE]);
+        $this->setTaxNumber($parameters[TAX_NUMBER]);
         $this->setCompanyTitle($parameters[COMPANY_TITLE]);
         $this->setIban($parameters[IBAN]);
     }
@@ -29,6 +31,7 @@ class Merchant {
             MERCHANT_KEY => $this->getMerchantKey(),
             IDENTITY_NUMBER => $this->getIdentityNumber(),
             TAX_OFFICE => $this->getTaxOffice(),
+            TAX_NUMBER => $this->getTaxNumber(),
             COMPANY_TITLE => $this->getCompanyTitle(),
             IBAN => $this->getIban()
         );
@@ -53,6 +56,10 @@ class Merchant {
     public function getTaxOffice() { return $this->taxOffice; }
 
     public function setTaxOffice($taxOffice): void { $this->taxOffice = $taxOffice; }
+
+    public function getTaxNumber() { return $this->taxNumber; }
+
+    public function setTaxNumber($taxNumber): void { $this->taxNumber = $taxNumber; }
 
     public function getCompanyTitle() { return $this->companyTitle; }
 

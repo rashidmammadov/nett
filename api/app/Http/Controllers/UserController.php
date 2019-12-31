@@ -251,6 +251,42 @@ class UserController extends ApiController {
     }
 
     /**
+     * Update merchant data of user.
+     * @param Request $request
+     * @return mixed
+     */
+    public function updateMerchant(Request $request) {
+        try {
+            $user = JWTAuth::parseToken()->authenticate();
+            $rules = array(
+                IBAN => 'required',
+                IDENTITY_NUMBER => 'required',
+                MERCHANT_TYPE => 'required'
+            );
+
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return $this->respondValidationError(FIELDS_VALIDATION_FAILED, $validator->errors());
+            } else {
+                $merchantQueryResult = ApiQuery::updateMerchant($user[IDENTIFIER], $request);
+                if ($merchantQueryResult) {
+                    $merchant = new Merchant($merchantQueryResult);
+                    $iyzico = new Iyzico();
+                    $merchantKey = $iyzico->updateIyzicoSubMerchant($merchant, $user);
+                    $merchant->setMerchantKey($merchantKey);
+                    return $this->respondCreated(MERCHANT_UPDATED_SUCCESSFULLY, $merchant->get());
+                } else {
+                    $this->respondWithError(SOMETHING_WRONG_WITH_DB);
+                }
+            }
+        } catch(JWTException $e) {
+            $this->setStatusCode($e->getStatusCode());
+            $this->setMessage(AUTHENTICATION_ERROR);
+            return $this->respondWithError($this->getMessage());
+        }
+    }
+
+    /**
      * Update settings of user.
      * @param Request $request
      * @return mixed

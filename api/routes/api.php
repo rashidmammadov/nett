@@ -52,6 +52,7 @@ Route::group(['middleware' => 'cors', 'prefix' => '/v1'], function () {
     Route::post('/resetPassword', 'UserController@resetPassword');
     Route::put('/activate', 'UserController@activate');
     Route::put('/updatePassword', 'UserController@updatePassword');
+    Route::put('/updateMerchant', 'UserController@updateMerchant');
     Route::put('/updateSettings', 'UserController@updateSettings');
 
     Route::post('/participants', 'ParticipantController@attend');

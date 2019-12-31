@@ -43,6 +43,8 @@ export const ENDPOINTS = {
 
     UPDATE_PASSWORD: () => `${PREFIX}updatePassword`,
 
+    UPDATE_MERCHANT: () => `${PREFIX}updateMerchant`,
+
     UPDATE_SETTINGS: () => `${PREFIX}updateSettings`,
 
 };

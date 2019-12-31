@@ -43,9 +43,9 @@
                         </mat-error>
                     </mat-form-field>
 
-                    <div style="margin-top: 8px" fxLayout="row" fxFlex fxLayoutGap="8px">
+                    <div class="mTop-8" fxLayout="row" fxFlex fxLayoutGap="8px">
                         <mat-form-field fxFlex="32%" appearance="outline">
-                            <mat-label>Gün</mat-label>
+                            <mat-label>Gün (Doğum)</mat-label>
                             <mat-select [(value)]="selectedDay" (valueChange)="setBirthday()">
                                 <mat-option *ngFor="let day of days" [value]="day">
                                     {{day}}
@@ -53,7 +53,7 @@
                             </mat-select>
                         </mat-form-field>
                         <mat-form-field fxFlex="32%" appearance="outline">
-                            <mat-label>Ay</mat-label>
+                            <mat-label>Ay (Doğum)</mat-label>
                             <mat-select [(value)]="selectedMonth" (valueChange)="setBirthday()">
                                 <mat-option *ngFor="let month of months" [value]="month">
                                     {{MONTHS_MAP[month - 1]}}
@@ -61,7 +61,7 @@
                             </mat-select>
                         </mat-form-field>
                         <mat-form-field fxFlex="33%" appearance="outline">
-                            <mat-label>Yıl</mat-label>
+                            <mat-label>Yıl (Doğum)</mat-label>
                             <mat-select [(value)]="selectedYear" (valueChange)="setBirthday()">
                                 <mat-option *ngFor="let year of years" [value]="year">
                                     {{year}}
@@ -96,13 +96,24 @@
                         </mat-form-field>
                     </div>
 
-                    <mat-form-field *ngIf="isHolder()" fxFlex appearance="outline">
-                        <mat-label>Şirketin Resmi Adı</mat-label>
-                        <input matInput placeholder="İsim" formControlName="companyTitle">
-                        <mat-error *ngIf="activateForm.controls.companyTitle.hasError('required')">
-                            Şirket ismi alanı boş bırakılamaz.
-                        </mat-error>
-                    </mat-form-field>
+                    <div *ngIf="isHolder()" fxLayout="row" fxLayout.lt-md="column" fxFlex fxLayoutGap="4%"
+                        fxLayoutGap.lt-md="0">
+                        <mat-form-field fxFlex="48%" fxFlex.lt-md appearance="outline">
+                            <mat-label>Vergi Numarası</mat-label>
+                            <input matInput type="number" placeholder="Vergi Numarası" formControlName="taxNumber" maxlength="11">
+                            <mat-error *ngIf="activateForm.controls.taxNumber.hasError('required')">
+                                Vergi numarası alanı boş bırakılamaz.
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field fxFlex="48%" fxFlex.lt-md appearance="outline">
+                            <mat-label>Şirketin Resmi Adı</mat-label>
+                            <input matInput placeholder="Şirketin Resmi Adı" formControlName="companyTitle">
+                            <mat-error *ngIf="activateForm.controls.companyTitle.hasError('required')">
+                                Şirket ismi alanı boş bırakılamaz.
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
 
                     <mat-form-field appearance="outline" fxFlex>
                         <mat-label>{{isHolder() ? 'İş Yeri Adresi' : 'Adres'}}</mat-label>

@@ -47,6 +47,11 @@ export class UserService {
             UtilityService.setHttpParams(params)));
     }
 
+    updateMerchant(params): Promise<ErrorResponse | IHttpResponse> {
+        return UtilityService.pipeHttpResponse(this.http.put<IHttpResponse>(ENDPOINTS.UPDATE_MERCHANT(),
+            UtilityService.setHttpParams(params)));
+    }
+
     updateSettings(params): Promise<ErrorResponse | IHttpResponse> {
         return UtilityService.pipeHttpResponse(this.http.put<IHttpResponse>(ENDPOINTS.UPDATE_SETTINGS(),
             UtilityService.setHttpParams(params)));

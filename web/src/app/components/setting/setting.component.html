@@ -1,10 +1,10 @@
 <div class="container">
     <div fxLayout="column" fxLayoutGap="16px" fxFlex="40%" fxFlex.lt-md="100%" fxFlexOffset="30%" fxFlexOffset.lt-md="0">
         <div fxLayout="column" fxLayoutGap="8px" fxFlex>
-            <mat-label>Profil Bilgilerini Güncelle</mat-label>
+            <mat-label>Profil Bilgileri</mat-label>
             <mat-card class="mat-elevation-z4">
                 <mat-card-content>
-                    <form ngNoForm fxLayout="column" [formGroup]="settingsForm">
+                    <form *ngIf="user" ngNoForm fxLayout="column" [formGroup]="settingsForm">
                         <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px">
                             <mat-form-field fxFlex appearance="outline">
                                 <mat-label>Kullanıcı Adı</mat-label>
@@ -46,6 +46,18 @@
 
                         <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px">
                             <mat-form-field fxFlex appearance="outline">
+                                <mat-label>Telefon</mat-label>
+                                <span matPrefix>+90 &nbsp;</span>
+                                <input type="tel" matInput placeholder="Telefon" maxlength="10" formControlName="phone">
+                                <mat-hint>Numarayı başında 0 olmadan (5*********) giriniz</mat-hint>
+                                <mat-error *ngIf="settingsForm.controls.phone.hasError('required')">
+                                    Telefon alanı boş bırakılamaz.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px" class="mTop-16">
+                            <mat-form-field fxFlex appearance="outline">
                                 <mat-label>İl</mat-label>
                                 <mat-select formControlName="city" (selectionChange)="setDistricts(settingsForm.controls.city.value)">
                                     <mat-option *ngFor="let city of cities" [value]="city">
@@ -64,30 +76,11 @@
                             </mat-form-field>
                         </div>
 
-                        <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutGap="16px">
-                            <mat-form-field fxFlex appearance="outline">
-                                <mat-label>Telefon</mat-label>
-                                <span matPrefix>+90 &nbsp;</span>
-                                <input type="tel" matInput placeholder="Telefon" maxlength="10" formControlName="phone">
-                                <mat-hint>Numarayı başında 0 olmadan (5*********) giriniz</mat-hint>
-                                <mat-error *ngIf="settingsForm.controls.phone.hasError('required')">
-                                    Telefon alanı boş bırakılamaz.
-                                </mat-error>
-                            </mat-form-field>
-
-                            <mat-form-field fxFlex appearance="outline">
-                                <mat-label>IBAN</mat-label>
-<!--                                <span matPrefix>TR &nbsp;</span>-->
-                                <input type="text" matInput placeholder="IBAN" formControlName="iban">
-                                <mat-hint>IBAN numarasını boşluk olmadan giriniz</mat-hint>
-                            </mat-form-field>
-                        </div>
-
-                        <mat-form-field appearance="outline" class="mTop-16">
-                            <mat-label>Adres</mat-label>
-                            <textarea matInput placeholder="Adres" formControlName="address"></textarea>
+                        <mat-form-field appearance="outline">
+                            <mat-label>{{isHolder() ? 'İş Yeri Adresi' : 'Adres'}}</mat-label>
+                            <textarea matInput [placeholder]="isHolder() ? 'İş Yeri Adresi' : 'Adres'" formControlName="address"></textarea>
                             <mat-error *ngIf="settingsForm.controls.address.hasError('required')">
-                                Adres alanı boş bırakılamaz.
+                                {{isHolder() ? 'İş Yeri Adresi' : 'Adres'}} alanı boş bırakılamaz.
                             </mat-error>
                         </mat-form-field>
 
@@ -99,7 +92,86 @@
         </div>
 
         <div fxLayout="column" fxLayoutGap="8px" fxFlex>
-            <mat-label>Şifreni Güncelle</mat-label>
+            <mat-label>Detaylı Bilgiler</mat-label>
+            <mat-card class="mat-elevation-z4">
+                <mat-card-content>
+                    <form *ngIf="merchantForm" ngNoForm fxLayout="column" [formGroup]="merchantForm">
+                        <div fxLayout="row" fxLayout.lt-md="column" fxFlex fxLayoutGap="4%"
+                             fxLayoutGap.lt-md="0">
+                            <mat-form-field fxFlex="48%" fxFlex.lt-md appearance="outline">
+                                <mat-label>Şirket Tipi</mat-label>
+                                <mat-select formControlName="merchantType">
+                                    <mat-option *ngFor="let type of MERCHANT_TYPES" [value]="type.value">
+                                        {{type.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <mat-form-field fxFlex="48%" fxFlex.lt-md appearance="outline">
+                                <mat-label>Vergi Dairesi</mat-label>
+                                <input type="text" placeholder="Vergi Dairesi" aria-label="Tax Office" matInput
+                                       formControlName="taxOffice" [matAutocomplete]="auto">
+                                <mat-error *ngIf="merchantForm.controls.taxOffice.hasError('required')">
+                                    Vergi dairesi alanı boş bırakılamaz.
+                                </mat-error>
+                                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                                    <mat-option *ngFor="let to of filteredTaxOffices | async" [value]="to.taxOffice">
+                                        {{to.taxOffice}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </div>
+
+                        <div *ngIf="isHolder()" fxLayout="row" fxLayout.lt-md="column" fxFlex fxLayoutGap="4%"
+                           fxLayoutGap.lt-md="0">
+                            <mat-form-field fxFlex="48%" fxFlex.lt-md appearance="outline">
+                                <mat-label>Vergi Numarası</mat-label>
+                                <input matInput type="number" placeholder="Vergi Numarası" formControlName="taxNumber" maxlength="11">
+                                <mat-error *ngIf="merchantForm.controls.taxNumber.hasError('required')">
+                                    Vergi numarası alanı boş bırakılamaz.
+                                </mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field *ngIf="isHolder()" fxFlex appearance="outline">
+                                <mat-label>Şirketin Resmi Adı</mat-label>
+                                <input matInput placeholder="Şirketin Resmi Adı" formControlName="companyTitle">
+                                <mat-error *ngIf="merchantForm.controls.companyTitle.hasError('required')">
+                                    Şirket ismi alanı boş bırakılamaz.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <div fxLayout="row" fxLayout.lt-md="column" fxFlex fxLayoutGap="4%"
+                             fxLayoutGap.lt-md="0">
+                            <mat-form-field fxFlex="48%" fxFlex.lt-md appearance="outline">
+                                <mat-label>TC Numarası</mat-label>
+                                <input matInput type="number" placeholder="TC Numarası" formControlName="identityNumber" minlength="11" maxlength="11">
+                                <mat-error *ngIf="merchantForm.controls.identityNumber.hasError('required')">
+                                    TC Numarası alanı boş bırakılamaz.
+                                </mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field fxFlex="48%" fxFlex.lt-md appearance="outline">
+                                <mat-label>IBAN</mat-label>
+                                <input type="text" matInput placeholder="IBAN" formControlName="iban">
+                                <mat-hint>IBAN numarasını boşluk olmadan giriniz.
+                                    {{isHolder() ? 'IBAN numarası iş yeriniz adına olmalıdır.' : 'IBAN numarası adınıza olmalıdır.'}}
+                                </mat-hint>
+                                <mat-error *ngIf="merchantForm.controls.iban.hasError('required')">
+                                    IBAN numarası zorunludur.
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <button mat-flat-button color="primary" type="sumbit" class="mTop-16" (click)="updateMerchant()"
+                                [disabled]="!merchantForm.valid" mat-button>Güncelle</button>
+                    </form>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+        <div fxLayout="column" fxLayoutGap="8px" fxFlex>
+            <mat-label>Şifre</mat-label>
             <mat-card class="mat-elevation-z4">
                 <mat-card-content>
                     <form ngNoForm fxLayout="column" [formGroup]="passwordForm">

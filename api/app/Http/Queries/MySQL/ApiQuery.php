@@ -378,6 +378,7 @@ class ApiQuery {
                 MERCHANT_KEY => $merchant[MERCHANT_KEY],
                 IDENTITY_NUMBER => $merchant[IDENTITY_NUMBER],
                 TAX_OFFICE => $merchant[TAX_OFFICE],
+                TAX_NUMBER => $merchant[TAX_NUMBER],
                 COMPANY_TITLE => $merchant[COMPANY_TITLE],
                 IBAN => $merchant[IBAN]
             ]);
@@ -413,6 +414,28 @@ class ApiQuery {
             $queryResult = Merchant::where(MERCHANT_ID, EQUAL_SIGN, $userId)
                 ->first();
             return $queryResult;
+        } catch (QueryException $e) {
+            self::logException($e, debug_backtrace());
+        }
+    }
+
+    /**
+     * @description query to update merchant data.
+     * @param integer $merchantId - holds the merchant id.
+     * @param $parameters - holds the merchant data.
+     * @return mixed
+     */
+    public static function updateMerchant($merchantId, $parameters) {
+        try {
+            $merchant = self::getMerchant($merchantId);
+            !empty($parameters[MERCHANT_TYPE])      && ($merchant[MERCHANT_TYPE] = $parameters[MERCHANT_TYPE]);
+            !empty($parameters[IDENTITY_NUMBER])    && ($merchant[IDENTITY_NUMBER] = $parameters[IDENTITY_NUMBER]);
+            !empty($parameters[TAX_OFFICE])         && ($merchant[TAX_OFFICE] = $parameters[TAX_OFFICE]);
+            !empty($parameters[TAX_NUMBER])         && ($merchant[TAX_NUMBER] = $parameters[TAX_NUMBER]);
+            !empty($parameters[COMPANY_TITLE])      && ($merchant[COMPANY_TITLE] = $parameters[COMPANY_TITLE]);
+            !empty($parameters[IBAN])               && ($merchant[IBAN] = $parameters[IBAN]);
+            $merchant->save();
+            return $merchant;
         } catch (QueryException $e) {
             self::logException($e, debug_backtrace());
         }

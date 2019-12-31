@@ -116,6 +116,7 @@ export class ActivateComponent implements OnInit {
             merchantType: new FormControl(this.MERCHANT_TYPES[0].value, [Validators.required]),
             companyTitle: new FormControl('', this.isHolder() ? [Validators.required] : null),
             taxOffice: new FormControl('', this.isHolder() ? [Validators.required] : null),
+            taxNumber: new FormControl('', this.isHolder() ? [Validators.required] : null),
             address: new FormControl('', [Validators.required])
         });
         this.setBirthday();
@@ -136,6 +137,7 @@ export class ActivateComponent implements OnInit {
             'merchantType': form.merchantType.value,
             'companyTitle': form.companyTitle.value,
             'taxOffice': form.taxOffice.value,
+            'taxNumber': form.taxNumber.value,
             'address': form.address.value
         }
     }

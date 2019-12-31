@@ -33,6 +33,40 @@ class Iyzico {
      * @return string | null subMerchantKey
      */
     public function setIyzicoSubMerchant(Merchant $merchant, $user) {
+        $request = $this->subMerchant($merchant, $user);
+        $subMerchant = Model\SubMerchant::create($request, $this->getOptions());
+        if ($subMerchant->getErrorCode()) {
+            Log::error('IYZICO: ' . $subMerchant->getErrorMessage());
+        } else {
+            ApiQuery::setMerchantKey($user[IDENTIFIER], $subMerchant->getSubMerchantKey());
+        }
+        return $subMerchant->getSubMerchantKey();
+    }
+
+    /**
+     * Update exist sub merchant for iyzico account and save on db.
+     *
+     * @param Merchant $merchant - holds the merchant data.
+     * @param $user - holds the user data.
+     * @return string | null subMerchantKey
+     */
+    public function updateIyzicoSubMerchant(Merchant $merchant, $user) {
+        $request = $this->subMerchant($merchant, $user);
+        $subMerchant = Model\SubMerchant::create($request, $this->getOptions());
+        if ($subMerchant->getErrorCode()) {
+            Log::error('IYZICO: ' . $subMerchant->getErrorMessage());
+        } else {
+            ApiQuery::setMerchantKey($user[IDENTIFIER], $subMerchant->getSubMerchantKey());
+        }
+        return $subMerchant->getSubMerchantKey();
+    }
+
+    /**
+     * @param Merchant $merchant
+     * @param $user
+     * @return CreateSubMerchantRequest
+     */
+    private function subMerchant(Merchant $merchant, $user): CreateSubMerchantRequest {
         $request = new CreateSubMerchantRequest();
         $request->setLocale(Model\Locale::TR);
         $request->setConversationId($user[USERNAME]);
@@ -40,6 +74,7 @@ class Iyzico {
         $request->setSubMerchantType($merchant->getMerchantType());
         $request->setAddress($user[ADDRESS]);
         $request->setTaxOffice($merchant->getTaxOffice());
+        $request->setTaxNumber($merchant->getTaxNumber());
         $request->setLegalCompanyTitle($merchant->getCompanyTitle());
         $request->setContactName($user[NAME]);
         $request->setContactSurname($user[SURNAME]);
@@ -49,14 +84,7 @@ class Iyzico {
         $request->setIban($merchant->getIban());
         $request->setIdentityNumber($merchant->getIdentityNumber());
         $request->setCurrency(Model\Currency::TL);
-
-        $subMerchant = Model\SubMerchant::create($request, $this->getOptions());
-        if ($subMerchant->getErrorCode()) {
-            Log::error('IYZICO: ' . $subMerchant->getErrorMessage());
-        } else {
-            ApiQuery::setMerchantKey($user[IDENTIFIER], $subMerchant->getSubMerchantKey());
-        }
-        return $subMerchant->getSubMerchantKey();
+        return $request;
     }
 
 }

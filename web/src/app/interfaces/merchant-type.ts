@@ -4,6 +4,7 @@ export interface MerchantType {
     merchantKey?: string;
     identityNumber: string | number;
     taxOffice?: string;
+    taxNumber?: string;
     companyTitle?: string;
     iban?: string;
 }
