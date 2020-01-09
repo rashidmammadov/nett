@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { first } from 'rxjs/operators';
 import { UserType } from '../../interfaces/user-type';
+import { DepositDialogComponent } from '../shared/deposit-dialog/deposit-dialog.component';
 import { FinanceArchiveDialogComponent } from '../shared/finance-archive-dialog/finance-archive-dialog.component';
 import { WithdrawDialogComponent } from '../shared/withdraw-dialog/withdraw-dialog.component';
 import { FinanceService } from '../../services/finance/finance.service';
@@ -28,22 +29,23 @@ export class BankComponent implements OnInit {
         await this.getUserData();
     }
 
+    openDepositDialog(): void {
+        this.dialog
+            .open(DepositDialogComponent, { width: '500px' })
+            .afterClosed().toPromise()
+            .then((result) => result)
+    }
+
     openFinanceArchiveDialog(): void {
-        this.dialog.open(FinanceArchiveDialogComponent, {
-            width: '500px'
-        });
+        this.dialog
+            .open(FinanceArchiveDialogComponent, { width: '500px' });
     }
 
     openWithdrawDialog(): void {
-        this.dialog.open(WithdrawDialogComponent, {
-            width: '500px',
-            data: {
-                budget: this.user.budget,
-                iban: this.user.iban
-            }
-        }).afterClosed().toPromise().then((result) => {
-            !!result && this.withdraw(result);
-        });
+        this.dialog
+            .open(WithdrawDialogComponent, { width: '500px', data: { budget: this.user.budget, iban: this.user.iban }})
+            .afterClosed().toPromise()
+            .then((result) => !!result && this.withdraw(result) );
     }
 
     private getUserData = async () => {

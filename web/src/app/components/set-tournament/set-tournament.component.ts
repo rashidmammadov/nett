@@ -33,8 +33,8 @@ export class SetTournamentComponent implements OnInit {
     public tournamentTypesMap = TYPES.TOURNAMENT_TYPE;
 
     date = new Date();
-    minDate = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 7, 12, 0, 0);
-    maxDate = new Date(this.date.getFullYear(), this.date.getMonth() + 4, this.date.getDate(), 12, 0, 0);
+    minDate = new Date(this.date.getFullYear(), this.date.getMonth(), this.date.getDate() + 3, 0, 0, 0);
+    maxDate = new Date(this.date.getFullYear(), this.date.getMonth() + 4, this.date.getDate(), 0, 0, 0);
 
     tournamentForm = new FormGroup({
         gameId: new FormControl(1, [Validators.required]),

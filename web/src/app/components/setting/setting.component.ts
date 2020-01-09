@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
-import {first, map, startWith} from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { first, map, startWith } from 'rxjs/operators';
 import { UserType } from '../../interfaces/user-type';
 import { loaded, loading } from '../../store/actions/progress.action';
 import { UtilityService } from '../../services/utility/utility.service';
@@ -15,7 +16,6 @@ import { ToastService } from '../../services/toast/toast.service';
 import { Cookie } from '../../services/cookie/cookies.service';
 import { TYPES } from '../../constants/types.constant';
 import { TaxOfficeType } from '../../interfaces/tax-office-type';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-setting',
@@ -47,6 +47,11 @@ export class SettingComponent implements OnInit {
 
     ngOnInit() {
         this.getRegionsAndTaxOffices().then(this.getUserData);
+    }
+
+    public changeMerchantType() {
+        const form = this.merchantForm;
+        UtilityService.validateMerchantForm(form);
     }
 
     public isHolder() {
@@ -124,12 +129,14 @@ export class SettingComponent implements OnInit {
         const merchant = this.user.merchant;
         this.merchantForm = new FormGroup({
             iban: new FormControl(merchant.iban, [Validators.required]),
-            identityNumber: new FormControl(merchant.identityNumber, [Validators.required]),
+            identityNumber: new FormControl(merchant.identityNumber,
+                [Validators.required, Validators.pattern(REGEX.IDENTITY_NUMBER)]),
             merchantType: new FormControl(merchant.merchantType, [Validators.required]),
-            taxOffice: new FormControl(merchant.taxOffice, this.isHolder() ? [Validators.required] : null),
-            taxNumber: new FormControl(merchant.taxOffice, this.isHolder() ? [Validators.required] : null),
-            companyTitle: new FormControl(merchant.companyTitle, this.isHolder() ? [Validators.required] : null)
+            taxOffice: new FormControl(merchant.taxOffice),
+            taxNumber: new FormControl(merchant.taxNumber),
+            companyTitle: new FormControl(merchant.companyTitle)
         });
+        this.changeMerchantType();
         this.filteredTaxOffices = this.merchantForm.controls.taxOffice.valueChanges.pipe(
             startWith(''),
             map((value: any) => this.filterTaxOffice(value))
@@ -182,7 +189,6 @@ export class SettingComponent implements OnInit {
             'city': form.city.value,
             'district': form.district.value,
             'phone': form.phone.value,
-            'iban': form.iban.value,
             'address': form.address.value,
         }
     }

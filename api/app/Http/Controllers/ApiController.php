@@ -111,7 +111,7 @@ class ApiController extends Controller {
      * @param $errors
      * @return mixed respond
      */
-    public function respondValidationError($message, $errors){
+    public function respondValidationError($message, $errors) {
         return $this->respond([
             STATUS => ERROR,
             STATUS_CODE => Res::HTTP_UNPROCESSABLE_ENTITY,

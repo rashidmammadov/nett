@@ -2,6 +2,7 @@ import { Injectable, Injector } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
+import { FormGroup, Validators } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { IHttpResponse } from '../../interfaces/i-http-response';
@@ -12,6 +13,7 @@ import { MESSAGES } from '../../constants/messages.constant';
 import { environment } from '../../../environments/environment';
 import { DATE_TIME } from '../../constants/date-time.constant';
 import { TYPES } from 'src/app/constants/types.constant';
+import { REGEX } from '../../constants/regex.constant';
 
 @Injectable({
   providedIn: 'root'
@@ -55,6 +57,11 @@ export class UtilityService {
 
     public static calculateHolderEarnings(participantCount, participationFee) {
         return Number((participantCount * ((participationFee * TYPES.MIN_COEFFICIENT) / TYPES.MIN_PARTICIPATION_FEE)).toFixed(2));
+    }
+
+    public static calculateDepositCommission(amount: number, percent: number, additionalFee?: number): number {
+        const commission = ((amount + (additionalFee || 0)) / (1 - (percent / 100))).toFixed(2);
+        return Number(commission);
     }
 
     public static calculateWinnersEarnings(participantCount, participationFee, place) {
@@ -110,6 +117,25 @@ export class UtilityService {
             }
         }
         return result;
+    }
+
+    public static validateMerchantForm(form: FormGroup) {
+        const controls = form.controls;
+        if (controls.merchantType.value === 'PERSONAL') {
+            controls.companyTitle.clearValidators();
+            controls.taxOffice.clearValidators();
+            controls.taxNumber.clearValidators();
+            controls.companyTitle.disable();
+            controls.taxOffice.disable();
+            controls.taxNumber.disable();
+        } else {
+            controls.companyTitle.setValidators([Validators.required]);
+            controls.taxOffice.setValidators([Validators.required]);
+            controls.taxNumber.setValidators([Validators.required, Validators.pattern(REGEX.TAX_NUMBER)]);
+            controls.companyTitle.enable();
+            controls.taxOffice.enable();
+            controls.taxNumber.enable();
+        }
     }
 
     private static convertToFormat(date, format = null) {

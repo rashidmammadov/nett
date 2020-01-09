@@ -19,6 +19,7 @@ import { AttendDialogComponent } from './components/shared/attend-dialog/attend-
 import { BankComponent } from './components/bank/bank.component';
 import { BelongComponent } from './components/belong/belong.component';
 import { ConfirmDialogComponent } from './components/shared/confirm-dialog/confirm-dialog.component';
+import { DepositDialogComponent } from './components/shared/deposit-dialog/deposit-dialog.component';
 import { FinanceArchiveDialogComponent } from './components/shared/finance-archive-dialog/finance-archive-dialog.component';
 import { ForgotPasswordDialogComponent } from './components/shared/forgot-password-dialog/forgot-password-dialog.component';
 import { HalfDonutReportComponent } from './components/shared/half-donut-report/half-donut-report.component';
@@ -77,7 +78,8 @@ import { DatePickerIntl } from './models/DatePickerIntl';
         HalfDonutReportComponent,
         BankComponent,
         FinanceArchiveDialogComponent,
-        WithdrawDialogComponent
+        WithdrawDialogComponent,
+        DepositDialogComponent
     ],
     imports: [
         BrowserModule,
@@ -95,6 +97,7 @@ import { DatePickerIntl } from './models/DatePickerIntl';
     entryComponents: [
         AttendDialogComponent,
         ConfirmDialogComponent,
+        DepositDialogComponent,
         FinanceArchiveDialogComponent,
         ForgotPasswordDialogComponent,
         LeaveDialogComponent,

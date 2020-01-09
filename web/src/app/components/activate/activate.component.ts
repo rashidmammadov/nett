@@ -14,6 +14,7 @@ import { TaxOfficeType } from '../../interfaces/tax-office-type';
 import { set } from '../../store/actions/user.action';
 import { DATE_TIME } from '../../constants/date-time.constant';
 import { TYPES } from '../../constants/types.constant';
+import { REGEX } from '../../constants/regex.constant';
 
 @Component({
   selector: 'app-activate',
@@ -78,6 +79,11 @@ export class ActivateComponent implements OnInit {
         }
     };
 
+    public changeMerchantType() {
+        const form = this.activateForm;
+        UtilityService.validateMerchantForm(form);
+    }
+
     public isHolder() {
         return this.user.type === TYPES.USER.HOLDER;
     }
@@ -110,16 +116,18 @@ export class ActivateComponent implements OnInit {
         this.activateForm = new FormGroup({
             name: new FormControl('', [Validators.required]),
             surname: new FormControl('', [Validators.required]),
-            identityNumber: new FormControl('', [Validators.required]),
+            identityNumber: new FormControl('',
+                [Validators.required, Validators.pattern(REGEX.IDENTITY_NUMBER)]),
             phone: new FormControl('', [Validators.required]),
             birthday: new FormControl('', [Validators.required]),
             merchantType: new FormControl(this.MERCHANT_TYPES[0].value, [Validators.required]),
-            companyTitle: new FormControl('', this.isHolder() ? [Validators.required] : null),
-            taxOffice: new FormControl('', this.isHolder() ? [Validators.required] : null),
-            taxNumber: new FormControl('', this.isHolder() ? [Validators.required] : null),
+            companyTitle: new FormControl(''),
+            taxOffice: new FormControl(''),
+            taxNumber: new FormControl(''),
             address: new FormControl('', [Validators.required])
         });
         this.setBirthday();
+        this.changeMerchantType();
         this.filteredTaxOffices = this.activateForm.controls.taxOffice.valueChanges.pipe(
             startWith(''),
             map(value => this.filterTaxOffice(value))

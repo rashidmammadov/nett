@@ -27,9 +27,10 @@
 
                     <mat-form-field fxFlex appearance="outline">
                         <mat-label>TC Numarası</mat-label>
-                        <input matInput type="number" placeholder="TC Numarası" formControlName="identityNumber" minlength="11" maxlength="11">
-                        <mat-error *ngIf="activateForm.controls.identityNumber.hasError('required')">
-                            TC Numarası alanı boş bırakılamaz.
+                        <input matInput placeholder="TC Numarası" formControlName="identityNumber">
+                        <mat-error *ngIf="activateForm.controls.identityNumber.hasError('required') ||
+                            activateForm.controls.identityNumber.hasError('pattern')">
+                            TC Numarası alanı boş bırakılamaz ve 11 haneli olmalıdır.
                         </mat-error>
                     </mat-form-field>
 
@@ -74,7 +75,7 @@
                          fxLayoutGap.lt-md="0">
                         <mat-form-field fxFlex="48%" fxFlex.lt-md appearance="outline">
                             <mat-label>Şirket Tipi</mat-label>
-                            <mat-select formControlName="merchantType">
+                            <mat-select formControlName="merchantType" (selectionChange)="changeMerchantType()">
                                 <mat-option *ngFor="let type of MERCHANT_TYPES" [value]="type.value">
                                     {{type.name}}
                                 </mat-option>
@@ -100,9 +101,10 @@
                         fxLayoutGap.lt-md="0">
                         <mat-form-field fxFlex="48%" fxFlex.lt-md appearance="outline">
                             <mat-label>Vergi Numarası</mat-label>
-                            <input matInput type="number" placeholder="Vergi Numarası" formControlName="taxNumber" maxlength="11">
-                            <mat-error *ngIf="activateForm.controls.taxNumber.hasError('required')">
-                                Vergi numarası alanı boş bırakılamaz.
+                            <input matInput placeholder="Vergi Numarası" formControlName="taxNumber">
+                            <mat-error *ngIf="activateForm.controls.taxNumber.hasError('required') ||
+                                activateForm.controls.taxNumber.hasError('pattern')">
+                                Vergi numarası alanı boş bırakılamaz ve uygun formatta olmalıdır.
                             </mat-error>
                         </mat-form-field>
 

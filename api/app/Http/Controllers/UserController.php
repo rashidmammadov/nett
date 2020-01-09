@@ -33,13 +33,15 @@ class UserController extends ApiController {
             $merchant = new Merchant(ApiQuery::getMerchant($user[IDENTIFIER]));
             $user[MERCHANT] = $merchant->get();
             return $this->respondCreated("Get User", $this->userTransformer->transform($user));
-        } catch (TokenExpiredException $e){
+        } catch (TokenExpiredException $e) {
             $refreshedToken = JWTAuth::refresh(JWTAuth::getToken());
             $user = JWTAuth::setToken($refreshedToken)->toUser();
-            $user->remember_token = $refreshedToken;
-            $user->save();
-            $merchant = new Merchant(ApiQuery::getMerchant($user[IDENTIFIER]));
-            $user[MERCHANT] = $merchant->get();
+            if ($user[IDENTIFIER]) {
+                $user->remember_token = $refreshedToken;
+                $user->save();
+                $merchant = new Merchant(ApiQuery::getMerchant($user[IDENTIFIER]));
+                $user[MERCHANT] = $merchant->get();
+            }
             return $this->respondCreated("Token Refreshed", $this->userTransformer->transform($user));
         } catch (JWTException $e) {
             $this->setStatusCode($e->getStatusCode());
