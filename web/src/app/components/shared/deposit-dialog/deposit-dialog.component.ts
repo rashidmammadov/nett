@@ -14,13 +14,13 @@ export class DepositDialogComponent {
     private currentDate = new Date();
 
     depositForm = new FormGroup({
-        price: new FormControl('15', [Validators.required, Validators.min(15), Validators.max(1500)]),
-        paidPrice: new FormControl('15.75', [Validators.required, Validators.min(15)]),
-        cardNumber: new FormControl('5528790000000008', [Validators.required, Validators.pattern(REGEX.CARD_NUMBER)]),
-        cardHolderName: new FormControl('John Doe', [Validators.required]),
-        expireMonth: new FormControl('12', [Validators.required]),
-        expireYear: new FormControl('30', [Validators.required]),
-        cvc: new FormControl('123', [Validators.required])
+        price: new FormControl('', [Validators.required, Validators.min(15), Validators.max(1500)]),
+        paidPrice: new FormControl('', [Validators.required, Validators.min(15)]),
+        cardNumber: new FormControl('', [Validators.required, Validators.pattern(REGEX.CARD_NUMBER)]),
+        cardHolderName: new FormControl('', [Validators.required]),
+        expireMonth: new FormControl('', [Validators.required]),
+        expireYear: new FormControl('', [Validators.required]),
+        cvc: new FormControl('', [Validators.required])
     });
 
     constructor(public dialog: MatDialogRef<DepositDialogComponent>) {
@@ -52,8 +52,8 @@ export class DepositDialogComponent {
         const minYear = Number(this.currentDate.getFullYear().toString().slice(2, 4));
         const currentMonth = this.currentDate.getMonth() + 1;
         for (let i = minYear; i <= minYear + 15; i++) { this.availableYears.push(i); }
-        // this.depositForm.controls.expireMonth.setValue(currentMonth);
-        // this.depositForm.controls.expireYear.setValue(minYear);
+        this.depositForm.controls.expireMonth.setValue(currentMonth);
+        this.depositForm.controls.expireYear.setValue(minYear);
     }
 
 }
