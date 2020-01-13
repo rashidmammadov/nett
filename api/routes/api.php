@@ -38,6 +38,8 @@ Route::group(['middleware' => 'cors', 'prefix' => '/v1'], function () {
 
     Route::get('/finance', 'FinanceController@get');
     Route::put('/finance', 'FinanceController@withdraw');
+    Route::post('/finance', 'FinanceController@deposit');
+    Route::post('/confirmDeposit', 'FinanceController@confirmDeposit');
 
     Route::put('/fixture', 'FixtureController@setScore');
 

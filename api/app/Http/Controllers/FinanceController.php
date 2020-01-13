@@ -7,7 +7,9 @@ use App\Http\Utility\CustomDate;
 use App\Http\Utility\Finance;
 use App\Http\Utility\FinanceArchive;
 use App\Http\Utility\Fixture;
+use App\Http\Utility\Iyzico;
 use App\Http\Utility\Match;
+use App\Http\Utility\Merchant;
 use App\Repository\Transformers\ParticipantTransformer;
 use App\Repository\Transformers\TournamentTransformer;
 use Illuminate\Http\Request;
@@ -20,6 +22,46 @@ use Validator;
 class FinanceController extends ApiController {
 
     public function __construct() {}
+
+    public function confirmDeposit(Request $request) {
+        $iyzico = new Iyzico();
+        $data = $iyzico->confirmPayment($request);
+        return '<button color="primary" mat-button>başarılı eklenen tutar ' . $data . '</button>';
+    }
+
+    public function deposit(Request $request) {
+        try {
+            $user = JWTAuth::parseToken()->authenticate();
+            $rules = array(
+                PRICE => 'required',
+                PAID_PRICE => 'required',
+                CARD_NUMBER => 'required',
+                CARD_HOLDER_NAME => 'required',
+                EXPIRE_MONTH => 'required',
+                EXPIRE_YEAR => 'required',
+                CVC => 'required'
+            );
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return $this->respondValidationError(FIELDS_VALIDATION_FAILED, $validator->errors());
+            } else {
+                if ($request[PRICE] >= 15 && $request[PRICE] <= 1500) {
+                    $merchant = new Merchant(ApiQuery::getMerchant($user[IDENTIFIER]));
+                    $iyzico = new Iyzico();
+                    $threeDS = $iyzico->payment($merchant, $user, $request);
+                    if ($threeDS) {
+                        return $this->respondCreated('3D Secure', $threeDS);
+                    }
+                } else {
+                    $this->respondWithError(PRICE_MUST_BETWEEN_LIMIT);
+                }
+            }
+        } catch(JWTException $e) {
+            $this->setStatusCode($e->getStatusCode());
+            $this->setMessage(AUTHENTICATION_ERROR);
+            return $this->respondWithError($this->getMessage());
+        }
+    }
 
     public function get(Request $request) {
         try {

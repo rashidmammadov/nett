@@ -35,6 +35,7 @@ import { SetMatchScoreDialogComponent } from './components/shared/set-match-scor
 import { SetTournamentComponent } from './components/set-tournament/set-tournament.component';
 import { SettingComponent } from './components/setting/setting.component';
 import { LeaveDialogComponent } from './components/shared/leave-dialog/leave-dialog.component';
+import { ThreedsComponent } from './components/shared/threeds/threeds.component';
 import { TimelineReportComponent } from './components/shared/timeline-report/timeline-report.component';
 import { TournamentComponent } from './components/tournament/tournament.component';
 import { TournamentCardComponent } from './components/shared/tournament-card/tournament-card.component';
@@ -79,7 +80,8 @@ import { DatePickerIntl } from './models/DatePickerIntl';
         BankComponent,
         FinanceArchiveDialogComponent,
         WithdrawDialogComponent,
-        DepositDialogComponent
+        DepositDialogComponent,
+        ThreedsComponent
     ],
     imports: [
         BrowserModule,

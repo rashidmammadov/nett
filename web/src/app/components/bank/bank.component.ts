@@ -21,6 +21,7 @@ import { set } from '../../store/actions/user.action';
 export class BankComponent implements OnInit {
 
     public user: UserType;
+    threeDSResult: string;
 
     constructor(private store: Store<{user: UserType, progress: boolean}>, private dialog: MatDialog,
                 private financeService: FinanceService) { }
@@ -31,25 +32,47 @@ export class BankComponent implements OnInit {
 
     openDepositDialog(): void {
         this.dialog
-            .open(DepositDialogComponent, { width: '500px' })
+            .open(DepositDialogComponent, { width: '500px', disableClose: true })
             .afterClosed().toPromise()
-            .then((result) => result)
+            .then((result) => !!result && this.threeDS(result) );
     }
 
     openFinanceArchiveDialog(): void {
         this.dialog
-            .open(FinanceArchiveDialogComponent, { width: '500px' });
+            .open(FinanceArchiveDialogComponent, { width: '500px', disableClose: true });
     }
 
     openWithdrawDialog(): void {
         this.dialog
-            .open(WithdrawDialogComponent, { width: '500px', data: { budget: this.user.budget, iban: this.user.iban }})
+            .open(WithdrawDialogComponent, { width: '500px', disableClose: true,
+                data: { budget: this.user.budget, iban: this.user.iban }})
             .afterClosed().toPromise()
             .then((result) => !!result && this.withdraw(result) );
     }
 
     private getUserData = async () => {
         this.user = await this.store.select('user').pipe(first()).toPromise();
+    };
+
+    private deposit = async (params) => {
+      console.log(params);
+        // this.store.dispatch(loading());
+        // const result = await this.financeService.deposit(params);
+        // UtilityService.handleResponseFromService(result, (response: IHttpResponse) => {
+            // this.user.budget = response.data.budget;
+            // this.store.dispatch(set({user: this.user}));
+            // ToastService.show(response.message);
+        // });
+        // this.store.dispatch(loaded());
+    };
+
+    private threeDS = async (params) => {
+        this.store.dispatch(loading());
+        const result = await this.financeService.deposit(params);
+        UtilityService.handleResponseFromService(result, (response: IHttpResponse) => {
+            this.threeDSResult = response.data;
+        });
+        this.store.dispatch(loaded());
     };
 
     private withdraw = async (params) => {

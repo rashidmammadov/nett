@@ -8,6 +8,7 @@ use Iyzipay\Model;
 use Iyzipay\Options;
 use Iyzipay\Request\CreatePaymentRequest;
 use Iyzipay\Request\CreateSubMerchantRequest;
+use Iyzipay\Request\CreateThreedsPaymentRequest;
 
 class Iyzico {
 
@@ -26,24 +27,40 @@ class Iyzico {
         $this->options->setBaseUrl(env('IYZICO_BASE_URL'));
     }
 
-    public function payment(Merchant $merchant, $user) {
+    public function confirmPayment($response) {
+        $request = new CreateThreedsPaymentRequest();
+        $request->setLocale(Model\Locale::TR);
+        $request->setConversationId($response['conversationId']);
+        $request->setPaymentId($response['paymentId']);
+        $request->setConversationData($response['conversationData']);
+
+        $threedsPayment = Model\ThreedsPayment::create($request, $this->getOptions());
+        if ($threedsPayment->getErrorCode()) {
+            Log::error('IYZICO: ' . $threedsPayment->getErrorMessage());
+        } else {
+            ApiQuery::updateUserBudget($response['conversationId'], $threedsPayment->getPrice());
+            return $threedsPayment->getPaidPrice();
+        }
+    }
+
+    public function payment(Merchant $merchant, $user, $card) {
         $request = new CreatePaymentRequest();
         $request->setLocale(Model\Locale::TR);
-        $request->setConversationId("123456789");
-        $request->setPrice("1");
-        $request->setPaidPrice("1.2");
+        $request->setConversationId($user[IDENTIFIER]);
+        $request->setPrice($card[PRICE]);
+        $request->setPaidPrice($card[PAID_PRICE]);
         $request->setCurrency(Model\Currency::TL);
         $request->setInstallment(1);
-        $request->setBasketId("B67832");
+        $request->setBasketId("NO_BASKET_ID");
         $request->setPaymentGroup(Model\PaymentGroup::PRODUCT);
-        $request->setCallbackUrl("https://www.merchant.com/callback");
+        $request->setCallbackUrl(env('HOST_NAME') . 'api/v1/confirmDeposit');
 
         $paymentCard = new Model\PaymentCard();
-        $paymentCard->setCardHolderName("John Doe");
-        $paymentCard->setCardNumber("5528790000000008");
-        $paymentCard->setExpireMonth("12");
-        $paymentCard->setExpireYear("2030");
-        $paymentCard->setCvc("123");
+        $paymentCard->setCardHolderName($card[CARD_HOLDER_NAME]);
+        $paymentCard->setCardNumber($card[CARD_NUMBER]);//5528790000000008
+        $paymentCard->setExpireMonth($card[EXPIRE_MONTH]);//12
+        $paymentCard->setExpireYear($card[EXPIRE_YEAR]);//2030
+        $paymentCard->setCvc($card[CVC]);
         $paymentCard->setRegisterCard(0);
         $request->setPaymentCard($paymentCard);
 
@@ -54,13 +71,10 @@ class Iyzico {
         $buyer->setGsmNumber("+90" . $user[PHONE]);
         $buyer->setEmail($user[EMAIL]);
         $buyer->setIdentityNumber($merchant->getIdentityNumber());
-//        $buyer->setLastLoginDate("2015-10-05 12:43:35");
-//        $buyer->setRegistrationDate("2013-04-21 15:12:09");
         $buyer->setRegistrationAddress($user[ADDRESS]);
         $buyer->setIp("85.34.78.112"); // TODO: find ip of user.
         $buyer->setCity($user[CITY]);
         $buyer->setCountry($user[COUNTRY]);
-//        $buyer->setZipCode("34732");
         $request->setBuyer($buyer);
 
         $billingAddress = new Model\Address();
@@ -68,22 +82,23 @@ class Iyzico {
         $billingAddress->setCity($user[CITY]);
         $billingAddress->setCountry($user[COUNTRY]);
         $billingAddress->setAddress($user[ADDRESS]);
-//        $billingAddress->setZipCode("34742");
         $request->setBillingAddress($billingAddress);
 
         $basketItem = new Model\BasketItem();
-        $basketItem->setId("BI102");
+        $basketItem->setId("PF-" . $card[PRICE]);
         $basketItem->setName("Participation Fee");
         $basketItem->setCategory1("Budget");
         $basketItem->setItemType(Model\BasketItemType::VIRTUAL);
-        $basketItem->setPrice("1");
+        $basketItem->setPrice($card[PRICE]);
         $basketItems[0] = $basketItem;
         $request->setBasketItems($basketItems);
 
-        $checkoutFormInitialize = Model\ThreedsInitialize::create($request, $this->getOptions());
-        Log::info($checkoutFormInitialize->getStatus());
-        Log::info($checkoutFormInitialize->getErrorMessage());
-        Log::info($checkoutFormInitialize->getHtmlContent());
+        $threeDSInitialize = Model\ThreedsInitialize::create($request, $this->getOptions());
+        if ($threeDSInitialize->getErrorCode()) {
+            Log::error('IYZICO: ' . $threeDSInitialize->getErrorMessage());
+        } else {
+            return $threeDSInitialize->getHtmlContent();
+        }
     }
 
     /**

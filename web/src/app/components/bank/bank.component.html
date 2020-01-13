@@ -5,6 +5,7 @@
             <mat-label>Kullanılabilir Bakiye</mat-label>
             <h3 *ngIf="user" class="available-budget">{{user.budget}} ₺</h3>
         </div>
+        <app-threeds *ngIf="threeDSResult" [data]="threeDSResult"></app-threeds>
         <mat-card class="mat-elevation-z4 clickable" (click)="openDepositDialog()">
             <mat-card-content fxLayout="row">
                 <div fxLayout="column" fxLayoutAlign="center center">

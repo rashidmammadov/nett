@@ -3,6 +3,24 @@
 </div>
 <mat-dialog-content>
     <form ngNoForm fxLayout="column" [formGroup]="depositForm">
+        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="8px">
+            <mat-form-field fxFlex appearance="outline">
+                <mat-label>Yatırılacak Tutar</mat-label>
+                <span matPrefix>₺ &nbsp;</span>
+                <input matInput placeholder="Yatırılacak Tutar" formControlName="price" (ngModelChange)="changePrice()">
+                <mat-error *ngIf="depositForm.controls.price.hasError('required')">
+                    Yatırılacak Tutar alanı boş bırakılamaz.
+                </mat-error>
+                <mat-error *ngIf="depositForm.controls.price.hasError('min')">
+                    Yatırılacak Tutar en az 15 ₺ olmalıdır.
+                </mat-error>
+                <mat-error *ngIf="depositForm.controls.price.hasError('max')">
+                    Yatırılacak Tutar en fazla 1500 ₺ olmalıdır.
+                </mat-error>
+            </mat-form-field>
+
+            <button fxFlex="45" mat-button mat-flat-button disabled="true">Çekilecek Tutar: {{depositForm.controls.paidPrice.value || 0}} ₺</button>
+        </div>
         <mat-form-field fxFlex appearance="outline">
             <mat-label>Kart Numarası</mat-label>
             <input matInput placeholder="Kart Numarası" formControlName="cardNumber">

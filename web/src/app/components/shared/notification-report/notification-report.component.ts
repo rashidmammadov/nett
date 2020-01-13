@@ -15,11 +15,11 @@ export class NotificationReportComponent implements OnInit {
     ngOnInit() {
         this.data.forEach((notification: NotificationReportType) => {
             if (notification.status === TYPES.TOURNAMENT_STATUS.ACTIVE) {
-                 notification.class = 'active';
-                 notification.icon = 'tournament-active';
+                notification.class = 'active';
+                notification.icon = 'tournament-active';
             } else if (notification.status === TYPES.TOURNAMENT_STATUS.CANCEL) {
-              notification.class = 'cancel';
-              notification.icon = 'tournament-cancel';
+                notification.class = 'cancel';
+                notification.icon = 'tournament-cancel';
             } else if (notification.status === TYPES.TOURNAMENT_STATUS.CLOSE) {
                 notification.class = 'close';
                 notification.icon = 'tournament-close';

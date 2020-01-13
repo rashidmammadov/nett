@@ -12,6 +12,10 @@ export class FinanceService {
 
     constructor(private http: HttpClient) { }
 
+    deposit(params): Promise<ErrorResponse | IHttpResponse> {
+        return UtilityService.pipeHttpResponse(this.http.post<IHttpResponse>(ENDPOINTS.FINANCE(), UtilityService.setHttpParams(params)));
+    }
+
     get(page: number = null, itemPerPage: number = null): Promise<ErrorResponse | IHttpResponse> {
         return UtilityService.pipeHttpResponse(this.http.get<IHttpResponse>(ENDPOINTS.FINANCE(page, itemPerPage)));
     }
