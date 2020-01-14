@@ -27,6 +27,12 @@ class Iyzico {
         $this->options->setBaseUrl(env('IYZICO_BASE_URL'));
     }
 
+    /**
+     * Confirm payment after 3D Secure is success
+     *
+     * @param $response - the response from 3D Secure option
+     * @return string
+     */
     public function confirmPayment($response) {
         $request = new CreateThreedsPaymentRequest();
         $request->setLocale(Model\Locale::TR);
