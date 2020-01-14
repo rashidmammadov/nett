@@ -12,11 +12,11 @@ class DatabaseSeeder extends Seeder
      * @return void
      */
     public function run() {
-         $this->call(CityTableSeeder::class);
+         $this->call(GameTableSeeder::class);
     }
 }
 
-class CityTableSeeder extends Seeder {
+class GameTableSeeder extends Seeder {
 
     public function run() {
         DB::table(DB_GAME_TABLE)->delete();

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ThreedsComponent } from './threeds.component';
+import { ThreedsDialogComponent } from './threeds-dialog.component';
 
 describe('ThreedsDialogComponent', () => {
-  let component: ThreedsComponent;
-  let fixture: ComponentFixture<ThreedsComponent>;
+  let component: ThreedsDialogComponent;
+  let fixture: ComponentFixture<ThreedsDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ThreedsComponent ]
+      declarations: [ ThreedsDialogComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ThreedsComponent);
+    fixture = TestBed.createComponent(ThreedsDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

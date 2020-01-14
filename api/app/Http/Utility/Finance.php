@@ -13,22 +13,26 @@ use App\Http\Queries\MySQL\ApiQuery;
 class Finance {
 
     private static $financeId;
+    private static $referenceCode;
     private static $userId;
     private static $type;
     private static $channel;
     private static $tournamentId;
     private static $iban;
     private static $amount;
+    private static $amountWithCommission;
     private static $ticket;
     private static $status;
 
     public function __construct($parameters = null) {
+        self::setReferenceCode($parameters[REFERENCE_CODE]);
         self::setUserId($parameters[USER_ID]);
         self::setType($parameters[TYPE]);
         self::setChannel($parameters[CHANNEL]);
         self::setTournamentId($parameters[TOURNAMENT_ID]);
         self::setIban($parameters[IBAN]);
         self::setAmount($parameters[AMOUNT]);
+        self::setAmountWithCommission($parameters[AMOUNT_WITH_COMMISSION]);
         self::setTicket($parameters[TICKET]);
         self::setStatus($parameters[STATUS]);
     }
@@ -36,12 +40,14 @@ class Finance {
     public static function get() {
         return array(
             FINANCE_ID => self::getFinanceId(),
+            REFERENCE_CODE => self::getReferenceCode(),
             USER_ID => self::getUserId(),
             TYPE => self::getType(),
             CHANNEL => self::getChannel(),
             TOURNAMENT_ID => self::getTournamentId(),
             IBAN => self::getIban(),
             AMOUNT => self::getAmount(),
+            AMOUNT_WITH_COMMISSION => self::getAmountWithCommission(),
             TICKET => self::getTicket(),
             STATUS => self::getStatus()
         );
@@ -50,6 +56,10 @@ class Finance {
     public static function getFinanceId() { return self::$financeId; }
 
     public static function setFinanceId($financeId): void { self::$financeId = $financeId; }
+
+    public static function getReferenceCode() { return self::$referenceCode; }
+
+    public static function setReferenceCode($referenceCode): void { self::$referenceCode = $referenceCode; }
 
     public static function getUserId() { return self::$userId; }
 
@@ -74,6 +84,10 @@ class Finance {
     public static function getAmount() { return self::$amount; }
 
     public static function setAmount($amount): void { self::$amount = $amount; }
+
+    public static function getAmountWithCommission() { return self::$amountWithCommission; }
+
+    public static function setAmountWithCommission($amountWithCommission): void { self::$amountWithCommission = $amountWithCommission; }
 
     public static function getTicket() { return self::$ticket; }
 

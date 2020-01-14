@@ -16,7 +16,7 @@ class Finance extends Model {
     protected $primaryKey = FINANCE_ID;
 
     protected $fillable = [
-        FINANCE_ID, USER_ID, TYPE, CHANNEL, TOURNAMENT_ID, IBAN, AMOUNT, TICKET, STATUS
+        FINANCE_ID, REFERENCE_CODE, USER_ID, TYPE, CHANNEL, TOURNAMENT_ID, IBAN, AMOUNT, AMOUNT_WITH_COMMISSION, TICKET, STATUS
     ];
 
     public function user() {

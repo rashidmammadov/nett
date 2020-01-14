@@ -27,7 +27,7 @@ class UserController extends ApiController {
      * Refresh user by token
      * @return mixed: User info
      */
-    public function refreshUser() {
+    public function refreshUser(Request $request) {
         try {
             $user = JWTAuth::parseToken()->authenticate();
             $merchant = new Merchant(ApiQuery::getMerchant($user[IDENTIFIER]));

@@ -80,10 +80,6 @@ const routes: Routes = [
               redirectTo: 'home'
           }
       ]
-  },
-  {
-      path: '**',
-      redirectTo: ''
   }
 ];
 

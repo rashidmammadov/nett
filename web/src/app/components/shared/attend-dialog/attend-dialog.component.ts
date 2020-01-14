@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { UserType } from '../../../interfaces/user-type';
-import { TYPES } from 'src/app/constants/types.constant';
+import { TYPES } from '../../../constants/types.constant';
 
 @Component({
   selector: 'app-attend-dialog',

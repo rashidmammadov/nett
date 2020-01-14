@@ -25,8 +25,7 @@ class FinanceController extends ApiController {
 
     public function confirmDeposit(Request $request) {
         $iyzico = new Iyzico();
-        $data = $iyzico->confirmPayment($request);
-        return '<button color="primary" mat-button>başarılı eklenen tutar ' . $data . '</button>';
+        return $iyzico->confirmPayment($request);
     }
 
     public function deposit(Request $request) {
@@ -46,11 +45,14 @@ class FinanceController extends ApiController {
                 return $this->respondValidationError(FIELDS_VALIDATION_FAILED, $validator->errors());
             } else {
                 if ($request[PRICE] >= 15 && $request[PRICE] <= 1500) {
+                    $ipAddress = $request->getClientIp();
                     $merchant = new Merchant(ApiQuery::getMerchant($user[IDENTIFIER]));
                     $iyzico = new Iyzico();
-                    $threeDS = $iyzico->payment($merchant, $user, $request);
+                    $threeDS = $iyzico->make3DSPayment($merchant, $user, $request, $ipAddress);
                     if ($threeDS) {
-                        return $this->respondCreated('3D Secure', $threeDS);
+                        return $this->respondCreated('3D Secure Confirm Page', $threeDS);
+                    } else {
+                        return $this->respondWithError(PAYMENT_VALIDATION_ERROR);
                     }
                 } else {
                     $this->respondWithError(PRICE_MUST_BETWEEN_LIMIT);

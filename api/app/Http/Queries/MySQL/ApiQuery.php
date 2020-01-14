@@ -626,10 +626,14 @@ class ApiQuery {
      * @return mixed
      */
     public static function getUserByEmail($email) {
-        $queryResult = User::where([
-            [EMAIL, EQUAL_SIGN, $email]
-        ])->first();
-        return $queryResult;
+        try {
+            $queryResult = User::where([
+                [EMAIL, EQUAL_SIGN, $email]
+            ])->first();
+            return $queryResult;
+        } catch (QueryException $e) {
+            self::logException($e, debug_backtrace());
+        }
     }
 
     /**
@@ -638,10 +642,14 @@ class ApiQuery {
      * @return mixed
      */
     public static function getUserById($userId) {
-        $queryResult = User::where([
-            [IDENTIFIER, EQUAL_SIGN, $userId]
-        ])->first();
-        return $queryResult;
+        try {
+            $queryResult = User::where([
+                [IDENTIFIER, EQUAL_SIGN, $userId]
+            ])->first();
+            return $queryResult;
+        } catch (QueryException $e) {
+            self::logException($e, debug_backtrace());
+        }
     }
 
     /**

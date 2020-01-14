@@ -5,6 +5,7 @@ import { first } from 'rxjs/operators';
 import { UserType } from '../../interfaces/user-type';
 import { DepositDialogComponent } from '../shared/deposit-dialog/deposit-dialog.component';
 import { FinanceArchiveDialogComponent } from '../shared/finance-archive-dialog/finance-archive-dialog.component';
+import { ThreedsDialogComponent } from '../shared/threeds-dialog/threeds-dialog.component';
 import { WithdrawDialogComponent } from '../shared/withdraw-dialog/withdraw-dialog.component';
 import { FinanceService } from '../../services/finance/finance.service';
 import { UtilityService } from '../../services/utility/utility.service';
@@ -19,9 +20,7 @@ import { set } from '../../store/actions/user.action';
   styleUrls: ['./bank.component.scss']
 })
 export class BankComponent implements OnInit {
-
     public user: UserType;
-    threeDSResult: string;
 
     constructor(private store: Store<{user: UserType, progress: boolean}>, private dialog: MatDialog,
                 private financeService: FinanceService) { }
@@ -70,7 +69,9 @@ export class BankComponent implements OnInit {
         this.store.dispatch(loading());
         const result = await this.financeService.deposit(params);
         UtilityService.handleResponseFromService(result, (response: IHttpResponse) => {
-            this.threeDSResult = response.data;
+            this.dialog
+                .open(ThreedsDialogComponent, { width: '800px', disableClose: true, data: response.data })
+                .afterClosed().toPromise().then(() => location.reload());
         });
         this.store.dispatch(loaded());
     };

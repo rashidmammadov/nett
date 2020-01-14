@@ -13,6 +13,7 @@ app-application { height: 100%; }
 .blur-filter { filter: blur(4px); }
 .clickable { cursor: pointer; outline: none; }
 .container { margin: 16px; height: calc(100% - 32px); }
+.iframe { width: 100%; min-height: 350px; height: auto; }
 .google-map-frame { border:0; border-radius: 4px; width: 100%; height: auto; min-height: 250px; margin-top: 16px; }
 .mat-form-field-appearance-outline .mat-form-field-prefix, .mat-form-field-appearance-outline .mat-form-field-suffix { top: 0 !important; }
 .mat-progress-bar-buffer { background-color: #f9f9f9; }
