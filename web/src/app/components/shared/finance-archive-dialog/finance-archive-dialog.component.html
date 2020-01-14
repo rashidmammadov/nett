@@ -8,8 +8,8 @@
                 <p class="date">{{d.date}}</p>
             </div>
             <div fxLayout="column">
-                <p class="amount">{{d.amount}} ₺</p>
-                <p class="reference">{{d.referenceCode}}</p>
+                <p class="amount" align="right">{{d.amount}} ₺</p>
+                <p class="reference" align="right">{{d.referenceCode}}</p>
             </div>
         </div>
         <button [disabled]="progress" *ngIf="totalPage > currentPage" mat-button (click)="loadMore()">daha fazla</button>
