@@ -4,70 +4,70 @@ namespace App\Http\Utility;
 
 class RankingReport {
 
-    private static $id;
-    private static $picture;
-    private static $username;
-    private static $name;
-    private static $surname;
-    private static $city;
-    private static $ranking;
-    private static $previousRanking;
+    private $id;
+    private $picture;
+    private $username;
+    private $name;
+    private $surname;
+    private $city;
+    private $ranking;
+    private $previousRanking;
 
     public function __construct($parameters = null) {
-        !empty($parameters[IDENTIFIER])         && self::setId($parameters[IDENTIFIER]);
-        !empty($parameters[PICTURE])            && self::setPicture($parameters[PICTURE]);
-        !empty($parameters[USERNAME])           && self::setUsername($parameters[USERNAME]);
-        !empty($parameters[NAME])               && self::setName($parameters[NAME]);
-        !empty($parameters[SURNAME])            && self::setSurname($parameters[SURNAME]);
-        !empty($parameters[CITY])               && self::setCity($parameters[CITY]);
-        !empty($parameters[RANKING])            && self::setRanking($parameters[RANKING]);
-        !empty($parameters[PREVIOUS_RANKING])   && self::setPreviousRanking($parameters[PREVIOUS_RANKING]);
+        $this->setId($parameters[IDENTIFIER]);
+        $this->setPicture($parameters[PICTURE]);
+        $this->setUsername($parameters[USERNAME]);
+        $this->setName($parameters[NAME]);
+        $this->setSurname($parameters[SURNAME]);
+        $this->setCity($parameters[CITY]);
+        $this->setRanking($parameters[RANKING]);
+        $this->setPreviousRanking($parameters[PREVIOUS_RANKING]);
     }
 
-    public static function get() {
+    public function get() {
         return array(
-            IDENTIFIER => self::getId(),
-            PICTURE => self::getPicture(),
-            USERNAME => self::getUsername(),
-            NAME => self::getName(),
-            SURNAME => self::getSurname(),
-            CITY => self::getCity(),
-            RANKING => self::getRanking(),
-            PREVIOUS_RANKING => self::getPreviousRanking()
+            IDENTIFIER => $this->getId(),
+            PICTURE => $this->getPicture(),
+            USERNAME => $this->getUsername(),
+            NAME => $this->getName(),
+            SURNAME => $this->getSurname(),
+            CITY => $this->getCity(),
+            RANKING => $this->getRanking(),
+            PREVIOUS_RANKING => $this->getPreviousRanking()
         );
     }
 
-    public static function getId() { return self::$id; }
+    public function getId() { return $this->id; }
 
-    public static function setId($id): void { self::$id = $id; }
+    public function setId($id): void { $this->id = $id; }
 
-    public static function getPicture() { return self::$picture; }
+    public function getPicture() { return $this->picture; }
 
-    public static function setPicture($picture): void { self::$picture = $picture; }
+    public function setPicture($picture): void { $this->picture = $picture; }
 
-    public static function getUsername() { return self::$username; }
+    public function getUsername() { return $this->username; }
 
-    public static function setUsername($username): void { self::$username = $username; }
+    public function setUsername($username): void { $this->username = $username; }
 
-    public static function getName() { return self::$name; }
+    public function getName() { return $this->name; }
 
-    public static function setName($name): void { self::$name = $name; }
+    public function setName($name): void { $this->name = $name; }
 
-    public static function getSurname() { return self::$surname; }
+    public function getSurname() { return $this->surname; }
 
-    public static function setSurname($surname): void { self::$surname = $surname; }
+    public function setSurname($surname): void { $this->surname = $surname; }
 
-    public static function getCity() { return self::$city; }
+    public function getCity() { return $this->city; }
 
-    public static function setCity($city): void { self::$city = $city; }
+    public function setCity($city): void { $this->city = $city; }
 
-    public static function getRanking() { return self::$ranking; }
+    public function getRanking() { return $this->ranking; }
 
-    public static function setRanking($ranking): void { self::$ranking = $ranking; }
+    public function setRanking($ranking): void { $this->ranking = $ranking; }
 
-    public static function getPreviousRanking() { return self::$previousRanking; }
+    public function getPreviousRanking() { return $this->previousRanking; }
 
-    public static function setPreviousRanking($previousRanking): void { self::$previousRanking = $previousRanking; }
+    public function setPreviousRanking($previousRanking): void { $this->previousRanking = $previousRanking; }
 
 
 }

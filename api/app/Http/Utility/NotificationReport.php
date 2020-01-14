@@ -4,37 +4,37 @@ namespace App\Http\Utility;
 
 class NotificationReport {
 
-    private static $tournamentId;
-    private static $status;
-    private static $message;
+    private $tournamentId;
+    private $status;
+    private $message;
 
     public function __construct($parameters = null) {
-        !empty($parameters[TOURNAMENT_ID])      && self::setTournamentId($parameters[TOURNAMENT_ID]);
-        self::setStatus($parameters[STATUS]);
-        !empty($parameters[MESSAGE])            && self::setMessage($parameters[MESSAGE]);
+        $this->setTournamentId($parameters[TOURNAMENT_ID]);
+        $this->setStatus($parameters[STATUS]);
+        $this->setMessage($parameters[MESSAGE]);
     }
 
-    public static function get() {
+    public function get() {
         return array(
-            TOURNAMENT_ID => self::getTournamentId(),
-            STATUS => self::getStatus(),
-            MESSAGE => self::getMessage()
+            TOURNAMENT_ID => $this->getTournamentId(),
+            STATUS => $this->getStatus(),
+            MESSAGE => $this->getMessage()
         );
     }
 
-    public static function getTournamentId() { return self::$tournamentId; }
+    public function getTournamentId() { return $this->tournamentId; }
 
-    public static function setTournamentId($tournamentId): void { self::$tournamentId = $tournamentId; }
+    public function setTournamentId($tournamentId): void { $this->tournamentId = $tournamentId; }
 
-    public static function getStatus() { return self::$status; }
+    public function getStatus() { return $this->status; }
 
-    public static function setStatus($status = 0): void { self::$status = $status; }
+    public function setStatus($status = 0): void { $this->status = $status; }
 
-    public static function getMessage() { return self::$message; }
+    public function getMessage() { return $this->message; }
 
-    public static function setMessage($message): void { self::$message = $message; }
+    public function setMessage($message): void { $this->message = $message; }
 
-    public static function prepareTournamentMessage($gameName, $startDate, $status, $type) {
+    public function prepareTournamentMessage($gameName, $startDate, $status, $type) {
         $date = CustomDate::getDateFromMilliseconds($startDate);
         $message = '<b>' . $date . '</b> tarihli <b>' . $gameName . '</b>';
         if ($type == HOLDER) {

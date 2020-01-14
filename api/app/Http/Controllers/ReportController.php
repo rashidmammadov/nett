@@ -10,7 +10,6 @@ use App\Http\Utility\NotificationReport;
 use App\Http\Utility\RankingReport;
 use App\Http\Utility\TimelineReport;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Validator;
@@ -52,79 +51,85 @@ class ReportController extends ApiController {
         }
     }
 
+    /**
+     * Prepare participant`s earning by tournament report.
+     * @param integer $userId - the id of user.
+     * @return array
+     */
     private function earningReport($userId) {
-        $queryResult = ApiQuery::getEarningReport($userId);
+        $limit = 10;
+        $queryResult = ApiQuery::getEarningReport($userId, $limit);
         $result = array();
         $maxEarning = 0;
         foreach ($queryResult as $item) {
             $maxEarning = $item[AMOUNT] > $maxEarning ? $item[AMOUNT] : $maxEarning;
         }
         foreach ($queryResult as $item) {
-            $report = new EarningReport($item);
+            $earningReport = new EarningReport($item);
             $earningPercentage = ($item[AMOUNT] * 100) / $maxEarning;
-            $report::setEarnings($item[AMOUNT] . TURKISH_LIRA);
-            $report::setEarningPercentage($earningPercentage);
-            array_push($result, $report::get());
+            $earningReport->setEarnings($item[AMOUNT] . TURKISH_LIRA);
+            $earningReport->setEarningPercentage($earningPercentage);
+            array_push($result, $earningReport->get());
         }
         return $result;
     }
 
     /**
-     * @description Prepare participant`s income and outcome finance information.
-     * @param $userId
+     * Prepare participant`s income and outcome finance information.
+     * @param integer $userId - the id of user.
      * @return array
      */
     private function financeReport($userId) {
         $queryResult = ApiQuery::getFinanceReport($userId);
         $result = array();
         foreach ($queryResult as $group => $items) {
-            $finance = new FinanceReport();
+            $financeReport = new FinanceReport();
             $label = $group;
             $amount = 0;
             foreach ($items as $item) { $amount += $item[AMOUNT]; }
-            $finance::setLabel($label);
-            $finance::setAmount($amount);
-            $finance::setCurrency(TURKISH_LIRA);
-            array_push($result, $finance::get());
+            $financeReport->setLabel($label);
+            $financeReport->setAmount($amount);
+            $financeReport->setCurrency(TURKISH_LIRA);
+            array_push($result, $financeReport->get());
         }
         return $result;
     }
 
     /**
-     * @description Prepare most played games.
+     * Prepare most played games.
      * @return array
      */
     private function mostPlayedReport() {
         $result = array();
         $mostPlayerGames = ApiQuery::getMostPlayedReport();
         foreach ($mostPlayerGames as $gameId => $statuses) {
-            $mostPlayed = new MostPlayedReport();
+            $mostPlayedReport = new MostPlayedReport();
             $totalCount = 0;
             foreach ($statuses as $status => $data) {
                 $count = count($data);
-                $mostPlayed::setGameId($data[0][GAME_ID]);
-                $mostPlayed::setGameName($data[0][GAME_NAME]);
-                $mostPlayed::setGameImage($data[0][GAME_IMAGE]);
+                $mostPlayedReport->setGameId($data[0][GAME_ID]);
+                $mostPlayedReport->setGameName($data[0][GAME_NAME]);
+                $mostPlayedReport->setGameImage($data[0][GAME_IMAGE]);
                 if ($status == TOURNAMENT_STATUS_ACTIVE) {
-                    $mostPlayed::setActiveStatusCount($count);
+                    $mostPlayedReport->setActiveStatusCount($count);
                 } else if ($status == TOURNAMENT_STATUS_CANCEL) {
-                    $mostPlayed::setCancelStatusCount($count);
+                    $mostPlayedReport->setCancelStatusCount($count);
                 } else if ($status == TOURNAMENT_STATUS_CLOSE) {
-                    $mostPlayed::setCloseStatusCount($count);
+                    $mostPlayedReport->setCloseStatusCount($count);
                 } else if ($status == TOURNAMENT_STATUS_OPEN) {
-                    $mostPlayed::setOpenStatusCount($count);
+                    $mostPlayedReport->setOpenStatusCount($count);
                 }
                 $totalCount += $count;
             }
-            $mostPlayed::setTotalCount($totalCount);
-            array_push($result, $mostPlayed::get());
+            $mostPlayedReport->setTotalCount($totalCount);
+            array_push($result, $mostPlayedReport->get());
         }
         return $result;
     }
 
     /**
-     * Prepare participant`s notifications.
-     * @param integer $userId
+     * participant`s notifications.
+     * @param integer $userId - the id of user.
      * @param string $type
      * @return array
      */
@@ -138,10 +143,10 @@ class ReportController extends ApiController {
             $queryResult = ApiQuery::getPlayerNotificationReport($userId, $limit);
         }
         foreach ($queryResult as $query) {
-            $notification = new NotificationReport($query);
-            $message = NotificationReport::prepareTournamentMessage($query[GAME_NAME], $query[START_DATE], $query[STATUS], $type);
-            $notification::setMessage($message);
-            array_push($result, $notification::get());
+            $notificationReport = new NotificationReport($query);
+            $message = $notificationReport->prepareTournamentMessage($query[GAME_NAME], $query[START_DATE], $query[STATUS], $type);
+            $notificationReport->setMessage($message);
+            array_push($result, $notificationReport->get());
         }
         return $result;
     }
@@ -157,18 +162,18 @@ class ReportController extends ApiController {
         $result = array();
         $userOnTopList = false;
         foreach ($queryResult as $player) {
-            $ranking = new RankingReport($player);
+            $rankingReport = new RankingReport($player);
             if ($player[IDENTIFIER] == $user[IDENTIFIER]) {
                 $userOnTopList = true;
             }
-            $ranking::setPreviousRanking($player[PREVIOUS_RANKING]);
-            array_push($result, $ranking::get());
+            $rankingReport->setPreviousRanking($player[PREVIOUS_RANKING]);
+            array_push($result, $rankingReport->get());
         }
         if (!$userOnTopList) {
-            $ranking = new RankingReport($user);
-            $ranking::setRanking($user[RANKING]);
-            $ranking::setPreviousRanking($user[PREVIOUS_RANKING]);
-            array_push($result, $ranking::get());
+            $rankingReport = new RankingReport($user);
+            $rankingReport->setRanking($user[RANKING]);
+            $rankingReport->setPreviousRanking($user[PREVIOUS_RANKING]);
+            array_push($result, $rankingReport->get());
         }
         return $result;
     }
@@ -182,9 +187,9 @@ class ReportController extends ApiController {
         $queryResult = ApiQuery::getTimelineReport($userId);
         $result = array();
         foreach ($queryResult as $query) {
-            $timeline = new TimelineReport($query);
-            $timeline::setTournamentRanking($query[TOURNAMENT_RANKING]);
-            array_push($result, $timeline::get());
+            $timelineReport = new TimelineReport($query);
+            $timelineReport->setTournamentRanking($query[TOURNAMENT_RANKING]);
+            array_push($result, $timelineReport->get());
         }
         return $result;
     }

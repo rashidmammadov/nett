@@ -80,7 +80,7 @@ export class PieChartReportComponent implements OnChanges {
 
         key = (d) => { return d.data.label; };
 
-        color = {'tournament': '#5FDC96', "deposit": '#f44336'};
+        color = {'deposit': '#00BFFF', 'tournament': '#5FDC96', 'withdraw': '#DAA520'};
         legendData = [{label: '', amount: '', currency: ''}];
     }
 
@@ -121,7 +121,7 @@ export class PieChartReportComponent implements OnChanges {
             .attr('text-anchor', (d) => {
                 return this.midAngle(d) < Math.PI ? 'start': 'end';
             })
-            .text((d) => TYPES.FINANCE_TYPE[d.data.label.toUpperCase()] + ' (' + d.data.amount + d.data.currency +  ')');
+            .text((d) => TYPES.FINANCE_TYPE[d.data.label.toLowerCase()] + ' (' + d.data.amount + d.data.currency +  ')');
     }
 
     private drawLines(data) {
@@ -161,7 +161,7 @@ export class PieChartReportComponent implements OnChanges {
 
     private mouseenter(d) {
         svg.select('path[slice="' + key(d) + '"]').classed('focus', true);
-        d3.select('.legend .title').text(TYPES.FINANCE_TYPE[d.data.label.toUpperCase()]);
+        d3.select('.legend .title').text(TYPES.FINANCE_TYPE[d.data.label.toLowerCase()]);
         d3.select('.legend .value').text(d.data.amount + d.data.currency);
     }
 

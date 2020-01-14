@@ -6,61 +6,61 @@ namespace App\Http\Utility;
 
 class EarningReport {
 
-    private static $earnings;
-    private static $gameImage;
-    private static $gameName;
-    private static $participantCount;
-    private static $tournamentId;
-    private static $startDate;
-    private static $earningPercentage;
+    private $earnings;
+    private $gameImage;
+    private $gameName;
+    private $participantCount;
+    private $tournamentId;
+    private $startDate;
+    private $earningPercentage;
 
     public function __construct($parameters = null) {
-        self::setEarnings($parameters[EARNINGS]);
-        self::setGameImage($parameters[GAME_IMAGE]);
-        self::setGameName($parameters[GAME_NAME]);
-        self::setParticipantCount($parameters[PARTICIPANT_COUNT]);
-        self::setTournamentId($parameters[TOURNAMENT_ID]);
-        self::setStartDate($parameters[START_DATE]);
-        self::setEarningPercentage($parameters[EARNING_PERCENTAGE]);
+        $this->setEarnings($parameters[EARNINGS]);
+        $this->setGameImage($parameters[GAME_IMAGE]);
+        $this->setGameName($parameters[GAME_NAME]);
+        $this->setParticipantCount($parameters[PARTICIPANT_COUNT]);
+        $this->setTournamentId($parameters[TOURNAMENT_ID]);
+        $this->setStartDate($parameters[START_DATE]);
+        $this->setEarningPercentage($parameters[EARNING_PERCENTAGE]);
     }
 
-    public static function get() {
+    public function get() {
         return array(
-            EARNINGS => self::getEarnings(),
-            GAME_IMAGE => self::getGameImage(),
-            GAME_NAME => self::getGameName(),
-            PARTICIPANT_COUNT => self::getParticipantCount(),
-            TOURNAMENT_ID => self::getTournamentId(),
-            START_DATE => self::getStartDate(),
-            EARNING_PERCENTAGE => self::getEarningPercentage()
+            EARNINGS => $this->getEarnings(),
+            GAME_IMAGE => $this->getGameImage(),
+            GAME_NAME => $this->getGameName(),
+            PARTICIPANT_COUNT => $this->getParticipantCount(),
+            TOURNAMENT_ID => $this->getTournamentId(),
+            START_DATE => $this->getStartDate(),
+            EARNING_PERCENTAGE => $this->getEarningPercentage()
         );
     }
 
-    public static function getEarnings() {  return self::$earnings; }
+    public function getEarnings() {  return $this->earnings; }
 
-    public static function setEarnings($earnings): void {  self::$earnings = $earnings; }
+    public function setEarnings($earnings): void {  $this->earnings = $earnings; }
 
-    public static function getGameImage() { return self::$gameImage; }
+    public function getGameImage() { return $this->gameImage; }
 
-    public static function setGameImage($gameImage): void { self::$gameImage = $gameImage; }
+    public function setGameImage($gameImage): void { $this->gameImage = $gameImage; }
 
-    public static function getGameName() { return self::$gameName; }
+    public function getGameName() { return $this->gameName; }
 
-    public static function setGameName($gameName): void { self::$gameName = $gameName; }
+    public function setGameName($gameName): void { $this->gameName = $gameName; }
 
-    public static function getParticipantCount() { return self::$participantCount; }
+    public function getParticipantCount() { return $this->participantCount; }
 
-    public static function setParticipantCount($participantCount): void { self::$participantCount = $participantCount; }
+    public function setParticipantCount($participantCount): void { $this->participantCount = $participantCount; }
 
-    public static function getTournamentId() { return self::$tournamentId; }
+    public function getTournamentId() { return $this->tournamentId; }
 
-    public static function setTournamentId($tournamentId): void { self::$tournamentId = $tournamentId; }
+    public function setTournamentId($tournamentId): void { $this->tournamentId = $tournamentId; }
 
-    public static function getStartDate() { return self::$startDate; }
+    public function getStartDate() { return $this->startDate; }
 
-    public static function setStartDate($startDate): void { self::$startDate = intval($startDate); }
+    public function setStartDate($startDate): void { $this->startDate = intval($startDate); }
 
-    public static function getEarningPercentage() { return self::$earningPercentage; }
+    public function getEarningPercentage() { return $this->earningPercentage; }
 
-    public static function setEarningPercentage($earningPercentage): void { self::$earningPercentage = $earningPercentage; }
+    public function setEarningPercentage($earningPercentage): void { $this->earningPercentage = $earningPercentage; }
  }

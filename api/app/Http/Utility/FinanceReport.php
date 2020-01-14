@@ -4,34 +4,34 @@ namespace App\Http\Utility;
 
 class FinanceReport {
 
-    private static $label;
-    private static $amount;
-    private static $currency;
+    private $label;
+    private $amount;
+    private $currency;
 
     public function __construct($parameters = null) {
-        !empty($parameters[LABEL])      && self::setLabel($parameters[LABEL]);
-        !empty($parameters[AMOUNT])     && self::setAmount($parameters[AMOUNT]);
-        !empty($parameters[CURRENCY])   && self::setCurrency($parameters[CURRENCY]);
+        $this->setLabel($parameters[LABEL]);
+        $this->setAmount($parameters[AMOUNT]);
+        $this->setCurrency($parameters[CURRENCY]);
     }
 
-    public static function get() {
+    public function get() {
         return array(
-            LABEL => self::getLabel(),
-            AMOUNT => self::getAmount(),
-            CURRENCY => self::getCurrency()
+            LABEL => $this->getLabel(),
+            AMOUNT => $this->getAmount(),
+            CURRENCY => $this->getCurrency()
         );
     }
 
-    public static function getLabel() { return self::$label; }
+    public function getLabel() { return $this->label; }
 
-    public static function setLabel($label): void { self::$label = $label; }
+    public function setLabel($label): void { $this->label = $label; }
 
-    public static function getAmount() { return self::$amount; }
+    public function getAmount() { return $this->amount; }
 
-    public static function setAmount($amount): void { self::$amount = number_format($amount, 2, '.', ''); }
+    public function setAmount($amount): void { $this->amount = number_format($amount, 2, '.', ''); }
 
-    public static function getCurrency() { return self::$currency; }
+    public function getCurrency() { return $this->currency; }
 
-    public static function setCurrency($currency): void { self::$currency = $currency; }
+    public function setCurrency($currency): void { $this->currency = $currency; }
 
 }
