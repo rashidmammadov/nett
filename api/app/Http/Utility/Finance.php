@@ -128,6 +128,8 @@ class Finance {
     public static function setKnockOutFixtureParticipantsEarnings($tournamentId, $participants, $participationFee) {
         foreach ($participants as $participant) {
             $finance = new Finance();
+            $referenceCode = $finance::generateReferenceCode(TOURNAMENT, $participant[PARTICIPANT_ID]);
+            $finance::setReferenceCode($referenceCode);
             $finance::setUserId($participant[PARTICIPANT_ID]);
             $finance::setType(PLAYER);
             $finance::setChannel(TOURNAMENT);
@@ -153,6 +155,8 @@ class Finance {
      */
     public static function setKnockOutFixtureHolderEarnings($tournamentId, $holderId, $participantsCount, $participationFee) {
         $finance = new Finance();
+        $referenceCode = $finance::generateReferenceCode(TOURNAMENT, $holderId);
+        $finance::setReferenceCode($referenceCode);
         $finance::setUserId($holderId);
         $finance::setType(HOLDER);
         $finance::setChannel(TOURNAMENT);
