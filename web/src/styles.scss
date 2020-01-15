@@ -35,6 +35,9 @@ app-application { height: 100%; }
 .second-place-award { color: silver; fill: silver; }
 .third-place-award { color: #cd7f32; fill: #cd7f32; }
 .mat-card-header-text { margin: 0 8px !important; }
+.mat-hint {
+    a { text-decoration: none; color: #ffffff; cursor: pointer; }
+}
 .participants-card .mat-list-item-content { padding: 0 !important; }
 
 ::-webkit-scrollbar-thumb { border-radius: 2px; background-color: #f0f0f0; }

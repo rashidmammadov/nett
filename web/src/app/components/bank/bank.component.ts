@@ -33,7 +33,7 @@ export class BankComponent implements OnInit {
         this.dialog
             .open(DepositDialogComponent, { width: '500px', disableClose: true })
             .afterClosed().toPromise()
-            .then((result) => !!result && this.threeDS(result) );
+            .then((result) => !!result && this.deposit(result) );
     }
 
     openFinanceArchiveDialog(): void {
@@ -44,7 +44,7 @@ export class BankComponent implements OnInit {
     openWithdrawDialog(): void {
         this.dialog
             .open(WithdrawDialogComponent, { width: '500px', disableClose: true,
-                data: { budget: this.user.budget, iban: this.user.iban }})
+                data: { budget: this.user.budget, iban: this.user.merchant ? this.user.merchant.iban : null }})
             .afterClosed().toPromise()
             .then((result) => !!result && this.withdraw(result) );
     }
@@ -54,18 +54,6 @@ export class BankComponent implements OnInit {
     };
 
     private deposit = async (params) => {
-      console.log(params);
-        // this.store.dispatch(loading());
-        // const result = await this.financeService.deposit(params);
-        // UtilityService.handleResponseFromService(result, (response: IHttpResponse) => {
-            // this.user.budget = response.data.budget;
-            // this.store.dispatch(set({user: this.user}));
-            // ToastService.show(response.message);
-        // });
-        // this.store.dispatch(loaded());
-    };
-
-    private threeDS = async (params) => {
         this.store.dispatch(loading());
         const result = await this.financeService.deposit(params);
         UtilityService.handleResponseFromService(result, (response: IHttpResponse) => {

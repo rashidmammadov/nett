@@ -1,5 +1,6 @@
 export const REGEX = {
     CARD_NUMBER: /^\d{16}$/,
+    DECIMAL_NUMBER: /^\d*\.?\d*$/,
     IDENTITY_NUMBER: /^\d{11}$/,
     USERNAME: /^[a-zA-Z0-9_.]*$/,
     PASSWORD: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,20}$/,

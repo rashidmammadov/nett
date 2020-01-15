@@ -98,6 +98,8 @@ class FinanceController extends ApiController {
             } else {
                 if ($request[WITHDRAWAL_AMOUNT] <= $user[BUDGET]) {
                     $finance = new Finance();
+                    $referenceCode = $finance::generateReferenceCode(WITHDRAW, $user[IDENTIFIER]);
+                    $finance::setReferenceCode($referenceCode);
                     $finance::setUserId($user[IDENTIFIER]);
                     $finance::setType($user[TYPE]);
                     $finance::setChannel(WITHDRAW);

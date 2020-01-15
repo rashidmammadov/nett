@@ -14,7 +14,8 @@ export class DepositDialogComponent {
     private currentDate = new Date();
 
     depositForm = new FormGroup({
-        price: new FormControl('', [Validators.required, Validators.min(15), Validators.max(1500)]),
+        price: new FormControl('', [Validators.required, Validators.min(15), Validators.max(1500),
+            Validators.pattern(REGEX.DECIMAL_NUMBER)]),
         paidPrice: new FormControl('', [Validators.required, Validators.min(15)]),
         cardNumber: new FormControl('', [Validators.required, Validators.pattern(REGEX.CARD_NUMBER)]),
         cardHolderName: new FormControl('', [Validators.required]),

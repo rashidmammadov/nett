@@ -33,6 +33,8 @@ define('CVC', 'cvc');
 define('DATA', 'data');
 define('DATE', 'date');
 define('DATE_FORMAT', 'd/m/Y H:i');
+define('DATE_FORMAT_COMPACT', 'dmyHi');
+define('DATE_TIME', 'dateTime');
 define('DAY_MONTH', 'd/m');
 define('DAYS', 'days');
 define('DB_FINANCE_TABLE', 'finance');

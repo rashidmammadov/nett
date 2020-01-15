@@ -11,11 +11,14 @@
                 <mat-error *ngIf="depositForm.controls.price.hasError('required')">
                     Yatırılacak Tutar alanı boş bırakılamaz.
                 </mat-error>
+                <mat-error *ngIf="depositForm.controls.price.hasError('pattern')">
+                    Yatırılacak Tutar ondalık sayı tipinde olabilir.
+                </mat-error>
                 <mat-error *ngIf="depositForm.controls.price.hasError('min')">
-                    Yatırılacak Tutar en az 15 ₺ olmalıdır.
+                    Yatırılacak Tutar en az 15 ₺ olabilir.
                 </mat-error>
                 <mat-error *ngIf="depositForm.controls.price.hasError('max')">
-                    Yatırılacak Tutar en fazla 1500 ₺ olmalıdır.
+                    Yatırılacak Tutar en fazla 1500 ₺ olabilir.
                 </mat-error>
             </mat-form-field>
         </div>

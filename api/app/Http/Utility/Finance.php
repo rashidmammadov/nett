@@ -98,6 +98,27 @@ class Finance {
     public static function setStatus($status): void { self::$status = $status; }
 
     /**
+     * Generate reference code for financial operation. Reference Code format should be includes
+     * channel type (for DEPOSIT: "D", for TOURNAMENT: "T", for WITHDRAW: "W"), user id and current date as milliseconds.
+     *
+     * @param string $channel - the types of finance channel
+     * @param int $userId - the id of user
+     * @return string - reference code of operation
+     */
+    public static function generateReferenceCode(string $channel, int $userId): string {
+        $referenceCode = '';
+        if ($channel == DEPOSIT) {
+            $referenceCode .= 'D';
+        } else if ($channel == TOURNAMENT) {
+            $referenceCode .= 'T';
+        } else if ($channel == WITHDRAW) {
+            $referenceCode .= 'W';
+        }
+        $referenceCode .=  $userId . '-' .CustomDate::getDateFromMilliseconds();
+        return $referenceCode;
+    }
+
+    /**
      * Prepare participant`s earnings data for save finance table.
      *
      * @param integer $tournamentId - holds the tournament id.
