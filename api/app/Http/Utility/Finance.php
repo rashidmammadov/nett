@@ -12,90 +12,90 @@ use App\Http\Queries\MySQL\ApiQuery;
 
 class Finance {
 
-    private static $financeId;
-    private static $referenceCode;
-    private static $userId;
-    private static $type;
-    private static $channel;
-    private static $tournamentId;
-    private static $iban;
-    private static $amount;
-    private static $amountWithCommission;
-    private static $ticket;
-    private static $status;
+    private $financeId;
+    private $referenceCode;
+    private $userId;
+    private $type;
+    private $channel;
+    private $tournamentId;
+    private $iban;
+    private $amount;
+    private $amountWithCommission;
+    private $ticket;
+    private $status;
 
     public function __construct($parameters = null) {
-        self::setReferenceCode($parameters[REFERENCE_CODE]);
-        self::setUserId($parameters[USER_ID]);
-        self::setType($parameters[TYPE]);
-        self::setChannel($parameters[CHANNEL]);
-        self::setTournamentId($parameters[TOURNAMENT_ID]);
-        self::setIban($parameters[IBAN]);
-        self::setAmount($parameters[AMOUNT]);
-        self::setAmountWithCommission($parameters[AMOUNT_WITH_COMMISSION]);
-        self::setTicket($parameters[TICKET]);
-        self::setStatus($parameters[STATUS]);
+        $this->setReferenceCode($parameters[REFERENCE_CODE]);
+        $this->setUserId($parameters[USER_ID]);
+        $this->setType($parameters[TYPE]);
+        $this->setChannel($parameters[CHANNEL]);
+        $this->setTournamentId($parameters[TOURNAMENT_ID]);
+        $this->setIban($parameters[IBAN]);
+        $this->setAmount($parameters[AMOUNT]);
+        $this->setAmountWithCommission($parameters[AMOUNT_WITH_COMMISSION]);
+        $this->setTicket($parameters[TICKET]);
+        $this->setStatus($parameters[STATUS]);
     }
 
-    public static function get() {
+    public function get() {
         return array(
-            FINANCE_ID => self::getFinanceId(),
-            REFERENCE_CODE => self::getReferenceCode(),
-            USER_ID => self::getUserId(),
-            TYPE => self::getType(),
-            CHANNEL => self::getChannel(),
-            TOURNAMENT_ID => self::getTournamentId(),
-            IBAN => self::getIban(),
-            AMOUNT => self::getAmount(),
-            AMOUNT_WITH_COMMISSION => self::getAmountWithCommission(),
-            TICKET => self::getTicket(),
-            STATUS => self::getStatus()
+            FINANCE_ID => $this->getFinanceId(),
+            REFERENCE_CODE => $this->getReferenceCode(),
+            USER_ID => $this->getUserId(),
+            TYPE => $this->getType(),
+            CHANNEL => $this->getChannel(),
+            TOURNAMENT_ID => $this->getTournamentId(),
+            IBAN => $this->getIban(),
+            AMOUNT => $this->getAmount(),
+            AMOUNT_WITH_COMMISSION => $this->getAmountWithCommission(),
+            TICKET => $this->getTicket(),
+            STATUS => $this->getStatus()
         );
     }
 
-    public static function getFinanceId() { return self::$financeId; }
+    public function getFinanceId() { return $this->financeId; }
 
-    public static function setFinanceId($financeId): void { self::$financeId = $financeId; }
+    public function setFinanceId($financeId): void { $this->financeId = $financeId; }
 
-    public static function getReferenceCode() { return self::$referenceCode; }
+    public function getReferenceCode() { return $this->referenceCode; }
 
-    public static function setReferenceCode($referenceCode): void { self::$referenceCode = $referenceCode; }
+    public function setReferenceCode($referenceCode): void { $this->referenceCode = $referenceCode; }
 
-    public static function getUserId() { return self::$userId; }
+    public function getUserId() { return $this->userId; }
 
-    public static function setUserId($userId): void { self::$userId = $userId; }
+    public function setUserId($userId): void { $this->userId = $userId; }
 
-    public static function getType() { return self::$type; }
+    public function getType() { return $this->type; }
 
-    public static function setType($type): void { self::$type = $type; }
+    public function setType($type): void { $this->type = $type; }
 
-    public static function getChannel() { return self::$channel; }
+    public function getChannel() { return $this->channel; }
 
-    public static function setChannel($channel): void { self::$channel = $channel; }
+    public function setChannel($channel): void { $this->channel = $channel; }
 
-    public static function getTournamentId() { return self::$tournamentId; }
+    public function getTournamentId() { return $this->tournamentId; }
 
-    public static function setTournamentId($tournamentId): void { self::$tournamentId = $tournamentId; }
+    public function setTournamentId($tournamentId): void { $this->tournamentId = $tournamentId; }
 
-    public static function getIban() { return self::$iban; }
+    public function getIban() { return $this->iban; }
 
-    public static function setIban($iban): void { self::$iban = $iban; }
+    public function setIban($iban): void { $this->iban = $iban; }
 
-    public static function getAmount() { return self::$amount; }
+    public function getAmount() { return $this->amount; }
 
-    public static function setAmount($amount): void { self::$amount = $amount; }
+    public function setAmount($amount): void { $this->amount = $amount; }
 
-    public static function getAmountWithCommission() { return self::$amountWithCommission; }
+    public function getAmountWithCommission() { return $this->amountWithCommission; }
 
-    public static function setAmountWithCommission($amountWithCommission): void { self::$amountWithCommission = $amountWithCommission; }
+    public function setAmountWithCommission($amountWithCommission): void { $this->amountWithCommission = $amountWithCommission; }
 
-    public static function getTicket() { return self::$ticket; }
+    public function getTicket() { return $this->ticket; }
 
-    public static function setTicket($ticket): void { self::$ticket = $ticket; }
+    public function setTicket($ticket): void { $this->ticket = $ticket; }
 
-    public static function getStatus() { return self::$status; }
+    public function getStatus() { return $this->status; }
 
-    public static function setStatus($status): void { self::$status = $status; }
+    public function setStatus($status): void { $this->status = $status; }
 
     /**
      * Generate reference code for financial operation. Reference Code format should be includes
@@ -105,7 +105,7 @@ class Finance {
      * @param int $userId - the id of user
      * @return string - reference code of operation
      */
-    public static function generateReferenceCode(string $channel, int $userId): string {
+    public function generateReferenceCode(string $channel, int $userId): string {
         $referenceCode = '';
         if ($channel == DEPOSIT) {
             $referenceCode .= 'D';
@@ -125,22 +125,22 @@ class Finance {
      * @param array $participants - holds the participant.
      * @param double $participationFee - the participation fee of tournament.
      */
-    public static function setKnockOutFixtureParticipantsEarnings($tournamentId, $participants, $participationFee) {
+    public function setKnockOutFixtureParticipantsEarnings($tournamentId, $participants, $participationFee) {
         foreach ($participants as $participant) {
             $finance = new Finance();
-            $referenceCode = $finance::generateReferenceCode(TOURNAMENT, $participant[PARTICIPANT_ID]);
-            $finance::setReferenceCode($referenceCode);
-            $finance::setUserId($participant[PARTICIPANT_ID]);
-            $finance::setType(PLAYER);
-            $finance::setChannel(TOURNAMENT);
-            $finance::setTournamentId($tournamentId);
+            $referenceCode = $finance->generateReferenceCode(TOURNAMENT, $participant[PARTICIPANT_ID]);
+            $finance->setReferenceCode($referenceCode);
+            $finance->setUserId($participant[PARTICIPANT_ID]);
+            $finance->setType(PLAYER);
+            $finance->setChannel(TOURNAMENT);
+            $finance->setTournamentId($tournamentId);
             list($amount, $ticket) = Fixture::calculateKnockOutWinnersEarnings(count($participants),
                 $participationFee, $participant[TOURNAMENT_RANKING]);
-            $finance::setAmount($amount);
-            $finance::setTicket($ticket);
-            $finance::setStatus(FINANCE_STATUS_WAITING);
-            if ($finance::getAmount() > 0 || $finance::getTicket() > 0) {
-                ApiQuery::setFinance($finance::get());
+            $finance->setAmount($amount);
+            $finance->setTicket($ticket);
+            $finance->setStatus(FINANCE_STATUS_WAITING);
+            if ($finance->getAmount() > 0 || $finance->getTicket() > 0) {
+                ApiQuery::setFinance($finance->get());
             }
         }
     }
@@ -153,20 +153,20 @@ class Finance {
      * @param integer $participantsCount - holds the tournament`s participants count.
      * @param double $participationFee - the participation fee of tournament.
      */
-    public static function setKnockOutFixtureHolderEarnings($tournamentId, $holderId, $participantsCount, $participationFee) {
+    public function setKnockOutFixtureHolderEarnings($tournamentId, $holderId, $participantsCount, $participationFee) {
         $finance = new Finance();
-        $referenceCode = $finance::generateReferenceCode(TOURNAMENT, $holderId);
-        $finance::setReferenceCode($referenceCode);
-        $finance::setUserId($holderId);
-        $finance::setType(HOLDER);
-        $finance::setChannel(TOURNAMENT);
-        $finance::setTournamentId($tournamentId);
+        $referenceCode = $finance->generateReferenceCode(TOURNAMENT, $holderId);
+        $finance->setReferenceCode($referenceCode);
+        $finance->setUserId($holderId);
+        $finance->setType(HOLDER);
+        $finance->setChannel(TOURNAMENT);
+        $finance->setTournamentId($tournamentId);
         $earning = Fixture::calculateKnockOutHolderEarnings($participantsCount, $participationFee);
-        $finance::setAmount($earning);
-        $finance::setTicket(0);
-        $finance::setStatus(FINANCE_STATUS_WAITING);
-        if ($finance::getAmount() > 0) {
-            ApiQuery::setFinance($finance::get());
+        $finance->setAmount($earning);
+        $finance->setTicket(0);
+        $finance->setStatus(FINANCE_STATUS_WAITING);
+        if ($finance->getAmount() > 0) {
+            ApiQuery::setFinance($finance->get());
         }
     }
 

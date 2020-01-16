@@ -143,8 +143,9 @@ class FixtureController extends ApiController {
             $rankings = Fixture::setKnockOutRanking($tournamentId);
             Participant::setKnockOutFixtureRanking($tournamentId, $rankings);
             $participants = ApiQuery::getParticipants($tournamentId);
-            Finance::setKnockOutFixtureParticipantsEarnings($tournamentId, $participants, $tournament[PARTICIPATION_FEE]);
-            Finance::setKnockOutFixtureHolderEarnings($tournamentId, $tournament[HOLDER_ID], count($participants),
+            $finance = new Finance();
+            $finance->setKnockOutFixtureParticipantsEarnings($tournamentId, $participants, $tournament[PARTICIPATION_FEE]);
+            $finance->setKnockOutFixtureHolderEarnings($tournamentId, $tournament[HOLDER_ID], count($participants),
                 $tournament[PARTICIPATION_FEE]);
             ApiQuery::updateTournamentStatus($tournament, TOURNAMENT_STATUS_CLOSE);
         }

@@ -98,19 +98,23 @@ class FinanceController extends ApiController {
             } else {
                 if ($request[WITHDRAWAL_AMOUNT] <= $user[BUDGET]) {
                     $finance = new Finance();
-                    $referenceCode = $finance::generateReferenceCode(WITHDRAW, $user[IDENTIFIER]);
-                    $finance::setReferenceCode($referenceCode);
-                    $finance::setUserId($user[IDENTIFIER]);
-                    $finance::setType($user[TYPE]);
-                    $finance::setChannel(WITHDRAW);
-                    $finance::setIban($request[IBAN]);
-                    $finance::setAmount($request[WITHDRAWAL_AMOUNT]);
-                    $finance::setStatus(FINANCE_STATUS_ORDER);
-                    $financeQueryResult = ApiQuery::setFinance($finance::get());
-                    $newBudget = number_format((float)($user[BUDGET] - $request[WITHDRAWAL_AMOUNT]), 2, '.', '');
-                    $userQueryResult = ApiQuery::updateUserBudget($user[IDENTIFIER], $newBudget);
-                    if ($financeQueryResult && $userQueryResult) {
-                        return $this->respondCreated(SUCCESSFUL_WITHDRAW_ORDER, array(BUDGET => $newBudget));
+                    $referenceCode = $finance->generateReferenceCode(WITHDRAW, $user[IDENTIFIER]);
+                    $finance->setReferenceCode($referenceCode);
+                    $finance->setUserId($user[IDENTIFIER]);
+                    $finance->setType($user[TYPE]);
+                    $finance->setChannel(WITHDRAW);
+                    $finance->setIban($request[IBAN]);
+                    $finance->setAmount($request[WITHDRAWAL_AMOUNT]);
+                    $finance->setStatus(FINANCE_STATUS_ORDER);
+                    $financeQueryResult = ApiQuery::setFinance($finance->get());
+                    if ($financeQueryResult) {
+                        $newBudget = number_format((float)($user[BUDGET] - $request[WITHDRAWAL_AMOUNT]), 2, '.', '');
+                        $userQueryResult = ApiQuery::updateUserBudget($user[IDENTIFIER], $newBudget);
+                        if ($financeQueryResult && $userQueryResult) {
+                            return $this->respondCreated(SUCCESSFUL_WITHDRAW_ORDER, array(BUDGET => $newBudget));
+                        } else {
+                            return $this->respondWithError(SOMETHING_WRONG_WITH_DB);
+                        }
                     } else {
                         return $this->respondWithError(SOMETHING_WRONG_WITH_DB);
                     }
@@ -137,12 +141,12 @@ class FinanceController extends ApiController {
             $data = array();
             foreach ($pagination->items() as $item) {
                 $financeArchive = new FinanceArchive();
-                $financeArchive::setAmount($item[AMOUNT]);
-                $financeArchive::setChannel($item[CHANNEL]);
-                $financeArchive::setReferenceCode($item[REFERENCE_CODE]);
-                $financeArchive::setStatus($item[STATUS]);
-                $financeArchive::setDate(CustomDate::convertDateToMillisecond($item['updated_at']));
-                array_push($data, $financeArchive::get());
+                $financeArchive->setAmount($item[AMOUNT]);
+                $financeArchive->setChannel($item[CHANNEL]);
+                $financeArchive->setReferenceCode($item[REFERENCE_CODE]);
+                $financeArchive->setStatus($item[STATUS]);
+                $financeArchive->setDate(CustomDate::convertDateToMillisecond($item['updated_at']));
+                array_push($data, $financeArchive->get());
             }
             return $this->respondWithPagination('', $pagination, $data);
         } else {

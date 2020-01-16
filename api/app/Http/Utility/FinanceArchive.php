@@ -4,48 +4,48 @@ namespace App\Http\Utility;
 
 class FinanceArchive {
 
-    private static $amount;
-    private static $channel;
-    private static $referenceCode;
-    private static $status;
-    private static $date;
+    private $amount;
+    private $channel;
+    private $referenceCode;
+    private $status;
+    private $date;
 
     public function __construct($parameters = null) {
-        self::setAmount($parameters[AMOUNT]);
-        self::setChannel($parameters[CHANNEL]);
-        self::setReferenceCode($parameters[REFERENCE_CODE]);
-        self::setStatus($parameters[STATUS]);
-        self::setDate($parameters[DATE]);
+        $this->setAmount($parameters[AMOUNT]);
+        $this->setChannel($parameters[CHANNEL]);
+        $this->setReferenceCode($parameters[REFERENCE_CODE]);
+        $this->setStatus($parameters[STATUS]);
+        $this->setDate($parameters[DATE]);
     }
 
-    public static function get() {
+    public function get() {
         return array(
-            AMOUNT => self::getAmount(),
-            CHANNEL => self::getChannel(),
-            REFERENCE_CODE => self::getReferenceCode(),
-            STATUS => self::getStatus(),
-            DATE => self::getDate()
+            AMOUNT => $this->getAmount(),
+            CHANNEL => $this->getChannel(),
+            REFERENCE_CODE => $this->getReferenceCode(),
+            STATUS => $this->getStatus(),
+            DATE => $this->getDate()
         );
     }
 
-    public static function getAmount() { return self::$amount; }
+    public function getAmount() { return $this->amount; }
 
-    public static function setAmount($amount): void { self::$amount = $amount; }
+    public function setAmount($amount): void { $this->amount = $amount; }
 
-    public static function getChannel() { return self::$channel; }
+    public function getChannel() { return $this->channel; }
 
-    public static function setChannel($channel): void { self::$channel = $channel; }
+    public function setChannel($channel): void { $this->channel = $channel; }
 
-    public static function getReferenceCode() { return self::$referenceCode; }
+    public function getReferenceCode() { return $this->referenceCode; }
 
-    public static function setReferenceCode($referenceCode): void { self::$referenceCode = $referenceCode; }
+    public function setReferenceCode($referenceCode): void { $this->referenceCode = $referenceCode; }
 
-    public static function getStatus() { return self::$status; }
+    public function getStatus() { return $this->status; }
 
-    public static function setStatus($status): void { self::$status = $status; }
+    public function setStatus($status): void { $this->status = $status; }
 
-    public static function getDate() { return self::$date; }
+    public function getDate() { return $this->date; }
 
-    public static function setDate($date): void { self::$date = $date; }
+    public function setDate($date): void { $this->date = $date; }
 
 }

@@ -54,15 +54,15 @@ class Iyzico {
             if ($user) {
                 $paymentItem = $threedsPayment->getPaymentItems()[0];
                 $finance = new Finance();
-                $finance::setReferenceCode($paymentItem->getPaymentTransactionId());
-                $finance::setUserId($userId);
-                $finance::setType($user[TYPE]);
-                $finance::setChannel(DEPOSIT);
-                $finance::setAmount($threedsPayment->getPrice());
-                $finance::setAmountWithCommission($paymentItem->getPaidPrice());
-                $finance::setStatus(FINANCE_STATUS_APPROVED);
+                $finance->setReferenceCode($paymentItem->getPaymentTransactionId());
+                $finance->setUserId($userId);
+                $finance->setType($user[TYPE]);
+                $finance->setChannel(DEPOSIT);
+                $finance->setAmount($threedsPayment->getPrice());
+                $finance->setAmountWithCommission($paymentItem->getPaidPrice());
+                $finance->setStatus(FINANCE_STATUS_APPROVED);
                 $user[BUDGET] = number_format($user[BUDGET] + $threedsPayment->getPrice(), 2, '.', '');
-                ApiQuery::setFinance($finance::get());
+                ApiQuery::setFinance($finance->get());
                 ApiQuery::updateUserBudget($userId, $user[BUDGET]);
                 return '<div align="center" style="width: 100%; height: calc(100% - 64px); background: #fbfbfb; padding: 32px 0; font-family: Ubuntu, sans-serif;">
                     <h3 style="color: #5FDC96;">Başarılı</h3>
