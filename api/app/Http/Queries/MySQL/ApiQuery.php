@@ -42,14 +42,18 @@ class ApiQuery {
      * @return mixed
      */
     public static function getFinanceWithStatus($status) {
-        $queryResult = Finance::where(STATUS, EQUAL_SIGN, $status)->get();
-        return $queryResult;
+        try {
+            $queryResult = Finance::where(STATUS, EQUAL_SIGN, $status)->get();
+            return $queryResult;
+        } catch (QueryException $e) {
+            self::logException($e, debug_backtrace());
+        }
     }
 
     /**
      * @description query to create new finance data
      * @param $finance
-     * @return mixed
+     * @return mixed $queryResult
      */
     public static function setFinance($finance) {
         try {
@@ -64,10 +68,16 @@ class ApiQuery {
      * @description query to update finance status
      * @param $financeId - the id of finance
      * @param $status - the status is changed
+     * @return mixed $queryResult
      */
     public static function updateFinanceStatus($financeId, $status) {
-        Finance::where(FINANCE_ID, EQUAL_SIGN, $financeId)
-            ->update([STATUS => $status]);
+        try {
+            $queryResult = Finance::where(FINANCE_ID, EQUAL_SIGN, $financeId)
+                ->update([STATUS => $status]);
+            return $queryResult;
+        } catch (QueryException $e) {
+            self::logException($e, debug_backtrace());
+        }
     }
 
     /** -------------------- FIXTURE QUERIES -------------------- **/
