@@ -179,16 +179,20 @@ class ApiQuery {
      * @return mixed $queryResult
      */
     public static function getParticipants($tournamentId, $participantId = null) {
-        $queryResult = Participant::where(TOURNAMENT_ID, EQUAL_SIGN, $tournamentId)
-            ->join(DB_USERS_TABLE, (DB_USERS_TABLE . '.' . IDENTIFIER), EQUAL_SIGN, (DB_PARTICIPANT_TABLE . '.' . PARTICIPANT_ID))
-            ->where(function ($query) use ($participantId) {
-                if ($participantId) {
-                    $query->where(PARTICIPANT_ID, EQUAL_SIGN, $participantId);
-                }
-            })
-            ->orderBy(TOURNAMENT_RANKING)
-            ->get();
-        return $queryResult;
+        try {
+            $queryResult = Participant::where(TOURNAMENT_ID, EQUAL_SIGN, $tournamentId)
+                ->join(DB_USERS_TABLE, (DB_USERS_TABLE . '.' . IDENTIFIER), EQUAL_SIGN, (DB_PARTICIPANT_TABLE . '.' . PARTICIPANT_ID))
+                ->where(function ($query) use ($participantId) {
+                    if ($participantId) {
+                        $query->where(PARTICIPANT_ID, EQUAL_SIGN, $participantId);
+                    }
+                })
+                ->orderBy(TOURNAMENT_RANKING)
+                ->get();
+            return $queryResult;
+        } catch (QueryException $e) {
+            self::logException($e, debug_backtrace());
+        }
     }
 
     /**
@@ -198,24 +202,34 @@ class ApiQuery {
      * @return mixed $queryResult
      */
     public static function getParticipantsListedWithoutRanking($tournamentId) {
-        $queryResult = Participant::where(TOURNAMENT_ID, EQUAL_SIGN, $tournamentId)
-            ->where(TOURNAMENT_RANKING, EQUAL_SIGN, null)
-            ->join(DB_USERS_TABLE, (DB_USERS_TABLE . '.' . IDENTIFIER), EQUAL_SIGN, (DB_PARTICIPANT_TABLE . '.' . PARTICIPANT_ID))
-            ->orderBy(POINT, 'desc')
-            ->get();
-        return $queryResult;
+        try {
+            $queryResult = Participant::where(TOURNAMENT_ID, EQUAL_SIGN, $tournamentId)
+                ->where(TOURNAMENT_RANKING, EQUAL_SIGN, null)
+                ->join(DB_USERS_TABLE, (DB_USERS_TABLE . '.' . IDENTIFIER), EQUAL_SIGN, (DB_PARTICIPANT_TABLE . '.' . PARTICIPANT_ID))
+                ->orderBy(POINT, 'desc')
+                ->get();
+            return $queryResult;
+        } catch (QueryException $e) {
+            self::logException($e, debug_backtrace());
+        }
     }
 
     /**
      * @description query to remove participant from tournament
      * @param integer $tournamentId
      * @param integer $participantId
+     * @return mixed $queryResult
      */
     public static function removeParticipant($tournamentId, $participantId) {
-        Participant::where([
-            [TOURNAMENT_ID, EQUAL_SIGN, $tournamentId],
-            [PARTICIPANT_ID, EQUAL_SIGN, $participantId]
-        ])->delete();
+        try {
+            $queryResult = Participant::where([
+                [TOURNAMENT_ID, EQUAL_SIGN, $tournamentId],
+                [PARTICIPANT_ID, EQUAL_SIGN, $participantId]
+            ])->delete();
+            return $queryResult;
+        } catch (QueryException $e) {
+            self::logException($e, debug_backtrace());
+        }
     }
 
     /**
@@ -260,17 +274,23 @@ class ApiQuery {
      * @description query to set match.
      * @param integer $tournamentId
      * @param array $parameters
+     * @return mixed $queryResult
      */
     public static function setMatch($tournamentId, $parameters) {
-        Match::create([
-            TOURNAMENT_ID => $tournamentId,
-            TOUR_ID => $parameters[TOUR_ID],
-            TOUR_NAME => $parameters[TOUR_NAME],
-            HOME_ID => $parameters[HOME_ID],
-            AWAY_ID => $parameters[AWAY_ID],
-            AVAILABLE => $parameters[AVAILABLE],
-            DATE => $parameters[DATE]
-        ]);
+        try {
+            $queryResult = Match::create([
+                TOURNAMENT_ID => $tournamentId,
+                TOUR_ID => $parameters[TOUR_ID],
+                TOUR_NAME => $parameters[TOUR_NAME],
+                HOME_ID => $parameters[HOME_ID],
+                AWAY_ID => $parameters[AWAY_ID],
+                AVAILABLE => $parameters[AVAILABLE],
+                DATE => $parameters[DATE]
+            ]);
+            return $queryResult;
+        } catch (QueryException $e) {
+            self::logException($e, debug_backtrace());
+        }
     }
 
     /**
@@ -518,10 +538,14 @@ class ApiQuery {
      * @return mixed
      */
     public static function getAllOpenTournaments() {
-        $queryResult = Tournament::where([
-            [STATUS, EQUAL_SIGN, TOURNAMENT_STATUS_OPEN]
-        ])->get();
-        return $queryResult;
+        try {
+            $queryResult = Tournament::where([
+                [STATUS, EQUAL_SIGN, TOURNAMENT_STATUS_OPEN]
+            ])->get();
+            return $queryResult;
+        } catch (QueryException $e) {
+            self::logException($e, debug_backtrace());
+        }
     }
 
     /**

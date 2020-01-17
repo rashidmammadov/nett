@@ -9,74 +9,73 @@
 namespace App\Http\Utility;
 
 use App\Http\Queries\MySQL\ApiQuery;
-use Illuminate\Support\Facades\Log;
 
 class Participant {
 
-    private static $tournamentId;
-    private static $participantId;
-    private static $paymentAmount;
-    private static $paymentType;
-    private static $earnings;
-    private static $tournamentRanking;
-    private static $point;
-    private static $referenceCode;
+    private $tournamentId;
+    private $participantId;
+    private $paymentAmount;
+    private $paymentType;
+    private $earnings;
+    private $tournamentRanking;
+    private $point;
+    private $referenceCode;
 
     public function __construct($parameters = null) {
-        !empty($parameters[TOURNAMENT_ID])      && self::setTournamentId($parameters[TOURNAMENT_ID]);
-        !empty($parameters[PARTICIPANT_ID])     && self::setParticipantId($parameters[PARTICIPANT_ID]);
-        !empty($parameters[PAYMENT_AMOUNT])     && self::setPaymentAmount($parameters[PAYMENT_AMOUNT]);
-        !empty($parameters[PAYMENT_TYPE])       && self::setPaymentType($parameters[PAYMENT_TYPE]);
-        !empty($parameters[EARNINGS])           && self::setEarnings($parameters[EARNINGS]);
-        !empty($parameters[TOURNAMENT_RANKING]) && self::setTournamentRanking($parameters[TOURNAMENT_RANKING]);
-        !empty($parameters[POINT])              && self::setPoint($parameters[POINT]);
-        !empty($parameters[REFERENCE_CODE])     && self::setReferenceCode($parameters[REFERENCE_CODE]);
+        $this->setTournamentId($parameters[TOURNAMENT_ID]);
+        $this->setParticipantId($parameters[PARTICIPANT_ID]);
+        $this->setPaymentAmount($parameters[PAYMENT_AMOUNT]);
+        $this->setPaymentType($parameters[PAYMENT_TYPE]);
+        $this->setEarnings($parameters[EARNINGS]);
+        $this->setTournamentRanking($parameters[TOURNAMENT_RANKING]);
+        $this->setPoint($parameters[POINT]);
+        $this->setReferenceCode($parameters[REFERENCE_CODE]);
     }
 
-    public static function getParticipant() {
+    public function getParticipant() {
         return array(
-            TOURNAMENT_ID => self::getTournamentId(),
-            PARTICIPANT_ID => self::getParticipantId(),
-            PAYMENT_AMOUNT => self::getPaymentAmount(),
-            PAYMENT_TYPE => self::getPaymentType(),
-            EARNINGS => self::getEarnings(),
-            TOURNAMENT_RANKING => self::getTournamentRanking(),
-            POINT => self::getPoint(),
-            REFERENCE_CODE => self::getReferenceCode()
+            TOURNAMENT_ID => $this->getTournamentId(),
+            PARTICIPANT_ID => $this->getParticipantId(),
+            PAYMENT_AMOUNT => $this->getPaymentAmount(),
+            PAYMENT_TYPE => $this->getPaymentType(),
+            EARNINGS => $this->getEarnings(),
+            TOURNAMENT_RANKING => $this->getTournamentRanking(),
+            POINT => $this->getPoint(),
+            REFERENCE_CODE => $this->getReferenceCode()
         );
     }
 
-    public static function getParticipantId() { return self::$participantId; }
+    public function getParticipantId() { return $this->participantId; }
 
-    public static function setParticipantId($participantId): void { self::$participantId = $participantId; }
+    public function setParticipantId($participantId): void { $this->participantId = $participantId; }
 
-    public static function getPaymentAmount() { return self::$paymentAmount; }
+    public function getPaymentAmount() { return $this->paymentAmount; }
 
-    public static function setPaymentAmount($paymentAmount): void { self::$paymentAmount = $paymentAmount; }
+    public function setPaymentAmount($paymentAmount): void { $this->paymentAmount = $paymentAmount; }
 
-    public static function getPaymentType() { return self::$paymentType; }
+    public function getPaymentType() { return $this->paymentType; }
 
-    public static function setPaymentType($paymentType): void { self::$paymentType = $paymentType; }
+    public function setPaymentType($paymentType): void { $this->paymentType = $paymentType; }
 
-    public static function getEarnings() { return self::$earnings; }
+    public function getEarnings() { return $this->earnings; }
 
-    public static function setEarnings($earnings): void { self::$earnings = $earnings; }
+    public function setEarnings($earnings): void { $this->earnings = $earnings; }
 
-    public static function getTournamentId() { return self::$tournamentId; }
+    public function getTournamentId() { return $this->tournamentId; }
 
-    public static function setTournamentId($tournamentId): void { self::$tournamentId = $tournamentId; }
+    public function setTournamentId($tournamentId): void { $this->tournamentId = $tournamentId; }
 
-    public static function getTournamentRanking() { return self::$tournamentRanking; }
+    public function getTournamentRanking() { return $this->tournamentRanking; }
 
-    public static function setTournamentRanking($tournamentRanking): void { self::$tournamentRanking = $tournamentRanking; }
+    public function setTournamentRanking($tournamentRanking): void { $this->tournamentRanking = $tournamentRanking; }
 
-    public static function getPoint() { return self::$point; }
+    public function getPoint() { return $this->point; }
 
-    public static function setPoint($point): void { self::$point = $point; }
+    public function setPoint($point): void { $this->point = $point; }
 
-    public static function getReferenceCode() { return self::$referenceCode; }
+    public function getReferenceCode() { return $this->referenceCode; }
 
-    public static function setReferenceCode($referenceCode): void { self::$referenceCode = $referenceCode; }
+    public function setReferenceCode($referenceCode): void { $this->referenceCode = $referenceCode; }
 
     /**
      * @description: update participant`s point
@@ -85,19 +84,19 @@ class Participant {
      * @param integer $point - holds the user`s goal count
      * @param integer $coefficient - holds the coefficient of tour.
      */
-    public static function calculatePlayerPoint($tournamentId, $participantId, $point, $coefficient) {
+    public function calculatePlayerPoint($tournamentId, $participantId, $point, $coefficient) {
         $participantQuery = ApiQuery::getParticipants($tournamentId, $participantId)->first();
         $participant = new Participant($participantQuery);
         $total = $coefficient + $point;
-        $oldPoint = $participant::getPoint();
+        $oldPoint = $participant->getPoint();
         $newPoint = null;
         if (is_null($oldPoint)) {
             $newPoint = $total;
         } else {
             $newPoint = $oldPoint + $total;
         }
-        $participant::setPoint($newPoint);
-        ApiQuery::updateParticipantPoint($tournamentId, $participantId, $participant::getPoint());
+        $participant->setPoint($newPoint);
+        ApiQuery::updateParticipantPoint($tournamentId, $participantId, $participant->getPoint());
     }
 
     /**
@@ -105,14 +104,14 @@ class Participant {
      * @param $tournamentId - tournament id
      * @param $rankings - the list of fixture rankings
      */
-    public static function setKnockOutFixtureRanking($tournamentId, $rankings) {
+    public function setKnockOutFixtureRanking($tournamentId, $rankings) {
         foreach ($rankings as $ranking) {
             $participant = new Participant();
-            $participant::setTournamentId($tournamentId);
-            $participant::setParticipantId($ranking[PARTICIPANT_ID]);
-            $participant::setTournamentRanking($ranking[TOURNAMENT_RANKING]);
-            ApiQuery::updateParticipantRanking($participant::getTournamentId(), $participant::getParticipantId(),
-                $participant::getTournamentRanking());
+            $participant->setTournamentId($tournamentId);
+            $participant->setParticipantId($ranking[PARTICIPANT_ID]);
+            $participant->setTournamentRanking($ranking[TOURNAMENT_RANKING]);
+            ApiQuery::updateParticipantRanking($participant->getTournamentId(), $participant->getParticipantId(),
+                $participant->getTournamentRanking());
         }
     }
 

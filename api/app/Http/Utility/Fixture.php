@@ -180,15 +180,17 @@ class Fixture {
     public static function setKnockOutRanking($tournamentId) {
         $participants = ApiQuery::getParticipantsListedWithoutRanking($tournamentId);
         $rankings = array();
-        foreach ($participants as $index => $participant) {
-            $standing = ($index + 1) + 4;
-            $ranking = array(
-                PARTICIPANT_ID => $participant[PARTICIPANT_ID],
-                TOURNAMENT_RANKING => $standing
-            );
-            array_push($rankings, $ranking);
+        if ($participants) {
+            foreach ($participants as $index => $participant) {
+                $standing = ($index + 1) + 4;
+                $ranking = array(
+                    PARTICIPANT_ID => $participant[PARTICIPANT_ID],
+                    TOURNAMENT_RANKING => $standing
+                );
+                array_push($rankings, $ranking);
+            }
+            return $rankings;
         }
-        return $rankings;
     }
 
     /**

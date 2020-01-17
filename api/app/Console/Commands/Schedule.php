@@ -50,28 +50,32 @@ class Schedule extends Command {
         Log::info('**************************************************');
         Log::info('TOURNAMENT STATUS CHANGER STARTED');
         $tournaments = ApiQuery::getAllOpenTournaments();
-        Log::info('TOTAL OPEN TOURNAMENTS COUNT: ' . count($tournaments));
-        $resultCount = 0;
-        foreach ($tournaments as $tournament) {
-            if ($tournament[START_DATE] - $currentDate <= 86400000) {
-                $resultCount++;
-                $participants = $this->getParticipants($tournament[TOURNAMENT_ID]);
-                if (count($participants) < $tournament[PARTICIPANT_COUNT] - 2) {
-                    ApiQuery::updateTournamentStatus($tournament, TOURNAMENT_STATUS_CANCEL);
-                    Log::info('PARTICIPANT COUNT: ' . count($participants));
-                    Log::info('NEEDED PARTICIPANT COUNT: ' . $tournament[PARTICIPANT_COUNT]);
-                    Log::info('TOURNAMENT ' . $tournament[TOURNAMENT_ID] . ' STATUS CHANGED: FROM OPEN TO CANCEL');
-                    $this->payBack($participants);
-                    PushNotification::tournamentCancelled($tournament, $participants);
-                } else {
-                    ApiQuery::updateTournamentStatus($tournament, TOURNAMENT_STATUS_ACTIVE);
-                    Log::info('TOURNAMENT ' . $tournament[TOURNAMENT_ID] . ' STATUS CHANGED: FROM OPEN TO ACTIVE');
-                    Fixture::setKnockOutStartDraws($tournament[TOURNAMENT_ID], $tournament[START_DATE], $participants);
-                    PushNotification::tournamentStarts($tournament, $participants);
+        if ($tournaments) {
+            Log::info('TOTAL OPEN TOURNAMENTS COUNT: ' . count($tournaments));
+            $resultCount = 0;
+            foreach ($tournaments as $tournament) {
+                if ($tournament[START_DATE] - $currentDate <= 86400000) {
+                    $resultCount++;
+                    $participants = ApiQuery::getParticipants($tournament[TOURNAMENT_ID]);
+                    if ($participants) {
+                        if (count($participants) < $tournament[PARTICIPANT_COUNT] - 2) {
+                            ApiQuery::updateTournamentStatus($tournament, TOURNAMENT_STATUS_CANCEL);
+                            Log::info('PARTICIPANT COUNT: ' . count($participants));
+                            Log::info('NEEDED PARTICIPANT COUNT: ' . $tournament[PARTICIPANT_COUNT]);
+                            Log::info('TOURNAMENT ' . $tournament[TOURNAMENT_ID] . ' STATUS CHANGED: FROM OPEN TO CANCEL');
+                            $this->payBack($participants);
+                            PushNotification::tournamentCancelled($tournament, $participants);
+                        } else {
+                            ApiQuery::updateTournamentStatus($tournament, TOURNAMENT_STATUS_ACTIVE);
+                            Log::info('TOURNAMENT ' . $tournament[TOURNAMENT_ID] . ' STATUS CHANGED: FROM OPEN TO ACTIVE');
+                            Fixture::setKnockOutStartDraws($tournament[TOURNAMENT_ID], $tournament[START_DATE], $participants);
+                            PushNotification::tournamentStarts($tournament, $participants);
+                        }
+                    }
                 }
             }
+            Log::info('STATUS CHANGED TOURNAMENTS COUNT: ' . $resultCount);
         }
-        Log::info('STATUS CHANGED TOURNAMENTS COUNT: ' . $resultCount);
     }
 
     public function payWaitingPaymentsFromTournament() {
@@ -107,22 +111,21 @@ class Schedule extends Command {
         Log::info('TOTAL PAYED EARNINGS: ' . $totalBudget . ' ' . TURKISH_LIRA . ' ' . $totalTicket . ' ' . TICKET);
     }
 
-    private function getParticipants($tournamentId) {
-        $participants = ApiQuery::getParticipants($tournamentId);
-        return $participants;
-    }
-
     private function payBack($participants) {
         foreach ($participants as $participant) {
             $user = ApiQuery::getUserById($participant[PARTICIPANT_ID]);
-            if (strtolower($participant[PAYMENT_TYPE]) == strtolower(MONEY)) {
-                $user[BUDGET] = number_format($participant[BUDGET] + $participant[PAYMENT_AMOUNT], 2, '.', '');
-            } else if (strtolower($participant[PAYMENT_TYPE]) == strtolower(TICKET)) {
-                $user[TICKET] = ($participant[TICKET] + 1);
+            if ($user) {
+                if (strtolower($participant[PAYMENT_TYPE]) == strtolower(MONEY)) {
+                    $user[BUDGET] = number_format($participant[BUDGET] + $participant[PAYMENT_AMOUNT], 2, '.', '');
+                } else if (strtolower($participant[PAYMENT_TYPE]) == strtolower(TICKET)) {
+                    $user[TICKET] = ($participant[TICKET] + 1);
+                }
+                $removeQueryResult = ApiQuery::removeParticipant($participant[TOURNAMENT_ID], $participant[PARTICIPANT_ID]);
+                if ($removeQueryResult) {
+                    $user->save();
+                    Log::info('PAYED BACK TO PARTICIPANT: ' . $participant[PARTICIPANT_ID] . ' (' . $participant[PAYMENT_TYPE] . ')');
+                }
             }
-            ApiQuery::removeParticipant($participant[TOURNAMENT_ID], $participant[PARTICIPANT_ID]);
-            $user->save();
-            Log::info('PAYED BACK TO PARTICIPANT: ' . $participant[PARTICIPANT_ID] . ' (' . $participant[PAYMENT_TYPE] . ')');
         }
     }
 
