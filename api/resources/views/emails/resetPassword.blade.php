@@ -2,17 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>ozelden.com</title>
+    <title>turnuvaz.com</title>
 </head>
-<body style="font-family: 'Raleway', sans-serif; color: #707070;">
-<div style="border-radius: 4px; margin: 16px; padding: 16px; border: 1px solid #707070; z-index: 2; position: relative; background-color: #fff;
-               position: relative !important; z-index: 2 !important; margin-bottom: -48px;" align="center">
-    <p>Şifreniz göncellendi. Aşağıdaki bilgilerle sisteme giriş yapabilirsiniz.</p>
-    <p><b>Email:</b> {{$email}}</p>
-    <p><b>Parola:</b> {{$password}}</p>
+<body style="background: #303030; color: #ffffff; font-family: sans-serif;">
+<div align="center">
+    <img src="https://api.ozelden.com/images/logo.png" style="height: 48px;">
+    <p>Gerçek yarış, gerçek ödül</p>
 </div>
-<div style="background-color: #D1A377; padding: 64px 16px 16px 16px;" align="center">
-    <p>ozelden.com</p>
+<div style="width: 70%; background: #ffffff; color: #303030; margin: 32px 15%; border-radius: 8px; padding: 16px;" align="center">
+    <h2>Şifren güncellendi</h2>
+    <p>Aşağıdaki bilgilerle
+        <a href="https://turnuvaz.com" style="background: #7B1FA2; color: #fff; border: 0; padding: 4px 8px; border-radius: 4px; font-weight: 600; cursor: pointer; text-decoration: none;">turnuvaz.com</a>
+        `a giriş yapabilirsin.</p>
+    <p><b>Email:</b> {{$email}}</p>
+    <p><b>Şifre:</b> {{$password}}</p>
+</div>
+<div align="center">
+    <p>turnuvaz.com</p>
 </div>
 </body>
 </html>
+

@@ -21,7 +21,7 @@ class Email {
         );
         Mail::send('emails/resetPassword', $user, function ($message) use ($user) {
             $message->subject('🎉 Şifre Yenileme');
-            $message->from(NO_REPLY, 'özelden team');
+            $message->from(NO_REPLY, 'tunuvaz');
             $message->to($user[EMAIL]);
         });
     }
@@ -36,7 +36,7 @@ class Email {
         );
         Mail::send('emails/welcome', $user, function ($message) use ($user) {
             $message->subject('🎉 Hoş Geldin!');
-            $message->from(NO_REPLY, 'özelden team');
+            $message->from(NO_REPLY, 'turnuvaz');
             $message->to($user[EMAIL]);
         });
     }
