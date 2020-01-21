@@ -7,12 +7,13 @@ import { AuthGuard } from '../guards/auth.guard';
 import { BankComponent } from '../components/bank/bank.component';
 import { BelongComponent } from '../components/belong/belong.component';
 import { HomeComponent } from '../components/home/home.component';
+import { LandingComponent } from '../components/landing/landing.component';
 import { LoginComponent } from '../components/login/login.component';
 import { RegisterComponent } from '../components/register/register.component';
 import { SearchComponent } from '../components/search/search.component';
 import { SetTournamentComponent } from '../components/set-tournament/set-tournament.component';
-import { SettingComponent } from '../components/setting/setting.component';
 
+import { SettingComponent } from '../components/setting/setting.component';
 import { TournamentComponent } from '../components/tournament/tournament.component';
 import { GameResolver } from '../resolvers/game.resolver';
 import { TournamentResolver } from '../resolvers/tournament.resolver';
@@ -21,7 +22,8 @@ const routes: Routes = [
   {
       path: '',
       pathMatch: 'full',
-      redirectTo: 'login',
+      // redirectTo: 'login',
+      component: LandingComponent,
       canActivate: [AuthGuard]
   },
   {

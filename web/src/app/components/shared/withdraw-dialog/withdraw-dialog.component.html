@@ -4,7 +4,7 @@
 <mat-dialog-content>
     <form ngNoForm fxLayout="column" [formGroup]="withdrawForm">
         <mat-form-field fxFlex appearance="outline">
-            <mat-label>Çekilecek Tutar</mat-label>
+            <mat-label>Çekilecek Tutar (Min: 50 ₺)</mat-label>
             <span matPrefix>₺ &nbsp;</span>
             <input matInput placeholder="Tutar (Min: 50 ₺)" formControlName="withdrawalAmount" min="0">
             <mat-hint>

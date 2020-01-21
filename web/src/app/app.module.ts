@@ -20,6 +20,7 @@ import { BelongComponent } from './components/belong/belong.component';
 import { HalfDonutReportComponent } from './components/shared/half-donut-report/half-donut-report.component';
 import { HomeComponent } from './components/home/home.component';
 import { PieChartReportComponent } from './components/shared/pie-chart-report/pie-chart-report.component';
+import { LandingComponent } from './components/landing/landing.component';
 import { LoginComponent } from './components/login/login.component';
 import { MostPlayedReportComponent } from './components/shared/most-played-report/most-played-report.component';
 import { NotificationReportComponent } from './components/shared/notification-report/notification-report.component';
@@ -28,7 +29,6 @@ import { RegisterComponent } from './components/register/register.component';
 import { SearchComponent } from './components/search/search.component';
 import { SetTournamentComponent } from './components/set-tournament/set-tournament.component';
 import { SettingComponent } from './components/setting/setting.component';
-import { LeaveDialogComponent } from './components/shared/leave-dialog/leave-dialog.component';
 import { TimelineReportComponent } from './components/shared/timeline-report/timeline-report.component';
 import { TournamentComponent } from './components/tournament/tournament.component';
 import { TournamentCardComponent } from './components/shared/tournament-card/tournament-card.component';
@@ -37,6 +37,7 @@ import { ConfirmDialogComponent } from './components/shared/confirm-dialog/confi
 import { DepositDialogComponent } from './components/shared/deposit-dialog/deposit-dialog.component';
 import { FinanceArchiveDialogComponent } from './components/shared/finance-archive-dialog/finance-archive-dialog.component';
 import { ForgotPasswordDialogComponent } from './components/shared/forgot-password-dialog/forgot-password-dialog.component';
+import { LeaveDialogComponent } from './components/shared/leave-dialog/leave-dialog.component';
 import { SetMatchScoreDialogComponent } from './components/shared/set-match-score-dialog/set-match-score-dialog.component';
 import { ThreedsDialogComponent } from './components/shared/threeds-dialog/threeds-dialog.component';
 import { WithdrawDialogComponent } from './components/shared/withdraw-dialog/withdraw-dialog.component';
@@ -68,6 +69,7 @@ import { DatePickerIntl } from './models/DatePickerIntl';
         ForgotPasswordDialogComponent,
         HalfDonutReportComponent,
         HomeComponent,
+        LandingComponent,
         LeaveDialogComponent,
         LoginComponent,
         MostPlayedReportComponent,

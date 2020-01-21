@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { REGEX } from '../../../constants/regex.constant';
-import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-withdraw-dialog',
