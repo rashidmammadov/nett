@@ -188,6 +188,7 @@ define('STATUS', 'status');
 define('STATUS_CODE', 'status_code');
 define('STATUS_MUST_BE_ACTIVE_FOR_CHANGE', 'Değişiklik yapabilmek için turnuva durumu aktif olmalıdır');
 define('SOMETHING_WRONG_WITH_DB', 'Veri tabanıyla bağlanmada bir sorun oluştu');
+define('SOMETHING_WRONG_WITH_EMAIL', 'Email gönderilirken bir sorun oluştu');
 define('SUCCESSFUL_WITHDRAW_ORDER', 'Başarılı para çekme talebi');
 define('SUCCESS', 'success');
 define('SURNAME', 'surname');

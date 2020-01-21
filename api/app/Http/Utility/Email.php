@@ -2,15 +2,16 @@
 
 namespace App\Http\Utility;
 
+use Illuminate\Support\Facades\Log;
 use Mail;
 
 class Email {
 
     public static function send($type, $data) {
         if ($type == RESET_PASSWORD) {
-            self::sendResetPasswordEmail($data);
+            return self::sendResetPasswordEmail($data);
         } else if ($type == WELCOME_EMAIL) {
-            self::sendWelcomeEmail($data);
+            return self::sendWelcomeEmail($data);
         }
     }
 
@@ -19,11 +20,16 @@ class Email {
             EMAIL => $data[EMAIL],
             PASSWORD => $data[PASSWORD]
         );
-        Mail::send('emails/resetPassword', $user, function ($message) use ($user) {
-            $message->subject('🎉 Şifre Yenileme');
-            $message->from(NO_REPLY, 'tunuvaz');
-            $message->to($user[EMAIL]);
-        });
+        try {
+            Mail::send('emails/resetPassword', $user, function ($message) use ($user) {
+                $message->subject('🎉 Şifre Yenileme');
+                $message->from(NO_REPLY, 'tunuvaz');
+                $message->to($user[EMAIL]);
+            });
+            return true;
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
     }
 
     private static function sendWelcomeEmail($data) {
@@ -34,11 +40,16 @@ class Email {
             EMAIL => $data[EMAIL],
             PASSWORD => $data[PASSWORD]
         );
-        Mail::send('emails/welcome', $user, function ($message) use ($user) {
-            $message->subject('🎉 Hoş Geldin!');
-            $message->from(NO_REPLY, 'turnuvaz');
-            $message->to($user[EMAIL]);
-        });
+        try {
+            Mail::send('emails/welcome', $user, function ($message) use ($user) {
+                $message->subject('🎉 Hoş Geldin!');
+                $message->from(NO_REPLY, 'turnuvaz');
+                $message->to($user[EMAIL]);
+            });
+            return true;
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
     }
 
 }

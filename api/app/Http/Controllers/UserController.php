@@ -157,8 +157,12 @@ class UserController extends ApiController {
             if (!$checkEmail) {
                 return $this->respondWithError(USER_DOES_NOT_EXIST);
             } else {
-                $this->setNewPassword($request[EMAIL]);
-                return $this->respondCreated(PASSWORD_SEND_TO_MAIL);
+                $emailResult = $this->setNewPassword($request[EMAIL]);
+                if ($emailResult) {
+                    return $this->respondCreated(PASSWORD_SEND_TO_MAIL);
+                } else {
+                    return $this->respondWithError(SOMETHING_WRONG_WITH_EMAIL);
+                }
             }
         }
     }
@@ -347,7 +351,7 @@ class UserController extends ApiController {
             EMAIL => $email,
             PASSWORD => $newPassword
         );
-        Email::send(RESET_PASSWORD, $data);
+        return Email::send(RESET_PASSWORD, $data);
     }
 
     private function randomKeys($keys, $limit) {
