@@ -1,0 +1,11 @@
+.header {
+    //background: rgb(48,48,48);
+    //background: linear-gradient(140deg, rgba(48,48,48,1) 10%, rgba(123,31,162,1) 100%);
+    background: url('../../../assets/landing/background.jpg') no-repeat center center;
+    background-size: cover;
+    min-height: 400px;
+    padding: 0 64px;
+    .header-image {
+        //background: url('../../../assets/landing/joysticks.png') no-repeat left bottom;
+    }
+}
