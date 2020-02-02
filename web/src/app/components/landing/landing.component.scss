@@ -1,11 +1,74 @@
 .header {
-    //background: rgb(48,48,48);
-    //background: linear-gradient(140deg, rgba(48,48,48,1) 10%, rgba(123,31,162,1) 100%);
-    background: url('../../../assets/landing/background.jpg') no-repeat center center;
-    background-size: cover;
     min-height: 400px;
     padding: 0 64px;
+    .header-text {
+        h1 {
+            font-size: 48px;
+            text-shadow: 2px 2px #7b1fa2;
+        }
+        margin: 64px;
+    }
     .header-image {
-        //background: url('../../../assets/landing/joysticks.png') no-repeat left bottom;
+        img {
+            width: 500px;
+            height: auto;
+            animation: float 3s ease-out infinite;
+        }
     }
 }
+
+.body {
+    padding: 0 128px;
+    .info-card {
+        text-align: center;
+        .icon {
+            position: absolute;
+            top: -24px;
+            left: calc(50% - 24px);
+            background: #fff;
+            width: 48px;
+            height: 48px;
+            color: #7b1fa2;
+            border-radius: 50%;
+        }
+        .divider {
+            margin: auto;
+            width: 150px;
+            height: 1px;
+            background: rgba(255,255,255);
+            box-shadow: 0 0 8px 0 rgba(255,255,255);
+        }
+        p {
+          font-size: 14px;
+        }
+    }
+}
+
+@keyframes float {
+    50% {
+        -ms-transform: translate(0, 20px);
+        -moz-transform: translate(0, 20px);
+        -webkit-transform: translate(0, 20px);
+        -o-transform: translate(0, 20px);
+        transform: translate(0, 20px);
+    }
+}
+
+@media (max-width: 960px) {
+    .header {
+        background-size: cover;
+        min-height: 200px;
+        padding: 16px;
+        .header-text {
+            h1 {
+                font-size: 32px;
+            }
+            margin: 0;
+        }
+    }
+    .body {
+        padding: 16px;
+    }
+}
+
+

@@ -2,6 +2,6 @@
       fxFlexOffset="30%" fxFlexOffset.lt-md="20%" fxFlexOffset.lt-sm="0">
     <app-tournament-card *ngFor="let data of searchResult" [data]="data"></app-tournament-card>
     <div *ngIf="!searchResult.length" fxLayoutAlign="center center">
-        <p>Sonuç Bulunamadı</p>
+        <p>Yakınlarda Bir Turnuva Bulunamadı</p>
     </div>
 </div>

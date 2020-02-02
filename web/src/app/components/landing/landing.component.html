@@ -1,11 +1,37 @@
 <div>
   <div class="header" fxLayout="row">
-      <div fxFlex>
-          <h1>TURNUVAZ</h1>
-          <h4>Gerçek Turnuva, Gerçek Rakip, Gerçek Ödül</h4>
+      <div class="header-text" fxFlex>
+          <h1>Gerçek Turnuva, <br/>
+            Gerçek Rakip, <br/>
+            Gerçek Ödül</h1>
+          <button mat-button mat-flat-button mat-raised-button
+                  [routerLink]="'/login'" color="primary">Hemen Katıl</button>
       </div>
-      <div class="header-image" fxFlex></div>
+      <div fxHide.lt-md="" class="header-image" fxFlex>
+          <img src="./assets/landing/joystick-ps4.png">
+      </div>
   </div>
-  <div class="body"></div>
+  <div class="body">
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="32px" fxFlexAlign="center center" fxFlex>
+          <mat-card class="info-card mat-elevation-z4" fxFlex>
+              <div class="icon" fxLayout="column" fxLayoutAlign="center center"><mat-icon svgIcon="shield"></mat-icon></div>
+              <h3>Güvenli</h3>
+              <div class="divider"></div>
+              <p>İleri düzey yapay zeka sayesinde sürekli takip edilen turnuvalar ve 3D Secure ödeme işlemleri ile dolandırıcılıklara karşı maksimum koruma</p>
+          </mat-card>
+          <mat-card class="info-card mat-elevation-z4" fxFlex>
+              <div class="icon" fxLayout="column" fxLayoutAlign="center center"><mat-icon svgIcon="pie-chart"></mat-icon></div>
+              <h4>İstatiksel</h4>
+              <div class="divider"></div>
+              <p>Çeşitli grafiksel görsellerle rakiplerini ve turnuvalarını analiz et, kazanma şansını daha da artır</p>
+          </mat-card>
+          <mat-card class="info-card mat-elevation-z4" fxFlex>
+              <div class="icon" fxLayout="column" fxLayoutAlign="center center"><mat-icon svgIcon="smile"></mat-icon></div>
+              <h4>Eğlenceli</h4>
+              <div class="divider"></div>
+              <p>En sevdiğin ve kendine güvendiğin oyunların turnuvalarında hem kendini göster hem de ödülleri kazan</p>
+          </mat-card>
+      </div>
+  </div>
   <div class="footer"></div>
 </div>
