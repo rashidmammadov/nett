@@ -42,6 +42,18 @@
           font-size: 14px;
         }
     }
+    .how-works {
+        .step {
+            .image {
+                padding: 16px;
+                img { max-width: 400px; height: auto; width: 100%; }
+            }
+            .description {
+                padding: 16px;
+                max-width: 400px;
+            }
+        }
+    }
 }
 
 @keyframes float {
