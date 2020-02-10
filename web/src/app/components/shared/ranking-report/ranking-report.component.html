@@ -1,6 +1,6 @@
 <div class="ranking-container" *ngFor="let player of data">
     <div class="ranking-item" fxLayout="row" fxFlexAlign="center center">
-        <img class="image" mat-card-avatar [src]="player.picture">
+        <img class="image" mat-card-avatar [alt]="player.username" [src]="player.picture">
         <div fxLayout="column" fxFlex>
             <p class="username">{{player.username}}</p>
             <p class="name">{{player.name}} {{player.surname}}</p>

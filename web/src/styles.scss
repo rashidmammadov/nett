@@ -1,6 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~ng-pick-datetime/assets/style/picker.min.css';
-@font-face { font-family: GoogleSans; src: url(./GoogleSans-Regular.ttf);}
+@font-face { font-family: GoogleSans; src: url(./GoogleSans-Regular.ttf); font-display: swap; }
 
 $mainColor: #7B1FA2;
 
